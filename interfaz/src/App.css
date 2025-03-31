@@ -1,0 +1,11 @@
+:root {
+  --texto-fuente: 'Helvetica';
+}
+
+@font-face {
+  /*Fuente de Billy Argel Fonts */
+  font-family: 'Air Travelers';
+  src: url('../../public/fonts/air_travelers/Air\ Travelers\ Personal\ Use.otf');
+  font-style: normal;
+}
+
