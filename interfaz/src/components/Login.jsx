@@ -1,5 +1,4 @@
 import React from "react";
-import styled from 'styled-components';
 import './../css/login.css'
 
 class Login extends React.Component{

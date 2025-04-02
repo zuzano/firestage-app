@@ -1,4 +1,5 @@
 import React from "react";
+import { Container} from "react-bootstrap";
 
 class Inicio extends React.Component {
   constructor(props) {
@@ -12,7 +13,7 @@ class Inicio extends React.Component {
     return(
 
     
-    <div className="firestage-home">
+    <Container fluid className="firestage-home mt-5">
       <main className="mt-20">
         <section className="sec-principal h-screen flex items-center justify-center">
           <h1 className="text-4xl font-bold text-center">
@@ -33,7 +34,14 @@ class Inicio extends React.Component {
         </section>
 
         <section className="container mx-auto my-12">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4"></div>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div>hola</div>
+            <div>hola</div>
+            <div>hola</div>
+            <div>hola</div>
+            <div>hola</div>
+            <div>hola</div>
+          </div>
         </section>
 
         <section className="container mx-auto my-12 text-center">
@@ -48,7 +56,7 @@ class Inicio extends React.Component {
       <footer className="bg-white text-black text-center py-4">
         © 2025 FireStage - Todos los derechos reservados
       </footer>
-    </div>
+    </Container>
     )
 
   }
