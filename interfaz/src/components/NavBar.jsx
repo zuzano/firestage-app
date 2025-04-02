@@ -12,7 +12,7 @@ class NavBar extends React.Component {
 
   render() {
     return (
-      <Navbar bg="white" expand="lg" fixed="top">
+      <Navbar bg="white" expand="lg">
         {/* fluid --> hace que todo el contenedor ocupe todo el ancho posible */}
         {/* as={Link} to="" --> permite una navegacion dinamica sin necesidad de recargar la pagina a diferencia de href */}
         <Container fluid>

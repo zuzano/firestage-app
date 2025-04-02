@@ -11,15 +11,16 @@ class Inicio extends React.Component {
 
   render() {
     return (
-      <Container fluid className="firestage-home mt-5">
+      <Container fluid className="firestage-home p-0">
         <main className="mt-20">
-          <section className="sec-principal h-screen flex items-center justify-center" style={{
+          <section className="sec-principal d-flex  justify-content-center align-items-center w-100" style={{
             backgroundImage: "url('./../../public/images/section-principal.jpg')",
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
+            height: '500px'
           }}>
-            <h1 className="text-4xl font-bold text-center">
+            <h1 className="text-4xl font-bold text-center pb-5">
               UNA EXPERIENCIA INOLVIDABLE
             </h1>
           </section>
