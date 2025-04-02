@@ -13,7 +13,12 @@ class Inicio extends React.Component {
     return (
       <Container fluid className="firestage-home mt-5">
         <main className="mt-20">
-          <section className="sec-principal h-screen flex items-center justify-center">
+          <section className="sec-principal h-screen flex items-center justify-center" style={{
+            backgroundImage: "url('./../../public/images/section-principal.jpg')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+          }}>
             <h1 className="text-4xl font-bold text-center">
               UNA EXPERIENCIA INOLVIDABLE
             </h1>
