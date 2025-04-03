@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Inicio from "./components/Inicio";
 import NavBar from "./components/NavBar";
 import Login from "./components/Login";
+import Registro from "./components/Registro";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Inicio />} /> 
           <Route path="/login" element={<Login />} /> 
+          <Route path="/registrarse" element={<Registro />} /> 
         </Routes>
     </Router>
   );

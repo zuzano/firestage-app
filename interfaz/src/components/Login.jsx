@@ -1,4 +1,5 @@
-
+import React, { useState } from "react";
+import { Link } from 'react-router-dom';
 import "./../css/login.css";
 
 function Login() {
@@ -6,6 +7,11 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const handleChange = (e) => {
+    e.preventDefault();
+    // Aquí iría la lógica de envío, como una llamada a una API
+   
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     // Aquí iría la lógica de envío, como una llamada a una API
@@ -16,14 +22,14 @@ function Login() {
     // Form by glisovic01
 
     <div className="login-box">
-      <p>Login</p>
-      <form>
+      <p>Iniciar Sesión</p>
+      <form onSubmit={handleSubmit}>
         <div className="user-box">
-          <input required name type="text" />
+          <input required name type="text" onChange={handleChange}/>
           <label>Email</label>
         </div>
         <div className="user-box">
-          <input required name type="password" />
+          <input required name type="password" onChange={handleChange}/>
           <label>Contraseña</label>
         </div>
         <a href="#">
@@ -36,9 +42,9 @@ function Login() {
       </form>
       <p>
         ¿No tienes una cuenta?
-        <a href className="a2">
-          Regístrate!
-        </a>
+        <Link to="/registrarse" className="a2">
+          ¡Regístrate!
+        </Link>
       </p>
     </div>
   );

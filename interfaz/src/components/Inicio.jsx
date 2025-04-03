@@ -4,7 +4,7 @@ import { Container } from "react-bootstrap";
 function Inicio() {
   return (
     <Container fluid className="firestage-home p-0">
-      <main className="">
+      <main className="w-100">
         <section
           className="sec-principal d-flex justify-content-center align-items-center w-100 bg-image"
           style={{
@@ -21,7 +21,7 @@ function Inicio() {
           </h1>
         </section>
 
-        <section className="container my-5 text-center">
+        <section className="py-5 h-100 w-100 text-center text-white" style={{backgroundColor:'#5A2D8C'}}>
           <h1 className="fs-2 fw-bold mb-4">Sobre Nosotros</h1>
           <p className="col-md-8 mx-auto fs-5">
             Firestage es la discoteca más emblemática de Madrid, estilos
@@ -33,17 +33,17 @@ function Inicio() {
           </p>
         </section>
 
-        <section className="container my-5 d-flex justify-content-center">
+        <section className="py-5 h-100 w-100 d-flex justify-content-center" style={{backgroundColor:'#131313'}}>
           <div>
             <img src="" alt="" className="img-fluid" />
           </div>
         </section>
 
-        <section className="container my-5 text-center">
+        <section className="py-5 h-100 w-100 text-center text-white" style={{backgroundColor:'#5A2D8C'}}>
           <h1 className="fs-2 fw-bold">Reservas</h1>
         </section>
 
-        <section className="container my-5 text-center">
+        <section className=" py-5 h-100 w-100 text-center text-white" style={{backgroundColor:'#131313'}}>
           <h1 className="fs-2 fw-bold">Premios</h1>
         </section>
       </main>

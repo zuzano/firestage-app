@@ -28,7 +28,7 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 
 // Routes
-app.use('/usuarios', usersRouter);
+app.use('/usuario', usersRouter);
 
 
 // 404 ERROR

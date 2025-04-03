@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"; // Importa Link
 function NavBar (){
   
     return (
-      <Navbar bg="white" expand="lg">
+      <Navbar  expand="lg" className="bg-white fw-bold">
         {/* fluid --> hace que todo el contenedor ocupe todo el ancho posible */}
         {/* as={Link} to="" --> permite una navegacion dinamica sin necesidad de recargar la pagina a diferencia de href */}
         <Container fluid>
