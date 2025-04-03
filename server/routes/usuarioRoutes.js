@@ -1,10 +1,11 @@
 let express = require('express');
 let router = express.Router();
-const ctrlUsuarios = require("../controllers/usuarios.js");
+const ctrlUsuarios = require("../controllers/login.js");
 
 router
-	.route('/autenticacion')
-	.post(ctrlUsuarios.autenticacion);
+	.route('/registrarUsuario')
+	.post(ctrlUsuarios.registrarUsuario);
+
 
 
 
