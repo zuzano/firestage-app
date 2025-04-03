@@ -1,6 +1,3 @@
-import React from "react";
-import styled from 'styled-components';
-import './../css/login.css'
 
 class Login extends React.Component{
     constructor(props){
@@ -11,9 +8,10 @@ class Login extends React.Component{
        }
     }
 
-    componentDidMount() {
+function Login() {
 
-    }
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
     handleSubmit = async (event) => {
       event.preventDefault();
@@ -56,7 +54,4 @@ class Login extends React.Component{
     }
 }
 
-
-
 export default Login;
-
