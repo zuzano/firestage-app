@@ -1,16 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, Navbar, Nav } from "react-bootstrap";
 import { Link } from "react-router-dom"; // Importa Link
 
-class NavBar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  componentDidMount() {}
-
-  render() {
+function NavBar (){
+  
     return (
       <Navbar bg="white" expand="lg">
         {/* fluid --> hace que todo el contenedor ocupe todo el ancho posible */}
@@ -41,6 +34,6 @@ class NavBar extends React.Component {
       </Navbar>
     );
   }
-}
+
 
 export default NavBar;
