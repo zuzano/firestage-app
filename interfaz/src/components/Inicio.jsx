@@ -16,7 +16,7 @@ function Inicio() {
             height: "500px",
           }}
         >
-          <h1 className="display-4 fw-bold text-center pb-5 text-black">
+          <h1 className="display-4 fw-bold text-center pb-5 text-black" >
             UNA EXPERIENCIA INOLVIDABLE
           </h1>
         </section>
@@ -48,9 +48,6 @@ function Inicio() {
         </section>
       </main>
 
-      <footer className="bg-white text-black text-center py-4">
-        © 2025 FireStage - Todos los derechos reservados
-      </footer>
     </Container>
   );
 }
