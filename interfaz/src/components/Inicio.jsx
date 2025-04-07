@@ -83,7 +83,7 @@ function Inicio() {
                     </Card.Text>
                   </Card.Body>
                   <Card.Footer className="transparent border-0"  style={{zIndex: 2}}>
-                    <Button variant="border-0" className="w-100 text-white">
+                    <Button variant="outline-secondary border-0" className="w-100 text-white">
                       Reservar ahora
                     </Button>
                   </Card.Footer>
@@ -127,7 +127,7 @@ function Inicio() {
                     </Card.Text>
                   </Card.Body>
                   <Card.Footer className=" border-0 "  style={{zIndex: 2}}>
-                    <Button variant="border-0" className="w-100 text-white">
+                    <Button variant="outline-secondary border-0" className="w-100 text-white">
                       Ver opciones
                     </Button>
                   </Card.Footer>
@@ -171,7 +171,7 @@ function Inicio() {
                     </Card.Text>
                   </Card.Body>
                   <Card.Footer className=" border-0"  style={{zIndex: 2}}>
-                    <Button variant="border-0" className="w-100 text-white">
+                    <Button variant="outline-secondary border-0" className="w-100 text-white">
                       Comprar entrada
                     </Button>
                   </Card.Footer>
