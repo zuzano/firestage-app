@@ -31,10 +31,7 @@ const Registro = () => {
         );
         const data = await response.json();
 
-        if (response.status === 201) {
-    
-          // navigate("/login"); // Vuelve al login tras registro exitoso
-        } else {
+        if (response.status !== 201) {
           setError(data.mensaje || "Error al registrar");
         }
       } catch (err) {
@@ -46,7 +43,7 @@ const Registro = () => {
     };
 
     registrarUsuario();
-  }, [enviar, correo, contraseña, navigate]);
+  }, [enviar, correo, contraseña]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

@@ -1,6 +1,7 @@
-let mongoose = require("mongoose");
+const mongoose = require("mongoose");
 require('dotenv').config();
 const Usuario = require("../models/Usuario");
+
 
 const dbURI = process.env.MONGODB_URI;
 console.log(dbURI)
@@ -20,7 +21,6 @@ app.use(bodyParser.json({ limit: '10mb' }));
 
 registrarUsuario = async function (req,res){
     try {
-        console.log(dbURI)
         await mongoose.connect(dbURI, {
             useNewUrlParser: true,
             useUnifiedTopology: true
@@ -60,11 +60,16 @@ iniciarSesionUsuario = async function (req,res){
         });
 
         const {
-            correo,
+            email,
             contraseña
         } = req.body;
 
+        const usuario = await Usuario.findOne({email: email, contraseña: contraseña});
+        if(!usuario){
+            res.status(404).json({error: "Usuario no encontrado", mensaje: error.message})
+        }
 
+        res.status(200).json({mensaje: "Sesión Iniciada", usuario: {usuario}});
     }catch(error){
         return res.status(500).json({
             error: "Error al iniciar sesion",

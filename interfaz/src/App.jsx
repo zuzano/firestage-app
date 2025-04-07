@@ -16,7 +16,7 @@ function App() {
     <div className="app-wrapper">
     <Router>
         <NavBar /> {/* El NavBar debe estar fuera de Routes si quieres que aparezca en todas las páginas */}
-        <div className="main-content">
+        <div className="main-content" style={{backgroundColor:'#5A2D8C'}}>
         <Routes>
           <Route path="/" element={<Inicio />} /> 
           <Route path="/login" element={<Login />} /> 

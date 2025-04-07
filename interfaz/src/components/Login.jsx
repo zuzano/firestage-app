@@ -1,52 +1,122 @@
-import React, { useState } from "react";
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Modal } from 'react-bootstrap';
 import "./../css/login.css";
 
 function Login() {
+  const [enviar, setEnviar] = useState(false);
+  const [correo, setCorreo] = useState("");
+  const [contraseña, setContraseña] = useState("");
+  const [error, setError] = useState(null);
+  const [show, setShow] = useState(false);
+  const navigate = useNavigate();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  useEffect(() => {
+    if (!enviar) return;
 
-  const handleChange = (e) => {
-    e.preventDefault();
-    // Aquí iría la lógica de envío, como una llamada a una API
-   
-  };
+    const inciarSesion = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:5000/usuario/iniciarSesion",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: correo, contraseña: contraseña }),
+          }
+        );
+        const data = await response.json();
+
+        if (response.status !== 200) {
+          setError(data.mensaje || "Error al iniciar sesión");
+        }else{
+          // Guardar datos del usuario en localStorage
+          localStorage.setItem('usuario', JSON.stringify(data.usuario));
+        }
+      } catch (err) {
+        setError("Error al conectar con el servidor");
+      } finally {
+        setShow(true);
+        setEnviar(false);
+      }
+    };
+
+    inciarSesion();
+  }, [enviar, correo, contraseña]);
+
+  // Verificar si ya hay un usuario logueado al cargar el componente
+  useEffect(() => {
+    const usuario = localStorage.getItem('usuario');
+    if (usuario) {
+      navigate('/'); // Redirige si ya está logueado
+    }
+  }, [navigate]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Aquí iría la lógica de envío, como una llamada a una API
-    console.log("Email:", email, "Contraseña:", password);
+    setError(null);
+    setEnviar(true);
   };
+
+  const handleClose = (e) => {
+    navigate('/');
+  }
 
   return (
     // Form by glisovic01
-
-    <div className="login-box">
-      <p>Iniciar Sesión</p>
-      <form onSubmit={handleSubmit}>
-        <div className="user-box">
-          <input required name type="text" onChange={handleChange}/>
-          <label>Email</label>
-        </div>
-        <div className="user-box">
-          <input required name type="password" onChange={handleChange}/>
-          <label>Contraseña</label>
-        </div>
-        <a href="#">
-          <span />
-          <span />
-          <span />
-          <span />
-          Enviar
-        </a>
-      </form>
-      <p>
-        ¿No tienes una cuenta?
-        <Link to="/registrarse" className="a2">
-          ¡Regístrate!
-        </Link>
-      </p>
-    </div>
+    <>
+      <div className="login-box" >
+        <p>Iniciar Sesión</p>
+        <form onSubmit={handleSubmit}>
+          <div className="user-box">
+            <input
+              required
+              name="email"
+              type="text"
+              onChange={(e) => setCorreo(e.target.value)}
+            />
+            <label>Email</label>
+          </div>
+          <div className="user-box">
+            <input
+              required
+              name="contraseña"
+              type="password"
+              onChange={(e) => setContraseña(e.target.value)}
+            />
+            <label>Contraseña</label>
+          </div>
+         <button type="submit" className="submit-btn">
+            <span />
+            <span />
+            <span />
+            <span />
+            Enviar
+          </button>
+        </form>
+        <p>
+          ¿No tienes una cuenta?
+          <Link to="/registrarse" className="a2">
+            ¡Regístrate!
+          </Link>
+        </p>
+      </div>
+      <Modal
+        className="d-flex align-items-center"
+        show={show}
+        onHide={handleClose}
+        animation={true}
+      >
+        <Modal.Header>
+          <Modal.Title>Inicio Sesión Completado</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {error !== null
+            ? error
+            : "Has iniciado sesión."}
+        </Modal.Body>
+      </Modal>
+    </>
   );
 }
 

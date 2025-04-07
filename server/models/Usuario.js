@@ -30,7 +30,7 @@ const usuarioSchema = new mongoose.Schema({
   puntos: {
     type: Number,
     default: 0
-  }
+  },
 }, {
   timestamps: true
 });
