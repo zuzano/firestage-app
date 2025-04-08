@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import "./../css/galeriaFotos.css";
 
 function Inicio() {
   return (
@@ -13,7 +14,7 @@ function Inicio() {
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
-            height: "500px",
+            height: "90vh",
           }}
         >
           <h1 className="display-4 fw-bold text-center pb-5 text-black">
@@ -22,11 +23,33 @@ function Inicio() {
         </section>
 
         <section
-          className="py-5 h-100 w-100 text-center text-white"
-          style={{ backgroundColor: "#5A2D8C" }}
+          className="py-5 h-100 w-100 text-center text-black"
         >
-          <h1 className="fs-2 fw-bold mb-4">Sobre Nosotros</h1>
-          <p className="col-md-8 mx-auto fs-5">
+          <div className="d-flex align-items-center">
+
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            style={{
+              margin: '2%',
+              width: '40%',
+              objectFit: "cover",
+              zIndex: 0,
+            }}
+          >
+            <source
+              src="./../../public/video/4932855_Dj_Deejay_3840x2160.mp4"
+              type="video/mp4"
+            />
+            Tu navegador no soporta la reproducción de video.
+          </video>
+          <div className="d-flex flex-column">
+
+            <h1 className="fs-2 fw-bold mb-4">Sobre Nosotros</h1>
+
+          <p className="fs-5 m-5" style={{textAlign:'justify'}}>
             Firestage es la discoteca más emblemática de Madrid, estilos
             cuidadosamente diseñados y géneros musicales diversos.
             Estratégicamente ubicada en el corazón del triángulo de arte, cerca
@@ -34,20 +57,50 @@ function Inicio() {
             exclusiva que ha cautivado a millones de personas, convirtiéndonos
             en un referente internacional de la cultura nocturna.
           </p>
+          </div>
+          </div>
         </section>
 
         <section
           className="py-5 h-100 w-100 d-flex justify-content-center"
           style={{ backgroundColor: "#131313" }}
         >
-          <div>
-            <img src="" alt="" className="img-fluid" />
+          {/* See more by @ImBobby on CodePen */}
+          <div class="container">
+            <div id="carousel">
+              <figure>
+                <img src="./../../public/images/galeria/imagen5.jpg" alt="" />
+              </figure>
+              <figure>
+                <img src="./../../public/images/galeria/imagen6.jpg" alt="" />
+              </figure>
+              <figure>
+                <img src="./../../public/images/galeria/imagen1.jpg" alt="" />
+              </figure>
+              <figure>
+                <img src="./../../public/images/galeria/imagen4.jpg" alt="" />
+              </figure>
+              <figure>
+                <img src="./../../public/images/galeria/imagen9.jpg" alt="" />
+              </figure>
+              <figure>
+                <img src="./../../public/images/galeria/imagen8.jpg" alt="" />
+              </figure>
+              <figure>
+                <img src="./../../public/images/galeria/imagen3.jpg" alt="" />
+              </figure>
+              <figure>
+                <img src="./../../public/images/galeria/imagen7.jpg" alt="" />
+              </figure>
+              <figure>
+                <img src="./../../public/images/galeria/imagen2.jpg" alt="" />
+              </figure>
+            </div>
           </div>
         </section>
 
         <section
-          className="py-5 h-100 w-100 text-center text-white"
-          style={{ backgroundColor: "#5A2D8C"}}
+          className="py-5 h-100 w-100 text-center text-black"
         >
           <h1 className="fs-2 fw-bold">Reservas</h1>
           <p className="fs-5 col-md-8 mx-auto mb-4">
@@ -71,22 +124,30 @@ function Inicio() {
                   overflow: "hidden",
                 }}
               >
-                  <Card.Body style={{zIndex: 2}}>
-                    <Card.Title className="fw-bold mb-3 text-white">
-                      Reserva VIP
-                    </Card.Title>
-                    <Card.Text className="text-white" style={{fontSize: '1.2em'}}>
-                      Disfruta de la mejor vista del escenario desde nuestras
-                      mesas VIP. Incluye botella, atención personalizada y
-                      acceso preferente. Ideal para grupos o celebraciones
-                      especiales.
-                    </Card.Text>
-                  </Card.Body>
-                  <Card.Footer className="transparent border-0"  style={{zIndex: 2}}>
-                    <Button variant="outline-secondary border-0" className="w-100 text-white">
-                      Reservar ahora
-                    </Button>
-                  </Card.Footer>
+                <Card.Body style={{ zIndex: 2 }}>
+                  <Card.Title className="fw-bold mb-3 text-white">
+                    Reserva VIP
+                  </Card.Title>
+                  <Card.Text
+                    className="text-white"
+                    style={{ fontSize: "1.2em" }}
+                  >
+                    Disfruta de la mejor vista del escenario desde nuestras
+                    mesas VIP. Incluye botella, atención personalizada y acceso
+                    preferente. Ideal para grupos o celebraciones especiales.
+                  </Card.Text>
+                </Card.Body>
+                <Card.Footer
+                  className="transparent border-0"
+                  style={{ zIndex: 2 }}
+                >
+                  <Button
+                    variant="outline-secondary border-0"
+                    className="w-100 text-white"
+                  >
+                    Reservar ahora
+                  </Button>
+                </Card.Footer>
                 <div
                   style={{
                     position: "absolute",
@@ -98,13 +159,12 @@ function Inicio() {
                     backdropFilter: "blur(4px)",
                     zIndex: 1,
                   }}
-                >
-                </div>
+                ></div>
               </Card>
             </Col>
 
             {/* Cumpleaños */}
-            <Col md={4} style={{ width: "25%"}} className="mb-4">
+            <Col md={4} style={{ width: "25%" }} className="mb-4">
               <Card
                 className="h-100 p-3 rounded-4 d-flex flex-column justify-content-between"
                 style={{
@@ -116,65 +176,27 @@ function Inicio() {
                   overflow: "hidden",
                 }}
               >
-                  <Card.Body style={{zIndex:2}}>
-                    <Card.Title className="fw-bold mb-3 text-white">
-                      Cumpleaños
-                    </Card.Title>
-                    <Card.Text className="text-white" style={{fontSize: '1.2em'}}>
-                      ¡Celebra tu día a lo grande! Ofrecemos paquetes especiales
-                      para cumpleañeros con entrada gratuita, bebida de cortesía
-                      y muchas sorpresas más. Consulta disponibilidad.
-                    </Card.Text>
-                  </Card.Body>
-                  <Card.Footer className=" border-0 "  style={{zIndex: 2}}>
-                    <Button variant="outline-secondary border-0" className="w-100 text-white">
-                      Ver opciones
-                    </Button>
-                  </Card.Footer>
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                    backgroundColor: "rgba(0,0,0,0.5)",
-                    backdropFilter: "blur(4px)",
-                    zIndex: 1,
-                  }}
-                >
-                </div>
-              </Card>
-            </Col>
-
-            {/* Entrada Anticipada */}
-            <Col md={4} style={{ width: "25%" }} className="mb-4">
-              <Card
-                className="h-100 p-3 rounded-4 d-flex flex-column justify-content-between"
-                style={{
-                  backgroundImage: `url(./../../public/images/entrada-anticipada.jpg)`,
-                   backgroundSize: "101% 110%",
-                  backgroundRepeat: "no-repeat",
-                  backgroundPosition: "center",
-                  position: "relative",
-                  overflow: "hidden",
-                }}
-              >
-                  <Card.Body style={{zIndex: 2}}>
-                    <Card.Title className="fw-bold mb-3 text-white">
-                      Entrada Anticipada
-                    </Card.Title>
-                    <Card.Text className="text-white" style={{fontSize: '1.2em' }}>
-                      Evita colas y asegúrate el acceso con nuestras entradas
-                      anticipadas. Puedes adquirirlas online y acceder
-                      directamente sin esperas.
-                    </Card.Text>
-                  </Card.Body>
-                  <Card.Footer className=" border-0"  style={{zIndex: 2}}>
-                    <Button variant="outline-secondary border-0" className="w-100 text-white">
-                      Comprar entrada
-                    </Button>
-                  </Card.Footer>
+                <Card.Body style={{ zIndex: 2 }}>
+                  <Card.Title className="fw-bold mb-3 text-white">
+                    Cumpleaños
+                  </Card.Title>
+                  <Card.Text
+                    className="text-white"
+                    style={{ fontSize: "1.2em" }}
+                  >
+                    ¡Celebra tu día a lo grande! Ofrecemos paquetes especiales
+                    para cumpleañeros con entrada gratuita, bebida de cortesía y
+                    muchas sorpresas más. Consulta disponibilidad.
+                  </Card.Text>
+                </Card.Body>
+                <Card.Footer className=" border-0 " style={{ zIndex: 2 }}>
+                  <Button
+                    variant="outline-secondary border-0"
+                    className="w-100 text-white"
+                  >
+                    Ver opciones
+                  </Button>
+                </Card.Footer>
                 <div
                   style={{
                     position: "absolute",
@@ -186,8 +208,56 @@ function Inicio() {
                     backdropFilter: "blur(4px)",
                     zIndex: 1,
                   }}
-                >
-                </div>
+                ></div>
+              </Card>
+            </Col>
+
+            {/* Entrada Anticipada */}
+            <Col md={4} style={{ width: "25%" }} className="mb-4">
+              <Card
+                className="h-100 p-3 rounded-4 d-flex flex-column justify-content-between"
+                style={{
+                  backgroundImage: `url(./../../public/images/entrada-anticipada.jpg)`,
+                  backgroundSize: "101% 110%",
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "center",
+                  position: "relative",
+                  overflow: "hidden",
+                }}
+              >
+                <Card.Body style={{ zIndex: 2 }}>
+                  <Card.Title className="fw-bold mb-3 text-white">
+                    Entrada Anticipada
+                  </Card.Title>
+                  <Card.Text
+                    className="text-white"
+                    style={{ fontSize: "1.2em" }}
+                  >
+                    Evita colas y asegúrate el acceso con nuestras entradas
+                    anticipadas. Puedes adquirirlas online y acceder
+                    directamente sin esperas.
+                  </Card.Text>
+                </Card.Body>
+                <Card.Footer className=" border-0" style={{ zIndex: 2 }}>
+                  <Button
+                    variant="outline-secondary border-0"
+                    className="w-100 text-white"
+                  >
+                    Comprar entrada
+                  </Button>
+                </Card.Footer>
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    backgroundColor: "rgba(0,0,0,0.5)",
+                    backdropFilter: "blur(4px)",
+                    zIndex: 1,
+                  }}
+                ></div>
               </Card>
             </Col>
           </Row>
