@@ -38,8 +38,8 @@ function NavBar() {
             <Nav.Link as={Link} to="/eventos">
               EVENTOS
             </Nav.Link>
-            <Nav.Link as={Link} to="/contacto">
-              CONTACTO
+            <Nav.Link as={Link} to="/premios">
+              PREMIOS
             </Nav.Link>
             <Nav.Link as={Link} to="/soporte">
               SOPORTE

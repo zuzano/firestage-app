@@ -22,42 +22,40 @@ function Inicio() {
           </h1>
         </section>
 
-        <section
-          className="py-5 h-100 w-100 text-center text-black"
-        >
-          <div className="d-flex align-items-center">
+        <section className="py-5 h-100 w-100 text-center text-black">
+          <div className="d-flex align-items-center  justify-content-around">
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              style={{
+                margin: "2%",
+                width: "40%",
+                objectFit: "cover",
+                zIndex: 0,
+                borderRadius: "10%",
+              }}
+            >
+              <source
+                src="./../../public/video/4932855_Dj_Deejay_3840x2160.mp4"
+                type="video/mp4"
+              />
+              Tu navegador no soporta la reproducción de video.
+            </video>
+            <div className="d-flex flex-column"  style={{width:'40%'}}>
+              <h1 className="fs-2 fw-bold mb-4">Sobre Nosotros</h1>
 
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            style={{
-              margin: '2%',
-              width: '40%',
-              objectFit: "cover",
-              zIndex: 0,
-            }}
-          >
-            <source
-              src="./../../public/video/4932855_Dj_Deejay_3840x2160.mp4"
-              type="video/mp4"
-            />
-            Tu navegador no soporta la reproducción de video.
-          </video>
-          <div className="d-flex flex-column">
-
-            <h1 className="fs-2 fw-bold mb-4">Sobre Nosotros</h1>
-
-          <p className="fs-5 m-5" style={{textAlign:'justify'}}>
-            Firestage es la discoteca más emblemática de Madrid, estilos
-            cuidadosamente diseñados y géneros musicales diversos.
-            Estratégicamente ubicada en el corazón del triángulo de arte, cerca
-            de los museos más importantes de la ciudad. Una propuesta elegante y
-            exclusiva que ha cautivado a millones de personas, convirtiéndonos
-            en un referente internacional de la cultura nocturna.
-          </p>
-          </div>
+              <p className="fs-5 m-5" style={{ textAlign: "justify" }}>
+                Firestage es la discoteca más emblemática de Madrid, estilos
+                cuidadosamente diseñados y géneros musicales diversos.
+                Estratégicamente ubicada en el corazón del triángulo de arte,
+                cerca de los museos más importantes de la ciudad. Una propuesta
+                elegante y exclusiva que ha cautivado a millones de personas,
+                convirtiéndonos en un referente internacional de la cultura
+                nocturna.
+              </p>
+            </div>
           </div>
         </section>
 
@@ -99,9 +97,7 @@ function Inicio() {
           </div>
         </section>
 
-        <section
-          className="py-5 h-100 w-100 text-center text-black"
-        >
+        <section className="py-5 h-100 w-100 text-center text-black">
           <h1 className="fs-2 fw-bold">Reservas</h1>
           <p className="fs-5 col-md-8 mx-auto mb-4">
             ¿Quieres vivir una noche única en Firestage? Ya sea para celebrar un
@@ -268,9 +264,10 @@ function Inicio() {
           </p>
           <a
             href="https://wa.me/34123456789"
-            className="btn btn-light mt-3 px-4 py-2"
+            className="btn mt-3 px-4 py-2 text-white"
             target="_blank"
             rel="noopener noreferrer"
+            style={{ backgroundColor: "#131313" }}
           >
             Contactar por Email
           </a>
@@ -280,7 +277,25 @@ function Inicio() {
           className=" py-5 h-100 w-100 text-center text-white"
           style={{ backgroundColor: "#131313" }}
         >
-          <h1 className="fs-2 fw-bold">Premios</h1>
+          <div className="d-flex align-items-center justify-content-around m-4">
+            <div className="d-flex flex-column" style={{width:'40%'}}>
+              <h1 className="fs-2 fw-bold">Premios</h1>
+              <p
+                className="fs-5 m-5 "
+                style={{ textAlign: "justify"}}
+              >
+                ¡En nuestra discoteca también ganas! Solo por venir, participar
+                en eventos o celebrar con nosotros puedes conseguir premios como
+                entradas VIP, botellas gratis y productos exclusivos. Cuantas
+                más veces vengas, más oportunidades tienes. ¡No te lo pierdas!
+              </p>
+            </div>
+            <img
+              src="./../../public/images/ruleta.png"
+              alt="Ruleta"
+              style={{ width: "30%", borderRadius: "10%" }}
+            />
+          </div>
         </section>
       </main>
     </Container>

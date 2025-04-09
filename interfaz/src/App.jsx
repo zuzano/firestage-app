@@ -3,11 +3,13 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import Inicio from "./components/Inicio";
 import NavBar from "./components/NavBar";
 import Footer from  "./components/Footer"
+import Inicio from "./components/Inicio";
 import Login from "./components/Login";
+import Soporte from "./components/Soporte"
 import Registro from "./components/Registro";
+import Ruleta from "./components/Ruleta";
 
 import './App.css';
 
@@ -21,6 +23,8 @@ function App() {
           <Route path="/" element={<Inicio />} /> 
           <Route path="/login" element={<Login />} /> 
           <Route path="/registrarse" element={<Registro />} /> 
+          <Route path="/soporte" element={<Soporte />} /> 
+          <Route path="/premios" element={<Ruleta />} /> 
         </Routes>
         </div>
         <Footer />
