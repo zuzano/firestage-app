@@ -13,7 +13,7 @@
   }
   
   .form .title {
-    color: royalblue;
+    color: #131313;
     font-size: 30px;
     font-weight: 600;
     letter-spacing: -1px;
@@ -25,7 +25,8 @@
   
   .form input {
     outline: 0;
-    border: 1px solid rgb(219, 213, 213);
+    background-color: #e0dfdf;
+    border: 1px solid rgba(105, 105, 105, 0.397);
     padding: 8px 14px;
     border-radius: 8px;
     width: 100%;
@@ -39,7 +40,8 @@
     resize: none;
     outline: 0;
     padding: 8px 14px;
-    border: 1px solid rgb(219, 213, 213);
+    border: 1px solid rgba(105, 105, 105, 0.397);
+    background-color: #e0dfdf;
   }
   
   .form button {
@@ -50,7 +52,7 @@
     border-radius: 8px;
     font-size: 16px;
     font-weight: 500;
-    background-color: royalblue;
+    background-color: #131313;
     color: #fff;
     cursor: pointer;
   }

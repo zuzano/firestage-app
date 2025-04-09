@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
-import "./../css/galeriaFotos.css";
+import styles from "./../css/galeriaFotos.module.css";
 
 function Inicio() {
   return (
@@ -64,8 +64,8 @@ function Inicio() {
           style={{ backgroundColor: "#131313" }}
         >
           {/* See more by @ImBobby on CodePen */}
-          <div class="container">
-            <div id="carousel">
+          <div className={styles.container}>
+            <div id={styles.carousel}>
               <figure>
                 <img src="./../../public/images/galeria/imagen5.jpg" alt="" />
               </figure>

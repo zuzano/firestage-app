@@ -31,7 +31,7 @@ function Ruleta() {
   
   return (
     <>
-      <Container fluid style={{display:'grid', placeItems:'center', height:'80vh'}}>
+      <Container fluid style={{ backgroundColor: "#131313", height: "80vh", display:'grid', placeItems:'center' }}>
 
       <Wheel
         mustStartSpinning={mustSpin}

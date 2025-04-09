@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { Modal } from 'react-bootstrap';
-import "./../css/login.css";
+import { Container, Modal } from "react-bootstrap";
+import styles from "./../css/login.module.css";
 
 function Login() {
   const [enviar, setEnviar] = useState(false);
@@ -29,9 +29,9 @@ function Login() {
 
         if (response.status !== 200) {
           setError(data.mensaje || "Error al iniciar sesión");
-        }else{
+        } else {
           // Guardar datos del usuario en localStorage
-          localStorage.setItem('usuario', JSON.stringify(data.usuario));
+          localStorage.setItem("usuario", JSON.stringify(data.usuario));
         }
       } catch (err) {
         setError("Error al conectar con el servidor");
@@ -46,9 +46,9 @@ function Login() {
 
   // Verificar si ya hay un usuario logueado al cargar el componente
   useEffect(() => {
-    const usuario = localStorage.getItem('usuario');
+    const usuario = localStorage.getItem("usuario");
     if (usuario) {
-      navigate('/'); // Redirige si ya está logueado
+      navigate("/"); // Redirige si ya está logueado
     }
   }, [navigate]);
 
@@ -59,63 +59,63 @@ function Login() {
   };
 
   const handleClose = (e) => {
-    navigate('/');
-  }
+    navigate("/");
+  };
 
   return (
     // Form by glisovic01
     <>
-      <div className="login-box" >
-        <p>Iniciar Sesión</p>
-        <form onSubmit={handleSubmit}>
-          <div className="user-box">
-            <input
-              required
-              name="email"
-              type="text"
-              onChange={(e) => setCorreo(e.target.value)}
-            />
-            <label>Email</label>
-          </div>
-          <div className="user-box">
-            <input
-              required
-              name="contraseña"
-              type="password"
-              onChange={(e) => setContraseña(e.target.value)}
-            />
-            <label>Contraseña</label>
-          </div>
-         <button type="submit" className="submit-btn">
-            <span />
-            <span />
-            <span />
-            <span />
-            Enviar
-          </button>
-        </form>
-        <p>
-          ¿No tienes una cuenta?
-          <Link to="/registrarse" className="a2">
-            ¡Regístrate!
-          </Link>
-        </p>
-      </div>
-      <Modal
-        className="d-flex align-items-center"
-        show={show}
-        onHide={handleClose}
-        animation={true}
-      >
-        <Modal.Header>
-          <Modal.Title>Inicio Sesión Completado</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {error !== null
-            ? error
-            : "Has iniciado sesión."}
-        </Modal.Body>
-      </Modal>
+      <Container fluid style={{backgroundColor: '#131313' ,height: '80vh', display:'grid', placeItems:'center' }}>
+        <div className={styles.loginBox}>
+          <p>Iniciar Sesión</p>
+          <form onSubmit={handleSubmit}>
+            <div className={styles.userBox}>
+              <input
+                required
+                name="email"
+                type="text"
+                onChange={(e) => setCorreo(e.target.value)}
+              />
+              <label>Email</label>
+            </div>
+            <div className={styles.userBox}>
+              <input
+                required
+                name="contraseña"
+                type="password"
+                onChange={(e) => setContraseña(e.target.value)}
+              />
+              <label>Contraseña</label>
+            </div>
+            <button type="submit" className={styles.submitBtn}>
+              <span />
+              <span />
+              <span />
+              <span />
+              Enviar
+            </button>
+          </form>
+          <p>
+            ¿No tienes una cuenta?
+            <Link to="/registrarse" className={styles.a2}>
+              ¡Regístrate!
+            </Link>
+          </p>
+        </div>
+        <Modal
+          className="d-flex align-items-center"
+          show={show}
+          onHide={handleClose}
+          animation={true}
+        >
+          <Modal.Header>
+            <Modal.Title>Inicio Sesión Completado</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {error !== null ? error : "Has iniciado sesión."}
+          </Modal.Body>
+        </Modal>
+      </Container>
     </>
   );
 }
