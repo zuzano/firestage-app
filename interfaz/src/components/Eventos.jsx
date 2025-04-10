@@ -3,6 +3,8 @@ import { Container, Row, Col, Card, Button, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
+import styles from './../css/eventos.module.css'
+
 function Eventos() {
   return (
     <>
@@ -15,17 +17,23 @@ function Eventos() {
           placeItems: "center",
         }}
       >
-        
-<div class="parent">
-    <div class="div1">1</div>
-    <div class="div2">2</div>
-    <div class="div3">3</div>
-    <div class="div4">4</div>
-</div>
-    
+        <div className={styles.parent}>
+          <div className={styles.div1} style={{
+            backgroundImage:
+              "url('./../../public/images/eventos/evento1.png')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            height: "100%",
+            width: '80%'
+          }}></div>
+          <div className={styles.div2}></div>
+          <div className={styles.div3}></div>
+          <div className={styles.div4}></div>
+        </div>
       </Container>
     </>
   );
 }
 
-export default Evento;
+export default Eventos;
