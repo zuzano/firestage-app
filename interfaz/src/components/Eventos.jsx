@@ -25,11 +25,32 @@ function Eventos() {
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
             height: "100%",
-            width: '80%'
+            width: '100%'
           }}></div>
-          <div className={styles.div2}></div>
-          <div className={styles.div3}></div>
-          <div className={styles.div4}></div>
+          <div className={styles.div2}
+          style={{
+            backgroundImage:
+              "url('./../../public/images/eventos/evento2.webp')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            height: "100%",
+            width: '100%'
+          }}></div>
+          <div className={styles.div3}
+           style={{
+            backgroundImage:
+              "url('./../../public/images/eventos/evento3.png')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            height: "100%",
+            width: '100%'
+          }}></div>
+          <div className={styles.div4}
+          ></div>
+          <div className={styles.div5}
+          ></div>
         </div>
       </Container>
     </>
