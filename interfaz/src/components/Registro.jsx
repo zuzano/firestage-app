@@ -22,7 +22,7 @@ const Registro = () => {
     const registrarUsuario = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/usuario/registrarUsuario",
+          "http://localhost:5000/autenticacion/registrarUsuario",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

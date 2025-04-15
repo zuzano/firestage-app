@@ -1,10 +1,8 @@
 let express = require('express');
 let router = express.Router();
-const ctrlUsuarios = require("../controllers/login.js");
+const ctrlUsuarios = require("../controllers/usuarios.js");
 
-router.post('/registrarUsuario',ctrlUsuarios.registrarUsuario);
-router.post('/iniciarSesion', ctrlUsuarios.iniciarSesionUsuario);
-
+router.post('/contactar',ctrlUsuarios.enviarCorreo);
 
 
 module.exports = router;

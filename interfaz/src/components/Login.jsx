@@ -18,7 +18,7 @@ function Login() {
     const inciarSesion = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/usuario/iniciarSesion",
+          "http://localhost:5000/autenticacion/iniciarSesion",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

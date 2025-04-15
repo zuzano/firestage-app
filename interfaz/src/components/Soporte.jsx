@@ -16,6 +16,31 @@ function Soporte() {
 
   useEffect(() => {
     if (!enviar) return;
+
+    const contactar = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:5000/usuarios/contactar",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: correo, asunto: asunto, mensaje: mensaje }),
+          }
+        );
+        const data = await response.json();
+
+        if (response.status !== 200) {
+          setError(data.mensaje || "Error al enviar el correo");
+        }
+      } catch (err) {
+        setError("Error al conectar con el servidor");
+      } finally {
+        setShow(true);
+        setEnviar(false);
+      }
+    }
+
+    contactar();
   }, [enviar,nombre, correo, asunto, mensaje, error]);
 
   const handleSubmit = (e) => {
@@ -25,7 +50,7 @@ function Soporte() {
   };
 
   const handleClose = (e) => {
-    navigate("/");
+    setShow(false)
   };
 
   return (

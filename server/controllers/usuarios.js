@@ -40,31 +40,34 @@ enviarCorreo = async function(req,res) {
             return res.status(404).json({ mensaje: 'Debes estar registrado para realizar esta acción.' });
         }
 
+        // https://myaccount.google.com/apppasswords para crear una contraseña de aplicacion
         const transporter = nodemailer.createTransport({
-            service: 'hotmail',
+            service: 'gmail',
             auth: {
-              user: 'santi.casalv@hotmail.com',
-              pass: 'odesxd30'
+              user: 'odesxd1934@gmail.com',
+              pass: 'kjlh cecz tzhc rxbm'
             }
           });
           
           const mailOptions = {
-            from: 'tucorreo@gmail.com',
-            to: 'destinatario@gmail.com',
-            subject: 'Correo de prueba',
-            html: '<h1>¡Hola!</h1><p>Este es un correo de prueba.</p>'
+            from: 'santi.casalv@hotmail.com',
+            to: 'santi.casalv@hotmail.com',
+            subject: asunto,
+            text: `${mensaje}`
           };
           
           transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
-              console.error('Error al enviar:', error);
+              return res.status(404).json({
+                error: "Error al enviar el correo",
+                mensaje: error
+            });
             } else {
-              console.log('Correo enviado:', info.response);
+              res.status(200).json({ mensaje: 'Correo enviado', info: info.response });
             }
           });
 
 
-        res.status(201).json({ mensaje: 'Usuario registrado con éxito', usuario: nuevoUsuario });
     } catch (error) {
         return res.status(500).json({
             error: "Error al registrar el usuario",
@@ -75,7 +78,5 @@ enviarCorreo = async function(req,res) {
 
 module.exports = {
     enviarCorreo,
-    verUsuarios
-
 }
 

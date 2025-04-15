@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import styles from "./../css/galeriaFotos.module.css";
+import { Link } from "react-router-dom";
 
 function Inicio() {
   return (
@@ -262,15 +263,15 @@ function Inicio() {
             ¿Tienes dudas o quieres hacer una reserva personalizada? Contáctanos
             por email y te ayudamos encantados.
           </p>
-          <a
-            href="https://wa.me/34123456789"
+          <Link
+            to='/soporte'
             className="btn mt-3 px-4 py-2 text-white"
             target="_blank"
             rel="noopener noreferrer"
             style={{ backgroundColor: "#131313" }}
           >
             Contactar por Email
-          </a>
+          </Link>
         </section>
 
         <section

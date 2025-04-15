@@ -10,7 +10,8 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
 .catch(err => console.error('Error al conectar a MongoDB:', err));
 
 // Importar routes
-const usersRouter = require('./routes/usuarioRoutes');
+const loginRouter = require('./routes/loginRoutes');
+const usuariosRouter = require('./routes/usuarioRoutes');
 
 
 const app = express();
@@ -28,7 +29,8 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 
 // Routes
-app.use('/usuario', usersRouter);
+app.use('/autenticacion', loginRouter);
+app.use('/usuarios', usuariosRouter);
 
 
 // 404 ERROR
