@@ -80,7 +80,6 @@ function Soporte() {
               />
             </div>
             <div className="d-flex flex-column">
-
               <h1 className="text-white" style={{fontSize:'2em'}}>MOVIL</h1>
               <p className="text-white p-0 m-0">648 693 804</p>
             </div>
