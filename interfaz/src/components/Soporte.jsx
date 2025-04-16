@@ -80,7 +80,9 @@ function Soporte() {
               />
             </div>
             <div className="d-flex flex-column">
-              <h1 className="text-white" style={{fontSize:'2em'}}>MOVIL</h1>
+              <h1 className="text-white" style={{ fontSize: "2em" }}>
+                MOVIL
+              </h1>
               <p className="text-white p-0 m-0">648 693 804</p>
             </div>
             <div className={styles.iconos}>
@@ -91,11 +93,21 @@ function Soporte() {
                 color="black"
               />
             </div>
-            <h1 className="text-white" style={{fontSize:'2em'}}>DIRECCIÓN</h1>
+            <div className="d-flex flex-column">
+              <h1 className="text-white" style={{ fontSize: "2em" }}>
+                DIRECCIÓN
+              </h1>
+              <p className="text-white p-0 m-0">648 693 804</p>
+            </div>
             <div className={styles.iconos}>
               <Icon icon="uiw:mail" width="80" height="80" color="black" />
             </div>
-            <h1 className="text-white" style={{fontSize:'2em'}}>EMAIL</h1>
+            <div className="d-flex flex-column">
+              <h1 className="text-white" style={{ fontSize: "2em" }}>
+                EMAIL
+              </h1>
+              <p className="text-white p-0 m-0">648 693 804</p>
+            </div>
           </div>
         </div>
         {/* Form by Yaya12085 en uiverse.io*/}
