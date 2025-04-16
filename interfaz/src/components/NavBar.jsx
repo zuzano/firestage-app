@@ -26,9 +26,6 @@ function NavBar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="d-flex align-items-center">
-            <Nav.Link as={Link} to="/about">
-              ABOUT
-            </Nav.Link>
             <Nav.Link as={Link} to="/mesasVIP">
               MESAS VIP
             </Nav.Link>

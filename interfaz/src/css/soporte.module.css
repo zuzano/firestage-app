@@ -1,3 +1,11 @@
+.iconos{
+  background-color: #fff;
+  margin: 10px;
+  border-radius: 100%;
+  padding: 25px;
+}
+
+
 /* From Uiverse.io by Yaya12085 */ 
 .form {
     position: relative;
@@ -5,7 +13,7 @@
     align-items: flex-start;
     flex-direction: column;
     gap: 10px;
-    width: 300px;
+    width: 70%;
     background-color: white;
     padding: 20px;
     border-radius: 10px;

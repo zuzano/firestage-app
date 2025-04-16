@@ -50,7 +50,7 @@ enviarCorreo = async function(req,res) {
           });
           
           const mailOptions = {
-            from: 'santi.casalv@hotmail.com',
+            from: email,
             to: 'santi.casalv@hotmail.com',
             subject: asunto,
             text: `${mensaje}`

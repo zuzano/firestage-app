@@ -3,6 +3,7 @@ import { Container, Row, Col, Card, Button, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styles from "./../css/soporte.module.css";
+import { Icon } from "@iconify/react";
 
 function Soporte() {
   const [nombre, setNombre] = useState("");
@@ -24,7 +25,11 @@ function Soporte() {
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: correo, asunto: asunto, mensaje: mensaje }),
+            body: JSON.stringify({
+              email: correo,
+              asunto: asunto,
+              mensaje: mensaje,
+            }),
           }
         );
         const data = await response.json();
@@ -38,10 +43,10 @@ function Soporte() {
         setShow(true);
         setEnviar(false);
       }
-    }
+    };
 
     contactar();
-  }, [enviar,nombre, correo, asunto, mensaje, error]);
+  }, [enviar, nombre, correo, asunto, mensaje, error]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -50,7 +55,7 @@ function Soporte() {
   };
 
   const handleClose = (e) => {
-    setShow(false)
+    setShow(false);
   };
 
   return (
@@ -64,19 +69,64 @@ function Soporte() {
           placeItems: "center",
         }}
       >
+        <div className="d-flex flex-column w-50">
+          <div className="d-flex align-items-center justify-content-around">
+            <div className={styles.iconos}>
+              <Icon
+                icon="heroicons:phone-solid"
+                width="80"
+                height="80"
+                color="black"
+              />
+            </div>
+            <div className="d-flex flex-column">
+
+              <h1 className="text-white" style={{fontSize:'2em'}}>MOVIL</h1>
+              <p className="text-white p-0 m-0">648 693 804</p>
+            </div>
+            <div className={styles.iconos}>
+              <Icon
+                icon="simple-line-icons:location-pin"
+                width="80"
+                height="80"
+                color="black"
+              />
+            </div>
+            <h1 className="text-white" style={{fontSize:'2em'}}>DIRECCIÓN</h1>
+            <div className={styles.iconos}>
+              <Icon icon="uiw:mail" width="80" height="80" color="black" />
+            </div>
+            <h1 className="text-white" style={{fontSize:'2em'}}>EMAIL</h1>
+          </div>
+        </div>
         {/* Form by Yaya12085 en uiverse.io*/}
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.title}>Contactanos</div>
-          <input type="text" placeholder="Nombre" required onChange={(e) => setNombre(e.target.value)} className={styles.input} />
-          < input type="text" placeholder="Email" onChange={(e) => setCorreo(e.target.value)} className={styles.input} />
+          <input
+            type="text"
+            placeholder="Nombre"
+            required
+            onChange={(e) => setNombre(e.target.value)}
+            className={styles.input}
+          />
+          <input
+            type="text"
+            placeholder="Email"
+            onChange={(e) => setCorreo(e.target.value)}
+            className={styles.input}
+          />
           <input
             type="text"
             placeholder="Asunto"
-             required
-             onChange={(e) => setAsunto(e.target.value)}
+            required
+            onChange={(e) => setAsunto(e.target.value)}
             className={styles.input}
           />
-          <textarea placeholder="Mensaje" onChange={(e) => setMensaje(e.target.value)} defaultValue={""} />
+          <textarea
+            placeholder="Mensaje"
+            onChange={(e) => setMensaje(e.target.value)}
+            defaultValue={""}
+          />
           <button>Enviar</button>
         </form>
         <Modal
@@ -89,9 +139,7 @@ function Soporte() {
             <Modal.Title>Mensaje Enviado</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {error !== null
-              ? error
-              : "Tu mensaje se ha realizado con exitó."}
+            {error !== null ? error : "Tu mensaje se ha realizado con exitó."}
           </Modal.Body>
         </Modal>
       </Container>
