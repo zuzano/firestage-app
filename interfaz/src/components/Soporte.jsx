@@ -83,7 +83,7 @@ function Soporte() {
               <h1 className="text-white" style={{ fontSize: "2em" }}>
                 MOVIL
               </h1>
-              <p className="text-white p-0 m-0">648 693 804</p>
+              <p className="text-white p-0 m-0">648 793 805</p>
             </div>
             <div className={styles.iconos}>
               <Icon
@@ -97,7 +97,8 @@ function Soporte() {
               <h1 className="text-white" style={{ fontSize: "2em" }}>
                 DIRECCIÓN
               </h1>
-              <p className="text-white p-0 m-0">648 693 804</p>
+              <p className="text-white p-0 m-0">Fernández de los Ríos 67
+              Madrid</p>
             </div>
             <div className={styles.iconos}>
               <Icon icon="uiw:mail" width="80" height="80" color="black" />
@@ -106,7 +107,7 @@ function Soporte() {
               <h1 className="text-white" style={{ fontSize: "2em" }}>
                 EMAIL
               </h1>
-              <p className="text-white p-0 m-0">648 693 804</p>
+              <p className="text-white p-0 m-0">info@firestage.es</p>
             </div>
           </div>
         </div>

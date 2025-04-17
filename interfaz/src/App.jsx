@@ -11,6 +11,7 @@ import Soporte from "./components/Soporte"
 import Registro from "./components/Registro";
 import Ruleta from "./components/Ruleta";
 import Eventos from "./components/Eventos";
+import MesasVip from "./components/MesasVip";
 
 import './App.css';
 
@@ -25,6 +26,7 @@ function App() {
           <Route path="/login" element={<Login />} /> 
           <Route path="/registrarse" element={<Registro />} /> 
           <Route path="/eventos" element={<Eventos />} /> 
+          <Route path="/mesasVIP" element={<MesasVip />} /> 
           <Route path="/soporte" element={<Soporte />} /> 
           <Route path="/premios" element={<Ruleta />} /> 
         </Routes>
