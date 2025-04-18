@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Navbar, Nav } from "react-bootstrap";
 import { Link } from "react-router-dom"; // Importa Link
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,11 @@ import { useNavigate } from "react-router-dom";
 function NavBar() {
   const navigate = useNavigate();
   const [usuario, setUsuario] = useState(localStorage.getItem("usuario")); // Estado para reflejar el usuario
+
+  // Actualiza el estado sino haria falta recargar ya que localStorage solo se actualiza cuando se recarga
+  useEffect(() => {
+    setUsuario(localStorage.getItem("usuario"))
+  },[localStorage.getItem("usuario")])
 
   const handleLogout = () => {
     localStorage.removeItem("usuario"); // "Cerrar sesión" eliminando los datos
