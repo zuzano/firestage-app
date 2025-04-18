@@ -141,6 +141,8 @@ function Inicio() {
                   <Button
                     variant="outline-secondary border-0"
                     className="w-100 text-white"
+                    as={Link}
+                    to='/mesasVIP'
                   >
                     Reservar ahora
                   </Button>
@@ -190,6 +192,8 @@ function Inicio() {
                   <Button
                     variant="outline-secondary border-0"
                     className="w-100 text-white"
+                    as={Link}
+                    to='/entradas'
                   >
                     Ver opciones
                   </Button>
@@ -239,6 +243,8 @@ function Inicio() {
                   <Button
                     variant="outline-secondary border-0"
                     className="w-100 text-white"
+                    as={Link}
+                    to='/entradas'
                   >
                     Comprar entrada
                   </Button>
@@ -267,7 +273,6 @@ function Inicio() {
             to='/soporte'
             className="btn mt-3 px-4 py-2 text-white"
             target="_blank"
-            rel="noopener noreferrer"
             style={{ backgroundColor: "#131313" }}
           >
             Contactar por Email

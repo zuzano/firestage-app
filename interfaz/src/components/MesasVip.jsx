@@ -7,6 +7,18 @@ import { Icon } from "@iconify/react";
 import styles from './../css/mesasvip.module.css'
 
 function MesasVip(){
+    const [show, setShow] = useState(false)
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
+
+    const handleClose = (e) => {
+        setShow(false);
+      };
+
+      const handleClick = (e) => {
+        setShow(true);
+      };
+
     return (
         <>
         <Container fluid style={{
@@ -38,7 +50,7 @@ function MesasVip(){
                             <li>6 refrescos</li>
                             <li>Con mesa</li>
                         </ul>
-                        <button className={styles.button}>
+                        <button onClick={handleClick} className={styles.button}>
                             Reservar
                         </button>
                         </div>
@@ -50,7 +62,7 @@ function MesasVip(){
                             <li>4 refrescos</li>
                             <li>Cerca del DJ</li>
                         </ul>
-                        <button className={styles.button}>
+                        <button onClick={handleClick} className={styles.button}>
                             Reservar
                         </button>
                     </div>
@@ -62,12 +74,25 @@ function MesasVip(){
                             <li>Refrescos ilimitados</li>
                             <li>Al lado del DJ</li>
                         </ul>
-                        <button className={styles.button}>
+                        <button onClick={handleClick} className={styles.button}>
                             Reservar
                         </button>
                     </div>
                 </div>
             </section>
+             <Modal
+                      className="d-flex align-items-center"
+                      show={show}
+                      onHide={handleClose}
+                      animation={true}
+                    >
+                      <Modal.Header>
+                        <Modal.Title>Reservar Ahora</Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body>
+                        
+                      </Modal.Body>
+                    </Modal>
         </Container>
         </>
     )

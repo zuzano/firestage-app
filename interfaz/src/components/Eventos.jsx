@@ -47,7 +47,16 @@ function Eventos() {
             height: "100%",
             width: '100%'
           }}></div>
-          <div className={styles.div4}
+          <div className={styles.div4} 
+           style={{
+            backgroundImage:
+              "url('./../../public/images/eventos/Titulo.png')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            height: "100%",
+            width: '100%'
+          }}
           ></div>
           <div className={styles.div5}
           ></div>
