@@ -12,7 +12,7 @@ function Eventos() {
         fluid
         style={{
           backgroundColor: "#131313",
-          height: "80vh",
+          height: "85vh",
           display: "grid",
           placeItems: "center",
         }}
