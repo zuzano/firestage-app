@@ -64,12 +64,12 @@ function Soporte() {
         fluid
         style={{
           backgroundColor: "#131313",
-          height: "80vh",
-          display: "grid",
-          placeItems: "center",
+          display: "flex",
+          flexDirection: 'column',
+          alignItems: 'center',
         }}
       >
-        <div className="d-flex flex-column w-50">
+        <div className="d-flex flex-column w-70 mt-5">
           <div className="d-flex align-items-center justify-content-around">
             <div className={styles.iconos}>
               <Icon

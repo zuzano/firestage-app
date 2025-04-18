@@ -13,6 +13,7 @@ import Ruleta from "./components/Ruleta";
 import Eventos from "./components/Eventos";
 import MesasVip from "./components/MesasVip";
 import Entradas from "./components/Entradas";
+import Administrador from "./components/Administrador";
 
 import './App.css';
 
@@ -25,6 +26,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Inicio />} /> 
           <Route path="/login" element={<Login />} /> 
+          <Route path="/administrador" element={<Administrador />} /> 
           <Route path="/registrarse" element={<Registro />} /> 
           <Route path="/eventos" element={<Eventos />} /> 
           <Route path="/mesasVIP" element={<MesasVip />} /> 

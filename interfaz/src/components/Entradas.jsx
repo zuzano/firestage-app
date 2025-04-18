@@ -13,7 +13,6 @@ function Entradas(){
         <Container fluid style={{
           backgroundColor: "#131313",
           display: "flex",
-          height: '80vh',
           flexDirection: 'column',
           alignItems: 'center',
           padding: '100px'

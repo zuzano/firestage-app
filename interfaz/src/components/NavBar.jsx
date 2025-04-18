@@ -6,14 +6,18 @@ import { useNavigate } from "react-router-dom";
 function NavBar() {
   const navigate = useNavigate();
   const [usuario, setUsuario] = useState(localStorage.getItem("usuario")); // Estado para reflejar el usuario
+  const [rol, setRol] = useState(localStorage.getItem("rol"));
 
   // Actualiza el estado sino haria falta recargar ya que localStorage solo se actualiza cuando se recarga
   useEffect(() => {
     setUsuario(localStorage.getItem("usuario"))
-  },[localStorage.getItem("usuario")])
+    console.log(localStorage.getItem("rol"));
+    setRol(localStorage.getItem("rol"));
+  },[localStorage.getItem("usuario"), localStorage.getItem("rol")])
 
   const handleLogout = () => {
     localStorage.removeItem("usuario"); // "Cerrar sesión" eliminando los datos
+    localStorage.removeItem("rol"); 
     setUsuario(null); // Actualiza el estado para reflejar el cierre de sesión
     navigate("/");
   };
@@ -46,6 +50,7 @@ function NavBar() {
             <Nav.Link as={Link} to="/soporte">
               SOPORTE
             </Nav.Link>
+            {rol === "admin" ? (<Nav.Link as={Link} to='/administrador'>ADMINISTRADOR</Nav.Link>) : <></>}
           </Nav>
         </Navbar.Collapse>
         <Nav>

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Container, Modal } from "react-bootstrap";
 import styles from "./../css/login.module.css";
+import { createGlobalStyle } from "styled-components";
 
 function Login() {
   const [enviar, setEnviar] = useState(false);
@@ -32,6 +33,7 @@ function Login() {
         } else {
           // Guardar datos del usuario en localStorage
           localStorage.setItem("usuario", JSON.stringify(data.usuario));
+          localStorage.setItem("rol", data.usuario.usuario.rol)
         }
       } catch (err) {
         setError("Error al conectar con el servidor");
