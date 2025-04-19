@@ -36,6 +36,14 @@ function Administrador() {
         mostrarUsuarios();
     },[usuarios])
 
+    const handleSubmit = () => {
+
+    }
+
+    const handleChange = () => {
+
+    }
+
     return (
         <>
             <Container fluid style={{
