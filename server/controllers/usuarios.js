@@ -104,8 +104,92 @@ mostrarUsuarios = async function (req, res) {
 
 }
 
+editarUsuario = async function(req,res) {
+  try {
+   
+    await mongoose.connect(dbURI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+    const _idusuario = req.params.id;
+    const {
+     nombre,email,rol,puntos
+    } = req.body;
+
+
+    if (!_idusuario) {
+      return res.status(400).json({ error: "El ID del usuario es necesario." });
+    }
+
+    // Campos requeridos para la actualizaci�n
+    const requiredFields = ["nombre","email","rol","puntos"];
+    if (requiredFields.some(field => !req.body[field])) {
+      return res.status(400).json({ error: "Faltan campos por rellenar." });
+    }
+
+    // Actualizacion del usuario
+    const actualizarUsuario = {
+      nombre,email,rol,puntos
+    };
+
+    const actualizacionUsuario = await Producto.findOneAndUpdate(
+      {_id:_idusuario},
+      actualizarUsuario,
+      { new: true, runValidators: true }
+    );
+
+    if (!actualizacionUsuario) {
+      return res.status(404).json({ error: "Usuario no encontrado." });
+    }
+
+    res.json("Usuario actualizado");
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      error: "Error al editar el usuario",
+      mensaje: error.message
+    });
+  }
+}
+
+eliminarUsuario = async function (req,res){
+  try {
+    // Conectar a la base de datos
+    await mongoose.connect(dbURI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+
+    // Obtener el ID del usuario a eliminar
+    const _id = req.params.id;
+    // Intentar eliminar el usuario
+    const resultado = await Usuario.findByIdAndDelete(_id);
+
+    // Verificar si se encontró y eliminó el usuario
+    if (!resultado) {
+      return res.status(404).json({
+        mensaje: "No se encontró el usuario con ese ID"
+      });
+    }
+
+    // Respuesta de éxito si se eliminó
+    return res.status(200).json({
+      mensaje: "Usuario eliminado"
+    });
+  } catch (error) {
+    // Manejar errores generales
+    return res.status(500).json({
+      mensaje: "Error al eliminar el usuario",
+      error: error.message
+    });
+  }
+}
+
 module.exports = {
   enviarCorreo,
-  mostrarUsuarios
+  mostrarUsuarios,
+  editarUsuario,
+  eliminarUsuario
 }
 
