@@ -11,7 +11,6 @@ function NavBar() {
   // Actualiza el estado sino haria falta recargar ya que localStorage solo se actualiza cuando se recarga
   useEffect(() => {
     setUsuario(localStorage.getItem("usuario"))
-    console.log(localStorage.getItem("rol"));
     setRol(localStorage.getItem("rol"));
   },[localStorage.getItem("usuario"), localStorage.getItem("rol")])
 

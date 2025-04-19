@@ -10,7 +10,29 @@ function Administrador() {
 
     useEffect(() => {
 
+        const mostrarUsuarios = async () => {
+
+            try {
+                const response = await fetch(
+                  "http://localhost:5000/usuarios/mostrarUsuarios",
+                  {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                  }
+                );
+                const data = await response.json();
+                if (response.ok) {
+                    setUsuarios(data.usuarios); // Guardar los usuarios en el estado
+                  } else {
+                    console.log(data.mensaje);
+                  }
+                
+              } catch (err) {
+                console.error("Error al obtener usuarios:", err);
+              } 
+        }
         
+        mostrarUsuarios();
     },[usuarios])
 
     return (
@@ -30,26 +52,21 @@ function Administrador() {
                                 <tr>
                                     <th>Nombre</th>
                                     <th>Email</th>
-                                    <th>Contraseña</th>
                                     <th>Rol</th>
+                                    <th>Puntos</th>
+                                    <th>Opciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                </tr>
-                                <tr>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td colSpan={2}>Larry the Bird</td>
-                                    <td>@twitter</td>
-                                </tr>
+                                {usuarios.map((usuario, index) => (
+                                    <tr>
+                                        <td>{usuario.nombre}</td>
+                                        <td>{usuario.email}</td>
+                                        <td>{usuario.rol}</td>
+                                        <td>{usuario.puntos}</td>
+                                        <td>e e</td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </Table>
                     </div>
