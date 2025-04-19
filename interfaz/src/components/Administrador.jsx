@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Card, Button, Modal, Table } from "react-bootstrap";
+import { Container, Row, Col, Card, Button, Modal, Table, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { Icon } from "@iconify/react";
 
 import styles from './../css/administrador.module.css'
 
@@ -47,6 +48,7 @@ function Administrador() {
 
                 <div className={styles.parent}>
                     <div className={styles.div1}>
+                        <h1 className="text-center">USUARIOS</h1>
                         <Table striped bordered hover>
                             <thead>
                                 <tr>
@@ -64,15 +66,29 @@ function Administrador() {
                                         <td>{usuario.email}</td>
                                         <td>{usuario.rol}</td>
                                         <td>{usuario.puntos}</td>
-                                        <td>e e</td>
+                                        <td><Icon icon="flowbite:edit-solid" width="24" height="24"  style={{color: "#0e89ff"}} /><Icon icon="typcn:delete" width="24" height="24"  style={{color: "#f00"}}/></td>
                                     </tr>
                                 ))}
                             </tbody>
                         </Table>
                     </div>
-                    <div className={styles.div2}>2</div>
-                    <div className={styles.div3}>3</div>
-                    <div className={styles.div4}>4</div>
+                    <div className={styles.div2}>
+                        <h1 className="text-center">MESAS VIP</h1>
+                    </div>
+                    <div className={styles.div3}>
+                        <h1 className="text-center">PREMIOS</h1>
+                        <Form onSubmit={handleSubmit}>
+                            <Form.Control 
+                            type="text"
+                            placeholder="Introduce los premios a añadir en la ruleta"
+                            name="premios"
+                            onChange={handleChange}
+                            />
+                        </Form>
+                    </div>
+                    <div className={styles.div4}>
+                        <h1 className="text-center">ENTRADAS</h1>
+                    </div>
                 </div>
 
             </Container>

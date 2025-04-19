@@ -6,11 +6,6 @@ const entradaSchema = new mongoose.Schema({
     ref: 'Usuario',
     required: true
   },
-  evento: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Evento',
-    required: true
-  },
   tipo: {
     type: String,
     enum: ['general', 'vip'],
