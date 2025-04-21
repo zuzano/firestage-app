@@ -132,7 +132,7 @@ editarUsuario = async function(req,res) {
       nombre,email,rol,puntos
     };
 
-    const actualizacionUsuario = await Producto.findOneAndUpdate(
+    const actualizacionUsuario = await Usuario.findOneAndUpdate(
       {_id:_idusuario},
       actualizarUsuario,
       { new: true, runValidators: true }
@@ -142,7 +142,7 @@ editarUsuario = async function(req,res) {
       return res.status(404).json({ error: "Usuario no encontrado." });
     }
 
-    res.json("Usuario actualizado");
+    res.json({mensaje: "Usuario actualizado correctamente"});
 
   } catch (error) {
     console.error(error);

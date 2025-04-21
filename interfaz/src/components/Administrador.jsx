@@ -22,6 +22,7 @@ function Administrador() {
   const [mensaje, setMensaje] = useState(null);
 
   const [editar, setEditar] = useState(false);
+  const [usuarioId, setUsuarioId] = useState(null);
   const [datosEditados, setDatosEditados] = useState({});
 
   const handleSubmit = () => {};
@@ -37,7 +38,9 @@ function Administrador() {
     setDatosEditados((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleEditar = () => {
+  const handleEditar = (usuario) => {
+    setDatosEditados(usuario)
+    setUsuarioId(usuario._id);
     setEditar(true);
   };
 
@@ -66,32 +69,43 @@ function Administrador() {
     }
   };
 
-  const handleClickActualizar = async (usuarioActualizado) => {
+  const handleClickActualizar = async (id) => {
+    if(id !== usuarioId){
+        setUsuarioId(null);
+        setEditar(false);
+        return;
+    }
+
     try {
       const response = await fetch(
-        "http://localhost:5000/usuarios/editarUsuario/" + usuarioActualizado.id,
+        "http://localhost:5000/usuarios/editarUsuario/" + id,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            nombre: usuarioActualizado.nombre,
-            email: ususuarioActualizadouario.email,
-            rol: usuarioActualizado.rol,
-            puntos: usuarioActualizado.puntos,
+            nombre: datosEditados.nombre,
+            email: datosEditados.email,
+            rol: datosEditados.rol,
+            puntos: datosEditados.puntos,
           }),
         }
       );
       const data = await response.json();
       if (response.ok) {
-        setMensaje(data.mensaje);
         setShow(true);
+        setTitulo("Usuario editado.")
+        setMensaje(data.mensaje);
+        setUsuarioId(null);
+        setDatosEditados({});
+        setEditar(false);
       } else {
         setTitulo(data.error);
         setMensaje(data.mensaje);
         setShow(true);
       }
     } catch (err) {
-      setTitulo("Error al eliminar el usuario");
+      setShow(true)
+      setTitulo("Error al editar el usuario");
       setMensaje(err);
     }
   };
@@ -148,12 +162,12 @@ function Administrador() {
               <tbody>
                 {usuarios.map((usuario, index) => (
                   <tr>
-                    <td onClick={handleEditar}>
+                    <td onClick={() => {handleEditar(usuario)}}>
                       {editar ? (
                         <Form.Control
                           type="text"
                           name="nombre"
-                          value={datosEditados.nombre ? datosEditados.nombre : usuario.nombre}
+                          value={datosEditados.nombre}
                           onChange={handleCambioInput}
                           style={{backgroundColor: 'transparent', border: 'none'}}
                         />
@@ -161,12 +175,12 @@ function Administrador() {
                         usuario.nombre
                       )}
                     </td>
-                    <td  onClick={handleEditar}>
+                    <td  onClick={() => {handleEditar(usuario)}}>
                       {editar ? (
                         <Form.Control
                           type="email"
                           name="email"
-                          value={datosEditados.email ? datosEditados.email : usuario.email}
+                          value={datosEditados.email}
                           onChange={handleCambioInput}
                           style={{backgroundColor: 'transparent', border: 'none'}}
                         />
@@ -174,12 +188,12 @@ function Administrador() {
                         usuario.email
                       )}
                     </td>
-                    <td  onClick={handleEditar}>
+                    <td  onClick={() => {handleEditar(usuario)}}>
                       {editar ? (
                         <Form.Control
                           type="text"
                           name="rol"
-                          value={datosEditados.rol ? datosEditados.rol : usuario.rol}
+                          value={datosEditados.rol}
                           onChange={handleCambioInput}
                           style={{backgroundColor: 'transparent', border: 'none'}}
                         />
@@ -187,12 +201,12 @@ function Administrador() {
                         usuario.rol
                       )}
                     </td>
-                    <td  onClick={handleEditar}>
+                    <td  onClick={() => {handleEditar(usuario)}}>
                       {editar ? (
                         <Form.Control
                           type="number"
                           name="puntos"
-                          value={datosEditados.puntos ? datosEditados.puntos : usuario.puntos}
+                          value={datosEditados.puntos}
                           onChange={handleCambioInput}
                           style={{backgroundColor: 'transparent', border: 'none'}}
                         />
@@ -207,7 +221,7 @@ function Administrador() {
                         height="24"
                         style={{ color: "#0e89ff", cursor: "pointer" }}
                         onClick={() => {
-                          handleClickActualizar();
+                          handleClickActualizar(usuario._id);
                         }}
                       />
                       <Icon
