@@ -97,7 +97,7 @@ mostrarUsuarios = async function (req, res) {
 
   } catch (error) {
     return res.status(500).json({
-      error: "Error al registrar el usuario",
+      error: "Error al mostrar los usuarios",
       mensaje: error.message
     });
   }

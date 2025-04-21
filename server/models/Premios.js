@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const sorteoSchema = new mongoose.Schema({
+const premioSchema = new mongoose.Schema({
   descripcion: {
     type: String,
     required: true,
@@ -13,4 +13,4 @@ const sorteoSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('Sorteo', sorteoSchema);
+module.exports = mongoose.model('Premio', premioSchema);

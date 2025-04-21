@@ -12,6 +12,7 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
 // Importar routes
 const loginRouter = require('./routes/loginRoutes');
 const usuariosRouter = require('./routes/usuarioRoutes');
+const premiosRouter = require('./routes/premiosRoutes');
 
 
 const app = express();
@@ -31,6 +32,7 @@ app.use(express.static('public'));
 // Routes
 app.use('/autenticacion', loginRouter);
 app.use('/usuarios', usuariosRouter);
+app.use('/sorteos', premiosRouter);
 
 
 // 404 ERROR

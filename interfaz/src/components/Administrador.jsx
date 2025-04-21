@@ -27,7 +27,7 @@ function Administrador() {
 
   const handleSubmit = () => {};
 
-  const handleChange = () => {};
+  const handleChangePremios = () => {};
 
   const handleClose = () => {
     setShow(false);
@@ -249,7 +249,7 @@ function Administrador() {
                 type="text"
                 placeholder="Introduce los premios a añadir en la ruleta"
                 name="premios"
-                onChange={handleChange}
+                onChange={handleChangePremios}
               />
             </Form>
           </div>
