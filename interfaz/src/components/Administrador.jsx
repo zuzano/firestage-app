@@ -8,6 +8,8 @@ import {
   Modal,
   Table,
   Form,
+  InputGroup,
+  Label
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -17,6 +19,7 @@ import styles from "./../css/administrador.module.css";
 
 function Administrador() {
   const [usuarios, setUsuarios] = useState([]);
+  const [premio, setPremio] = useState(null);
   const [show, setShow] = useState(false);
   const [titulo, setTitulo] = useState(null);
   const [mensaje, setMensaje] = useState(null);
@@ -39,7 +42,7 @@ function Administrador() {
   };
 
   const handleEditar = (usuario) => {
-    setDatosEditados(usuario)
+    setDatosEditados(usuario);
     setUsuarioId(usuario._id);
     setEditar(true);
   };
@@ -70,10 +73,10 @@ function Administrador() {
   };
 
   const handleClickActualizar = async (id) => {
-    if(id !== usuarioId){
-        setUsuarioId(null);
-        setEditar(false);
-        return;
+    if (id !== usuarioId) {
+      setUsuarioId(null);
+      setEditar(false);
+      return;
     }
 
     try {
@@ -93,7 +96,7 @@ function Administrador() {
       const data = await response.json();
       if (response.ok) {
         setShow(true);
-        setTitulo("Usuario editado.")
+        setTitulo("Usuario editado.");
         setMensaje(data.mensaje);
         setUsuarioId(null);
         setDatosEditados({});
@@ -104,7 +107,7 @@ function Administrador() {
         setShow(true);
       }
     } catch (err) {
-      setShow(true)
+      setShow(true);
       setTitulo("Error al editar el usuario");
       setMensaje(err);
     }
@@ -162,53 +165,81 @@ function Administrador() {
               <tbody>
                 {usuarios.map((usuario, index) => (
                   <tr>
-                    <td onClick={() => {handleEditar(usuario)}}>
+                    <td
+                      onClick={() => {
+                        handleEditar(usuario);
+                      }}
+                    >
                       {editar ? (
                         <Form.Control
                           type="text"
                           name="nombre"
                           value={datosEditados.nombre}
                           onChange={handleCambioInput}
-                          style={{backgroundColor: 'transparent', border: 'none'}}
+                          style={{
+                            backgroundColor: "transparent",
+                            border: "none",
+                          }}
                         />
                       ) : (
                         usuario.nombre
                       )}
                     </td>
-                    <td  onClick={() => {handleEditar(usuario)}}>
+                    <td
+                      onClick={() => {
+                        handleEditar(usuario);
+                      }}
+                    >
                       {editar ? (
                         <Form.Control
                           type="email"
                           name="email"
                           value={datosEditados.email}
                           onChange={handleCambioInput}
-                          style={{backgroundColor: 'transparent', border: 'none'}}
+                          style={{
+                            backgroundColor: "transparent",
+                            border: "none",
+                          }}
                         />
                       ) : (
                         usuario.email
                       )}
                     </td>
-                    <td  onClick={() => {handleEditar(usuario)}}>
+                    <td
+                      onClick={() => {
+                        handleEditar(usuario);
+                      }}
+                    >
                       {editar ? (
                         <Form.Control
                           type="text"
                           name="rol"
                           value={datosEditados.rol}
                           onChange={handleCambioInput}
-                          style={{backgroundColor: 'transparent', border: 'none'}}
+                          style={{
+                            backgroundColor: "transparent",
+                            border: "none",
+                          }}
                         />
                       ) : (
                         usuario.rol
                       )}
                     </td>
-                    <td  onClick={() => {handleEditar(usuario)}}>
+                    <td
+                      onClick={() => {
+                        handleEditar(usuario);
+                      }}
+                    >
                       {editar ? (
                         <Form.Control
                           type="number"
                           name="puntos"
                           value={datosEditados.puntos}
                           onChange={handleCambioInput}
-                          style={{backgroundColor: 'transparent', border: 'none'}}
+                          style={{
+                            backgroundColor: "transparent",
+                            border: "none",
+                          }}
                         />
                       ) : (
                         usuario.puntos
@@ -245,13 +276,17 @@ function Administrador() {
           <div className={styles.div3}>
             <h1 className="text-center">PREMIOS</h1>
             <Form onSubmit={handleSubmit}>
-              <Form.Control
-                type="text"
-                placeholder="Introduce los premios a añadir en la ruleta"
-                name="premios"
-                onChange={handleChangePremios}
-              />
+              <InputGroup className="mb-3">
+                <Form.Control
+                  type="text"
+                  placeholder="Introduce los premios a añadir en la ruleta"
+                  name="premios"
+                  onChange={handleChangePremios}
+                />
+                <Button>Añadir</Button>
+              </InputGroup>
             </Form>
+            <Label></Label>
           </div>
           <div className={styles.div4}>
             <h1 className="text-center">ENTRADAS</h1>
