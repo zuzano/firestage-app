@@ -54,7 +54,7 @@ function MesasVip(){
                             Reservar
                         </button>
                         </div>
-                    <div className="text-center d-flex flex-column align-items-center py-3 fw-bold" style={{backgroundImage: 'linear-gradient( 109.6deg,  rgba(255,249,35,1) 11.5%, rgba(243,161,0,1) 91.1% )' ,color:'black', width:'20%',  borderRadius:'5%'}}>
+                    <div className="text-center d-flex flex-column align-items-center py-3 fw-bold" style={{backgroundImage: 'linear-gradient( 109.6deg,  #fff923 11.5%, rgba(243,161,0,1) 91.1% )' ,color:'black', width:'20%',  borderRadius:'5%'}}>
                         <h2>Pack Oro</h2>
                         <h1>€ 150</h1>
                         <ul style={{padding:'0px' ,textAlign:'left'}}>

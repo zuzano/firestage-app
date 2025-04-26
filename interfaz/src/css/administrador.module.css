@@ -4,14 +4,25 @@
     grid-template-columns: repeat(6, 1fr);
     grid-template-rows: repeat(6, 1fr);
     gap: 11px;
-    width: 100%;
+    width: 50%;
     height: 100%;
 }
     
 .parent div{
     border-radius: 10px;
     background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
 }
+
+.parent div:hover{
+    transition: scale 1s ease-in-out;
+    scale: 1.04;
+}
+
 .div1 {
     grid-column: span 3 / span 3;
     grid-row: span 3 / span 3;
