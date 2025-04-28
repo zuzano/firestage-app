@@ -49,21 +49,41 @@ enviarCorreo = async function (req, res) {
       }
     });
 
-    const mailOptions = {
-      from: email,
-      to: 'santi.casalv@hotmail.com',
+     // Correo envia el cliente
+     const mailToAdmin = {
+      from: email, // quien lo envía
+      to: 'santi.casalv@hotmail.com', // mi correo
       subject: asunto,
       text: `${mensaje}`
     };
 
-    transporter.sendMail(mailOptions, (error, info) => {
+    // Correo de CONFIRMACIÓN para el cliente
+    const mailToClient = {
+      from: 'odesxd1934@gmail.com', // mi correo oficial
+      to: email, // correo del cliente
+      subject: 'Confirmación de contacto',
+      text: `Hola, hemos recibido tu mensaje:\n\n"${mensaje}"\n\nTe responderemos pronto.`
+    };
+
+    // Primero enviar a ti
+    transporter.sendMail(mailToAdmin, (error, info) => {
       if (error) {
         return res.status(404).json({
-          error: "Error al enviar el correo",
+          error: "Error al enviar el correo.",
           mensaje: error
         });
       } else {
-        res.status(200).json({ mensaje: 'Correo enviado', info: info.response });
+        // Después enviar confirmación al cliente
+        transporter.sendMail(mailToClient, (err, infoCliente) => {
+          if (err) {
+            return res.status(404).json({
+              error: "Correo enviado al soporte pero error al enviar el correo de confirmacion al cliente.",
+              mensaje: err
+            });
+          } else {
+            res.status(200).json({ mensaje: 'Correo enviado', info: info.response });
+          }
+        });
       }
     });
 
