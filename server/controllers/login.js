@@ -1,9 +1,11 @@
+const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 require('dotenv').config();
 const Usuario = require("../models/Usuario");
 
 
 const dbURI = process.env.MONGODB_URI;
+
 console.log(dbURI)
 const express = require('express');
 const cors = require('cors');
@@ -38,8 +40,18 @@ registrarUsuario = async function (req,res){
         if(usuarioExistente){
             return res.status(400).json({mensaje: 'El email ya está registrado'});
         }
+        
+        // Encriptar contraseña antes de guardar
+        const saltRounds = 10;
+        const contraseñaEncriptada = await bcrypt.hash(contraseña, saltRounds);
 
-        const nuevoUsuario = new Usuario({nombre, apellidos, email, contraseña});
+        const nuevoUsuario = new Usuario({
+            nombre,
+            apellidos,
+            email,
+            contraseña: contraseñaEncriptada
+        });
+
 
         await nuevoUsuario.save();
 
@@ -64,9 +76,15 @@ iniciarSesionUsuario = async function (req,res){
             contraseña
         } = req.body;
 
-        const usuario = await Usuario.findOne({email: email, contraseña: contraseña});
+        const usuario = await Usuario.findOne({email: email});
+        
         if(!usuario){
             res.status(404).json({error: "Usuario no encontrado", mensaje: error.message})
+        }
+        // Comparar contraseña ingresada con la almacenada
+        const contraseñaValida = await bcrypt.compare(contraseña, usuario.contraseña);
+        if (!contraseñaValida) {
+            return res.status(401).json({ error: "Contraseña incorrecta" });
         }
 
         res.status(200).json({mensaje: "Sesión Iniciada", usuario: {usuario}});

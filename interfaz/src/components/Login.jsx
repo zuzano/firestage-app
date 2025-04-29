@@ -29,7 +29,7 @@ function Login() {
         const data = await response.json();
 
         if (response.status !== 200) {
-          setError(data.mensaje || "Error al iniciar sesión");
+          setError(data.error || "Error al iniciar sesión");
         } else {
           // Guardar datos del usuario en localStorage
           localStorage.setItem("usuario", JSON.stringify(data.usuario));
@@ -61,7 +61,11 @@ function Login() {
   };
 
   const handleClose = (e) => {
-    navigate("/");
+    if(error){
+      setShow(false)
+    }else{
+      navigate("/");
+    }
   };
 
   return (
