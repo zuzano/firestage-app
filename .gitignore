@@ -6,7 +6,6 @@ interfaz/node_modules/
 server/node_modules/
 .env
 server/.env
-# Builds de Vite
 interfaz/dist/
 docker-compose.yml
 Dockerfile
