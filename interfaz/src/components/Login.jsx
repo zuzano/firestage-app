@@ -39,7 +39,7 @@ const [emailTemp, setEmailTemp] = useState("");
         } else {
           // Guardar datos del usuario en localStorage
           localStorage.setItem("usuario", JSON.stringify(data.usuario));
-          localStorage.setItem("rol", data.usuario.usuario.rol)
+          localStorage.setItem("rol", data.usuario.rol)
         }
       } catch (err) {
         setError("Error al conectar con el servidor");

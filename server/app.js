@@ -5,19 +5,32 @@ const bodyParser = require('body-parser');
 const createError = require('http-errors');
 require('dotenv').config();
 
+const cron = require('node-cron');
+const Entradas = require('./models/Entradas');
+
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-.then(() => console.log('Conectado a MongoDB'))
-.catch(err => console.error('Error al conectar a MongoDB:', err));
+    .then(() => {
+        console.log('Conectado a MongoDB')
+        //Tarea automatizada para borrar entradas cada dia cuando se conecte a la base de datos
+        // Ejecutar todos los días a las 00:00
+        cron.schedule('0 0 * * *', async () => {
+            try {
+                await Entradas.deleteMany({});
+                console.log('Entradas reiniciadas correctamente');
+            } catch (error) {
+                console.error('Error al reiniciar entradas:', error);
+            }
+        });
+    })
+    .catch(err => console.error('Error al conectar a MongoDB:', err));
 
 // Importar routes
 const loginRouter = require('./routes/loginRoutes');
 const usuariosRouter = require('./routes/usuarioRoutes');
 const premiosRouter = require('./routes/premiosRoutes');
-
+const entradasRouter = require('./routes/entradasRoutes');
 
 const app = express();
-
-
 
 // Permite que tu frontend (como React) haga peticiones al backend desde diferentes dominios.
 app.use(cors());
@@ -33,6 +46,7 @@ app.use(express.static('public'));
 app.use('/autenticacion', loginRouter);
 app.use('/usuarios', usuariosRouter);
 app.use('/sorteos', premiosRouter);
+app.use('/reservas', entradasRouter);
 
 
 // 404 ERROR

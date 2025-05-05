@@ -1,24 +1,27 @@
 const mongoose = require('mongoose');
 
 const entradaSchema = new mongoose.Schema({
-  usuario: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Usuario',
-    required: true
-  },
   tipo: {
     type: String,
-    enum: ['general', 'vip'],
-    required: true
+    enum: ['general', 'vip', 'premium', 'cumpleaños'],
+    required: true,
   },
-  precio: {
-    type: Number,
-    required: true
-  }
-}, {
-  timestamps: {
-    createdAt: 'fecha_compra'
-  }
+  subtipo: {
+    type: String,
+    enum: ['plata', 'oro', 'diamante'],
+    required: function () {
+      return this.tipo === 'vip';
+    },
+  },
+  comprador: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Usuario', 
+    required: true,
+  },
+  fechaCompra: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 module.exports = mongoose.model('Entrada', entradaSchema);

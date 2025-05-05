@@ -87,7 +87,7 @@ iniciarSesionUsuario = async function (req,res){
             return res.status(401).json({ error: "Contraseña incorrecta" });
         }
 
-        res.status(200).json({mensaje: "Sesión Iniciada", usuario: {usuario}});
+        res.status(200).json({mensaje: "Sesión Iniciada", usuario});
     }catch(error){
         return res.status(500).json({
             error: "Error al iniciar sesion",
