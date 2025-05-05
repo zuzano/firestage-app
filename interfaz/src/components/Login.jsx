@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Container, Modal } from "react-bootstrap";
 import styles from "./../css/login.module.css";
-import { createGlobalStyle } from "styled-components";
 
 function Login() {
   const [enviar, setEnviar] = useState(false);
@@ -12,6 +11,13 @@ function Login() {
   const [error, setError] = useState(null);
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
+
+  const [requiereCodigo, setRequiereCodigo] = useState(false);
+const [codigo, setCodigo] = useState("");
+const [emailTemp, setEmailTemp] = useState("");
+
+
+  // POR HACER --> Autenticación en dos pasos.
 
   useEffect(() => {
     if (!enviar) return;

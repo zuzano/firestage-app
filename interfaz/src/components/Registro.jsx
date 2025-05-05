@@ -15,6 +15,7 @@ const Registro = () => {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
 
+  // POR HACER --> Validacion de campos.
 
   useEffect(() => {
     if (!enviar) return;

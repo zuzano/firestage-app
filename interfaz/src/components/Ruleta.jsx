@@ -21,6 +21,8 @@ function Ruleta() {
       }
     }
 
+    // POR HACER --> Que la primera vez que tire de la ruleta el salga un mensaje al usuario que le diga que tiene que tener un usuario, limitar las tiradas
+
      useEffect(() => {
     
         const mostrarPremios = async () => {
