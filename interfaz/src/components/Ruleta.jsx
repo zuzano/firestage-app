@@ -14,6 +14,12 @@ function Ruleta() {
     const [mensaje, setMensaje] = useState("");
   
     const handleSpinClick = () => {
+      if(localStorage.getItem("usuario")){
+        setShow(true);
+        setTitulo("¡Aún no estas listo!")
+        setMensaje("Primero debes tener una cuenta para poder usar la ruleta.")
+        return;
+      }
       if (!mustSpin) {
         const newPrizeNumber = Math.floor(Math.random() * premios.length);
         setPrizeNumber(newPrizeNumber);
@@ -21,7 +27,7 @@ function Ruleta() {
       }
     }
 
-    // POR HACER --> Que la primera vez que tire de la ruleta el salga un mensaje al usuario que le diga que tiene que tener un usuario, limitar las tiradas
+    // POR HACER -->  limitar las tiradas
 
      useEffect(() => {
     
@@ -36,12 +42,12 @@ function Ruleta() {
                 );
                 const data = await response.json();
                 if (response.ok) {
-                    setPremios(data.premios); // Guardar los usuarios en el estado
+                    setPremios(data.premios); // Guardar los premios en los usuarios
                 } else {
                     console.log(data.mensaje);
                 }
             } catch (err) {
-                console.error("Error al obtener usuarios:", err);
+                console.error("Error al obtener los premios", err);
             }
         };
     
