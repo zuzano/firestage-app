@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Card, Button, Modal } from "react-bootstrap";
+import { Container,  Button, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { Icon } from "@iconify/react";
+
 
 import styles from "./../css/entradas.module.css";
 
@@ -99,7 +98,7 @@ function Entradas() {
     };
 
     comprarEntrada();
-  }, [enviar, subtipo]);
+  }, [enviar, tipo]);
   return (
     <>
       <Container
