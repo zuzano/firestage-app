@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { Container, Modal } from 'react-bootstrap';
+import { Container, Modal } from "react-bootstrap";
 
 import styles from "./../css/registro.module.css";
 
@@ -13,9 +13,10 @@ const Registro = () => {
   const [enviar, setEnviar] = useState(false);
   const [error, setError] = useState(null);
   const [show, setShow] = useState(false);
-  const navigate = useNavigate();
+  const [validar, setValidar] = useState([]);
+  const [confirmarContraseña, setConfirmarContraseña] = useState("");
 
-  // POR HACER --> Validacion de campos.
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!enviar) return;
@@ -27,7 +28,12 @@ const Registro = () => {
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ nombre: nombre, apellidos: apellidos, email: correo, contraseña: contraseña }),
+            body: JSON.stringify({
+              nombre: nombre,
+              apellidos: apellidos,
+              email: correo,
+              contraseña: contraseña,
+            }),
           }
         );
         const data = await response.json();
@@ -48,57 +54,178 @@ const Registro = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setError(null);
+  
+    let errores = [];
+  
+    const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!correoRegex.test(correo)) {
+      errores.push("correo");
+    }
+  
+    if (contraseña.length < 6) {
+      errores.push("contraseña");
+    }
+  
+    if (contraseña !== confirmarContraseña) {
+      errores.push("confirmarContraseña");
+    }
+  
+    setValidar(errores);
+  
+    if (errores.length > 0) {
+      return; // Evita enviar si hay errores
+    }
+  
     setEnviar(true);
   };
 
+  const quitarError = (campo) => {
+    setValidar((prev) => prev.filter((item) => item !== campo));
+  };
   
+
   const handleClose = (e) => {
-    navigate('/login');
-  }
+    if (error) {
+      setShow(false);
+    } else {
+      navigate("/login");
+    }
+  };
 
   return (
     // From Uiverse.io by ammarsaa
     <>
-    <Container fluid style={{backgroundColor: '#131313' ,height: '80vh', display:'grid', placeItems:'center' }}>
-
+      <Container
+        fluid
+        style={{
+          backgroundColor: "#131313",
+          height: "80vh",
+          display: "grid",
+          placeItems: "center",
+        }}
+      >
         <form className={styles.form} onSubmit={handleSubmit}>
           <p className={styles.title}>Registrarse </p>
-          <p className={styles.message}>Registrate y consigue acceso completo </p>
+          <p className={styles.message}>
+            Registrate y consigue acceso completo{" "}
+          </p>
           <div className={styles.flex}>
             <label>
-              <input className={styles.input} type="text" placeholder required onChange={(e) => setNombre(e.target.value)} />
+              <input
+                className={styles.input}
+                type="text"
+                placeholder
+                required
+                onChange={(e) => setNombre(e.target.value)}
+              />
               <span>Nombre</span>
             </label>
             <label>
-              <input className={styles.input} type="text" placeholder required onChange={(e) => setApellidos(e.target.value)} />
+              <input
+                className={styles.input}
+                type="text"
+                placeholder
+                required
+                onChange={(e) => setApellidos(e.target.value)}
+              />
               <span>Apellidos</span>
             </label>
           </div>
           <label>
-            <input className={styles.input} type="email" placeholder required onChange={(e) => setCorreo(e.target.value)} />
+            <input
+              style={{
+                border:  validar.includes("correo") ? "2px solid red" : "none",
+              }}
+              className={styles.input}
+              type="email"
+              placeholder
+              required
+              onChange={(e) => {setCorreo(e.target.value)
+                quitarError("correo")
+              }}
+            />
             <span>Email</span>
           </label>
+          <span
+            style={{
+              display:  validar.includes("correo") ? "block" : "none",
+              color: "red",
+              fontSize: "0.7em",
+            }}
+          >
+            Debes introducir un correo válido
+          </span>
+
           <label>
-            <input className={styles.input} type="password" placeholder required onChange={(e) => setContraseña(e.target.value)} />
+            <input
+              style={{
+                border:  validar.includes("contraseña") ? "2px solid red" : "none",
+              }}
+              className={styles.input}
+              type="password"
+              placeholder
+              required
+              onChange={(e) => {setContraseña(e.target.value)
+                quitarError("contraseña")
+              }}
+            />
             <span>Contraseña</span>
           </label>
+          <span
+            style={{
+              display:  validar.includes("contraseña") ? "block" : "none",
+              color: "red",
+              fontSize: "0.7em",
+            }}
+          >
+            Debes introducir un contraseña con 6 caracteres.
+          </span>
           <label>
-            <input className={styles.input} type="password" placeholder required />
+            <input
+              style={{
+                border:
+                validar.includes("confirmarContraseña") ? "2px solid red" : "none",
+              }}
+              className={styles.input}
+              type="password"
+              placeholder
+              required
+              onChange={(e) => {setConfirmarContraseña(e.target.value)
+                quitarError("confirmarContraseña")
+              }}
+            />
             <span>Confirmar contraseña</span>
           </label>
+          <span
+            style={{
+              display:  validar.includes("confirmarContraseña") ? "block" : "none",
+              color: "red",
+              fontSize: "0.7em",
+            }}
+          >
+            Debes introducir la misma contraseña.
+          </span>
           <button className={styles.submit}>Enviar</button>
           <p className={styles.signin}>
             ¿Aún no tienes cuenta? <Link to="/login">Iniciar Sesión</Link>{" "}
           </p>
         </form>
-      <Modal className="d-flex align-items-center" show={show} onHide={handleClose} animation={true}>
-        <Modal.Header>
-          <Modal.Title>Registro Completado</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{error !== null ? error : "¡Bienvenido! Tu cuenta ha sido creada correctamente."}</Modal.Body>
-      </Modal>
-    </Container>
+        <Modal
+          className="d-flex align-items-center"
+          show={show}
+          onHide={handleClose}
+          animation={true}
+        >
+          <Modal.Header>
+            <Modal.Title>Registro Completado</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {error !== null
+              ? error
+              : "¡Bienvenido! Tu cuenta ha sido creada correctamente."}
+          </Modal.Body>
+        </Modal>
+      </Container>
     </>
   );
 };
