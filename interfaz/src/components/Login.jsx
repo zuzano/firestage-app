@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { Container, Modal } from "react-bootstrap";
+import { Container, Modal, Button } from "react-bootstrap";
 import styles from "./../css/login.module.css";
+
 
 function Login() {
   const [enviar, setEnviar] = useState(false);
@@ -12,12 +13,11 @@ function Login() {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
 
-  const [requiereCodigo, setRequiereCodigo] = useState(false);
-const [codigo, setCodigo] = useState("");
-const [emailTemp, setEmailTemp] = useState("");
+  const [show2FAModal, setShow2FAModal] = useState(false);
+  const [qrCode, setQrCode] = useState(null);
+  const [codigo, setCodigo] = useState("");
 
 
-  // POR HACER --> Autenticación en dos pasos.
 
   useEffect(() => {
     if (!enviar) return;
@@ -36,21 +36,62 @@ const [emailTemp, setEmailTemp] = useState("");
 
         if (response.status !== 200) {
           setError(data.error || "Error al iniciar sesión");
+        setShow(true);
+
         } else {
-          // Guardar datos del usuario en localStorage
-          localStorage.setItem("usuario", JSON.stringify(data.usuario));
-          localStorage.setItem("rol", data.usuario.rol)
+          if(data.requiere2FA){
+            setQrCode(data.qr); 
+            setShow2FAModal(true); 
+          }else{
+            // Guardar datos del usuario en localStorage
+            localStorage.setItem("usuario", JSON.stringify(data.usuario));
+            localStorage.setItem("rol", data.usuario.rol)
+            setShow(true);
+          }
         }
       } catch (err) {
         setError("Error al conectar con el servidor");
-      } finally {
         setShow(true);
+
+      } finally {
         setEnviar(false);
       }
     };
 
     inciarSesion();
   }, [enviar, correo, contraseña]);
+
+  // Handle 2FA code submission
+  const autenticacion2FA = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(
+        "http://localhost:5000/autenticacion/verificarCodigo",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: correo, token: codigo }),
+        }
+      );
+      const data = await response.json();
+
+      if (response.status !== 200) {
+        setError(data.error || "Código de verificación inválido");
+        setShow2FAModal(false);
+        setShow(true);
+      } else {
+        // Save user data and navigate
+        localStorage.setItem("usuario", JSON.stringify(data.usuario));
+        localStorage.setItem("rol", data.usuario.rol);
+        setShow2FAModal(false);
+        setShow(true);
+      }
+    } catch (err) {
+      setError("Error al verificar el código");
+      setShow2FAModal(false);
+      setShow(true);
+    }
+  };
 
   // Verificar si ya hay un usuario logueado al cargar el componente
   useEffect(() => {
@@ -72,6 +113,11 @@ const [emailTemp, setEmailTemp] = useState("");
     }else{
       navigate("/");
     }
+  };
+
+  const handleClose2FAModal = () => {
+    setShow2FAModal(false);
+    setCodigo("");
   };
 
   return (
@@ -127,6 +173,42 @@ const [emailTemp, setEmailTemp] = useState("");
             {error !== null ? error : "Has iniciado sesión."}
           </Modal.Body>
         </Modal>
+        <Modal
+      className="d-flex align-items-center"
+      show={show2FAModal}
+      onHide={handleClose2FAModal}
+      animation={true}
+    >
+      <Modal.Header>
+        <Modal.Title>Verificación en Dos Pasos</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <p>
+          Escanea este código QR con tu aplicación de autenticación (como Google
+          Authenticator) e introduce el código de verificación.
+        </p>
+        {qrCode && (
+          <img
+            src={qrCode}
+            alt="Código QR para verificación en dos pasos"
+            style={{ maxWidth: "100%" }}
+          />
+        )}
+        <form onSubmit={autenticacion2FA} className="mt-3">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Código de verificación"
+            value={codigo}
+            onChange={(e) => setCodigo(e.target.value)}
+            required
+          />
+          <Button type="submit" className="mt-3" variant="primary">
+            Verificar
+          </Button>
+        </form>
+      </Modal.Body>
+    </Modal>
       </Container>
     </>
   );

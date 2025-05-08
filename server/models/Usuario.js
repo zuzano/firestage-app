@@ -22,6 +22,8 @@ const usuarioSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  twoFASecret: { type: String}, // <- secreto para 2FA
+  twoFAHabilitado: { type: Boolean, default: false },
   rol: {
     type: String,
     enum: ['cliente', 'admin'],
