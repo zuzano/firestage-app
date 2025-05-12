@@ -65,7 +65,6 @@ comprarEntrada = async function (req, res) {
             general: 50,
             vip: 10,
             premium: 5,
-            cumpleaños: 2,
         };
 
         // Validación de límite 

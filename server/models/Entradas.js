@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const entradaSchema = new mongoose.Schema({
   tipo: {
     type: String,
-    enum: ['general', 'vip', 'premium', 'cumpleaños'],
+    enum: ['general', 'vip', 'premium'],
     required: true,
   },
   subtipo: {

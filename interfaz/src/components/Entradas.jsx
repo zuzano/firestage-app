@@ -117,7 +117,7 @@ function Entradas() {
             style={{
               backgroundColor: "#0B1B36",
               borderRadius: "5%",
-              width: "20%",
+              width: "30%",
             }}
           >
             <h1 className="mt-5 text-center" style={{ width: "50%" }}>
@@ -135,7 +135,7 @@ function Entradas() {
             style={{
               backgroundColor: "#0B1B36",
               borderRadius: "5%",
-              width: "20%",
+              width: "30%",
             }}
           >
             <h1 className="mt-5 text-center" style={{ width: "50%" }}>
@@ -160,7 +160,7 @@ function Entradas() {
             style={{
               backgroundColor: "#0B1B36",
               borderRadius: "5%",
-              width: "20%",
+              width: "30%",
             }}
           >
             <h1 className="mt-5 text-center" style={{ width: "50%" }}>
@@ -172,22 +172,6 @@ function Entradas() {
               elegir y palco privado.
             </p>
             <button onClick={() => {handleClick("premium")}} className={styles.button}>Comprar Ahora</button>
-          </div>
-          <div
-            className=" d-flex flex-column justify-content-around align-items-center py-4"
-            style={{
-              backgroundColor: "#0B1B36",
-              borderRadius: "5%",
-              width: "20%",
-            }}
-          >
-            <h1 className="mt-5 text-center">RESERVAR CUMPLEAÑOS</h1>
-            <h2 className="py-3 text-center">€200</h2>
-            <p className="py-3" style={{ textAlign: "center", width: "50%" }}>
-              Incluye todos los beneficios del VIP, mas 2 botellas con mezcla a
-              elegir y palco privado.
-            </p>
-            <button onClick={() => {handleClick("cumpleaños")}} className={styles.button}>Comprar Ahora</button>
           </div>
         </main>
         <Modal
