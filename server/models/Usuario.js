@@ -29,10 +29,18 @@ const usuarioSchema = new mongoose.Schema({
     enum: ['cliente', 'admin'],
     default: 'cliente'
   },
-  puntos: {
-    type: Number,
-    default: 0
+  premios: {
+    type: String,
+    default: 'Nada'
   },
+  tiradas: {
+    type: Number,
+    default: 1
+  },
+  ultimoReinicio: {
+    type: Date,
+    default: null
+  }
 }, {
   timestamps: true
 });
