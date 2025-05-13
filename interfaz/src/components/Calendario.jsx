@@ -10,8 +10,10 @@ import styles from "./../css/calendario.module.css";
 const Calendario = ({ onFechaSeleccionada }) => {
   const [fecha, setFecha] = useState(null);
 
-  // Registra el locale antes de usarlo
+  // Registra la localizacion para poder usarla
   registerLocale("es", es);
+
+  //Falta por hacer
 
   useEffect(() => {
   const cargarFechasOcupadas = async () => {
