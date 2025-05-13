@@ -20,7 +20,8 @@ const entradaSchema = new mongoose.Schema({
   },
   fechaCompra: {
     type: Date,
-    default: Date.now,
+    required: true,
+    default: null,
   },
 });
 

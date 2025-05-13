@@ -51,14 +51,14 @@ enviarEntradaConQR = async function (email, datosEntrada) {
     await transporter.sendMail(mailOptions);
 }
 
-
-comprarEntrada = async function (req, res) {
-    try {
+contarEntradas = async function(req,res){
+      try {
         await mongoose.connect(dbURI, {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
-        const { tipo, subtipo, compradorId, email } = req.body;
+
+        const { tipo } = req.params;
 
         // Contadores por tipo
         const limites = {
@@ -70,8 +70,29 @@ comprarEntrada = async function (req, res) {
         // Validación de límite 
         const cantidadActual = await Entradas.countDocuments({ tipo });
         if (cantidadActual >= limites[tipo]) {
-            return res.status(400).json({ error: `Ya no hay entradas disponibles para el tipo: ${tipo}` });
+            return res.status(400).json({ error: `Ya no hay entradas disponibles para el tipo: ${tipo}`, entradasAgotadas: true });
         }
+
+   
+            res.status(200).json({
+                entradasAgotadas: false
+            });
+     
+    } catch (error) {
+        return res.status(500).json({
+            error: "Error al contar las entradas",
+            mensaje: error.message
+        });
+    }
+}
+
+comprarEntrada = async function (req, res) {
+    try {
+        await mongoose.connect(dbURI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+        const { tipo, subtipo, compradorId, email, fechaCompra } = req.body;
 
         // Validación subtipo solo si es VIP
         if (tipo === 'vip' && !['plata', 'oro', 'diamante'].includes(subtipo)) {
@@ -82,6 +103,7 @@ comprarEntrada = async function (req, res) {
             tipo,
             subtipo: tipo === 'vip' ? subtipo : undefined,
             comprador: compradorId,
+            fechaCompra: fechaCompra
         });
 
         await entrada.save();
@@ -108,5 +130,6 @@ comprarEntrada = async function (req, res) {
 }
 
 module.exports = {
-    comprarEntrada
+    comprarEntrada,
+    contarEntradas
 }

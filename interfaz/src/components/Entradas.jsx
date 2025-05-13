@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Container,  Button, Modal } from "react-bootstrap";
+import { Container, Button, Modal } from "react-bootstrap";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { isSameDay } from "date-fns";
 import { Link } from "react-router-dom";
-
 
 import styles from "./../css/entradas.module.css";
 
@@ -10,20 +12,82 @@ function Entradas() {
   const [showEnviado, setShowEnviado] = useState(false);
   const [enviar, setEnviar] = useState(false);
   const [mensaje, setMensaje] = useState(null);
+  const [entradasAgotadas, setEntradasAgotadas] = useState(false);
 
-  const [tipo, setTipo] = useState(null)
+  const [fecha, setFecha] = useState(null);
+
+  const [tipo, setTipo] = useState(null);
 
   const handleClose = (e) => {
     setShow(false);
     setShowEnviado(false);
   };
 
-  const handleClick = (tipo) => {
-    setTipo(tipo);
-    setShow(true);
+  const handleClick = async (tipo) => {
+    try {
+      const response = await fetch(
+        "http://localhost:5000/reservas/contarEntradas/" + tipo,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      const data = await response.json();
+
+      if (response.ok) {
+        setEntradasAgotadas(data.entradasAgotadas);
+        console.log(tipo)
+        setTipo(tipo);
+        setShow(true);
+      } else {
+        setEntradasAgotadas(data.entradasAgotadas);
+        setMensaje(data.error);
+        setShow(true);
+      }
+    } catch (err) {
+      setMensaje("Error al conectar con el servidor");
+      setShow(true);
+    }
+  };
+
+  const DateSelector = () => {
+
+    const diasOcupados = [
+      new Date("2025-05-17"),
+      new Date("2025-05-19"),
+      new Date("2025-05-23"),
+    ];
+
+    // Solo permitir jueves a domingo
+    const isDiaPermitido = (date) => {
+      const dia = date.getDay();
+      return [0, 4, 5, 6].includes(dia); // 0: domingo, 4: jueves, 5: viernes, 6: sábado
+    };
+
+    // Estilos para los días ocupados
+    const dayClassName = (date) => {
+      const esOcupado = diasOcupados.some((d) => isSameDay(d, date));
+      if (esOcupado) return styles.ocupado; 
+      return undefined;
+    };
+
+    return (
+        <DatePicker
+           locale="es"
+          selected={fecha}
+          onChange={(date) => setFecha(date)}
+           calendarStartDay={1} // Establece que la semana comience el lunes (1 es lunes)
+          minDate={new Date()}
+          filterDate={isDiaPermitido}
+          dayClassName={dayClassName}
+          placeholderText="Selecciona una fecha"
+          dateFormat="yyyy-MM-dd"
+        />
+    );
   };
 
   const hacerReserva = (usuario) => {
+
     return (
       <form
         className={styles.form}
@@ -48,6 +112,9 @@ function Entradas() {
           readOnly
           className={styles.input}
         />
+        <div className={styles.input}>
+          <DateSelector /> 
+        </div>
         <button type="submit" disabled={enviar}>
           {enviar ? "Enviando..." : "Enviar"}
         </button>
@@ -74,6 +141,7 @@ function Entradas() {
               tipo: tipo,
               compradorId: usuario._id,
               email: usuario.email,
+              fechaCompra: fecha,
             }),
           }
         );
@@ -99,6 +167,7 @@ function Entradas() {
 
     comprarEntrada();
   }, [enviar, tipo]);
+
   return (
     <>
       <Container
@@ -128,7 +197,14 @@ function Entradas() {
               Acceso general a la discoteca. Perfecto para disfrutar de la
               música y el ambiente.
             </p>
-            <button onClick={() => {handleClick("general")}} className={styles.button}>Comprar Ahora</button>
+            <button
+              onClick={() => {
+                handleClick("general");
+              }}
+              className={styles.button}
+            >
+              Comprar Ahora
+            </button>
           </div>
           <div
             className=" d-flex flex-column justify-content-around align-items-center  py-4"
@@ -171,7 +247,14 @@ function Entradas() {
               Incluye todos los beneficios del VIP, mas 7 botellas con mezcla a
               elegir y palco privado.
             </p>
-            <button onClick={() => {handleClick("premium")}} className={styles.button}>Comprar Ahora</button>
+            <button
+              onClick={() => {
+                handleClick("premium");
+              }}
+              className={styles.button}
+            >
+              Comprar Ahora
+            </button>
           </div>
         </main>
         <Modal
@@ -184,7 +267,9 @@ function Entradas() {
             <Modal.Title>Reservar Ahora</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {localStorage.getItem("usuario") ? (
+            {entradasAgotadas ? (
+              { mensaje }
+            ) : localStorage.getItem("usuario") ? (
               hacerReserva(JSON.parse(localStorage.getItem("usuario")))
             ) : (
               <p>Para poder hacer una reserva debes tener una cuenta.</p>

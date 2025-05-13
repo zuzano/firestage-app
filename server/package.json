@@ -19,7 +19,6 @@
     "express": "^4.21.2",
     "mongoose": "^8.13.0",
     "node-2fa": "^2.0.3",
-    "node-cron": "^3.0.3",
     "nodemailer": "^6.10.1",
     "qrcode": "^1.5.4"
   },

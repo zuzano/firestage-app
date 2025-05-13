@@ -66,7 +66,7 @@ function Ruleta() {
       );
       const data = await response.json();
       if (response.ok) {
-        setMensaje(data.mensaje); // Guardar los premios en los usuarios
+        setMensaje(data.mensaje); 
       } else {
         setMensaje(data.error);
       }
