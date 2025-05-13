@@ -9,6 +9,7 @@ import styles from "./../css/calendario.module.css";
 
 const Calendario = ({ onFechaSeleccionada }) => {
   const [fecha, setFecha] = useState(null);
+  const [diasOcupados, setDiasOcupados] = useState([]);
 
   // Registra la localizacion para poder usarla
   registerLocale("es", es);
@@ -18,10 +19,19 @@ const Calendario = ({ onFechaSeleccionada }) => {
   useEffect(() => {
   const cargarFechasOcupadas = async () => {
     try {
-      const res = await fetch("http://localhost:5000/reservas/fechasAgotadas");
-      const data = await res.json();
-      const fechas = data.map((item) => new Date(item.fecha));
-      setDiasOcupados(fechas);
+      const response = await fetch("http://localhost:5000/reservas/fechasAgotadas", {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            
+          });
+      const data = await response.json();
+      if(response.ok){
+        const fechas = data.map((item) => new Date(item.fecha));
+        setDiasOcupados(fechas);
+
+      }else{
+
+      }
     } catch (error) {
       console.error("Error al cargar fechas ocupadas:", error);
     }
@@ -30,11 +40,6 @@ const Calendario = ({ onFechaSeleccionada }) => {
   cargarFechasOcupadas();
 }, []);
 
-  const diasOcupados = [
-    new Date("2025-05-17"),
-    new Date("2025-05-19"),
-    new Date("2025-05-23"),
-  ];
 
   // Solo permitir jueves a domingo
   const isDiaPermitido = (diaPermitido) => {
