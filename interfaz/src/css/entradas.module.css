@@ -99,12 +99,7 @@
   cursor: pointer;
 }
 
-/* Dias ocupados en el calendario */
-.ocupado {
-  background-color: #ff4d4d !important; 
-  color: white;
-  pointer-events: none;
-}
+
 
   
   

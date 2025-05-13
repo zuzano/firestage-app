@@ -51,36 +51,48 @@ enviarEntradaConQR = async function (email, datosEntrada) {
     await transporter.sendMail(mailOptions);
 }
 
-contarEntradas = async function(req,res){
-      try {
+fechasAgotadas = async function (req, res) {
+    try {
         await mongoose.connect(dbURI, {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
 
-        const { tipo } = req.params;
 
         // Contadores por tipo
         const limites = {
-            general: 50,
-            vip: 10,
-            premium: 5,
+            general: 2,
+            vip: 3,
+            premium: 2,
         };
 
-        // Validación de límite 
-        const cantidadActual = await Entradas.countDocuments({ tipo });
-        if (cantidadActual >= limites[tipo]) {
-            return res.status(400).json({ error: `Ya no hay entradas disponibles para el tipo: ${tipo}`, entradasAgotadas: true });
-        }
+        /*Solo se agruparán juntos los datos que tengan:
+        El mismo tipo de entrada, y La misma fecha (ignorando la hora). */
+        // Agrupamos por fecha y tipo, contando cuántas hay en total
+        const resultados = await Entradas.aggregate([
+            {
+                $group: {
+                    _id: {
+                        tipo: "$tipo",
+                        fecha: {
+                            $dateToString: { format: "%Y-%m-%d", date: "$fechaCompra" },
+                        },
+                    },
+                    cantidad: { $sum: 1 },
+                },
+            },
+        ]);
 
-   
-            res.status(200).json({
-                entradasAgotadas: false
-            });
-     
+        // Filtramos los que lleguen al límite de entradas segun el tipo
+        const fechasExcedidas = resultados.filter(({ _id, cantidad }) => {
+            const limite = limites[_id.tipo];
+            return cantidad === limite;
+        });
+
+        res.status(200).json(fechasExcedidas);
     } catch (error) {
         return res.status(500).json({
-            error: "Error al contar las entradas",
+            error: "Error al contar las fechas excedidas",
             mensaje: error.message
         });
     }
@@ -131,5 +143,5 @@ comprarEntrada = async function (req, res) {
 
 module.exports = {
     comprarEntrada,
-    contarEntradas
+    fechasAgotadas
 }

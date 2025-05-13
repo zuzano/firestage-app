@@ -7,14 +7,15 @@ import { Link } from "react-router-dom";
 
 import styles from "./../css/entradas.module.css";
 
+import Calendario from "./Calendario";
+
 function Entradas() {
   const [show, setShow] = useState(false);
   const [showEnviado, setShowEnviado] = useState(false);
   const [enviar, setEnviar] = useState(false);
   const [mensaje, setMensaje] = useState(null);
-  const [entradasAgotadas, setEntradasAgotadas] = useState(false);
 
-  const [fecha, setFecha] = useState(null);
+  const [fecha, setFecha] = useState("");
 
   const [tipo, setTipo] = useState(null);
 
@@ -24,70 +25,15 @@ function Entradas() {
   };
 
   const handleClick = async (tipo) => {
-    try {
-      const response = await fetch(
-        "http://localhost:5000/reservas/contarEntradas/" + tipo,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      const data = await response.json();
-
-      if (response.ok) {
-        setEntradasAgotadas(data.entradasAgotadas);
-        console.log(tipo)
         setTipo(tipo);
         setShow(true);
-      } else {
-        setEntradasAgotadas(data.entradasAgotadas);
-        setMensaje(data.error);
-        setShow(true);
-      }
-    } catch (err) {
-      setMensaje("Error al conectar con el servidor");
-      setShow(true);
-    }
   };
 
-  const DateSelector = () => {
-
-    const diasOcupados = [
-      new Date("2025-05-17"),
-      new Date("2025-05-19"),
-      new Date("2025-05-23"),
-    ];
-
-    // Solo permitir jueves a domingo
-    const isDiaPermitido = (date) => {
-      const dia = date.getDay();
-      return [0, 4, 5, 6].includes(dia); // 0: domingo, 4: jueves, 5: viernes, 6: sábado
-    };
-
-    // Estilos para los días ocupados
-    const dayClassName = (date) => {
-      const esOcupado = diasOcupados.some((d) => isSameDay(d, date));
-      if (esOcupado) return styles.ocupado; 
-      return undefined;
-    };
-
-    return (
-        <DatePicker
-           locale="es"
-          selected={fecha}
-          onChange={(date) => setFecha(date)}
-           calendarStartDay={1} // Establece que la semana comience el lunes (1 es lunes)
-          minDate={new Date()}
-          filterDate={isDiaPermitido}
-          dayClassName={dayClassName}
-          placeholderText="Selecciona una fecha"
-          dateFormat="yyyy-MM-dd"
-        />
-    );
+  const handleFechaSeleccionada = (fecha) => {
+    setFecha(fecha);
   };
 
   const hacerReserva = (usuario) => {
-
     return (
       <form
         className={styles.form}
@@ -113,7 +59,7 @@ function Entradas() {
           className={styles.input}
         />
         <div className={styles.input}>
-          <DateSelector /> 
+          <Calendario onFechaSeleccionada={handleFechaSeleccionada} />
         </div>
         <button type="submit" disabled={enviar}>
           {enviar ? "Enviando..." : "Enviar"}
@@ -267,9 +213,7 @@ function Entradas() {
             <Modal.Title>Reservar Ahora</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {entradasAgotadas ? (
-              { mensaje }
-            ) : localStorage.getItem("usuario") ? (
+            {localStorage.getItem("usuario") ? (
               hacerReserva(JSON.parse(localStorage.getItem("usuario")))
             ) : (
               <p>Para poder hacer una reserva debes tener una cuenta.</p>

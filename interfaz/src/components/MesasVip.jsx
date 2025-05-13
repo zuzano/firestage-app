@@ -6,6 +6,8 @@ import { Icon } from "@iconify/react";
 
 import styles from "./../css/mesasvip.module.css";
 
+import Calendario from "./Calendario";
+
 function MesasVip() {
   const [show, setShow] = useState(false);
   const [showEnviado, setShowEnviado] = useState(false);
@@ -13,14 +15,21 @@ function MesasVip() {
   const [subtipo, setSubtipo] = useState(null);
   const [mensaje, setMensaje] = useState(null);
 
+  const [fecha, setFecha] = useState("");
+
   const handleClose = (e) => {
     setShow(false);
     setShowEnviado(false);
   };
 
-  const handleClick = (subtipo) => {
-    setSubtipo(subtipo);
-    setShow(true);
+  const handleClick = async (subtipo) => {
+        setSubtipo(subtipo);
+        setShow(true);
+
+  };
+
+  const handleFechaSeleccionada = (fecha) => {
+    setFecha(fecha);
   };
 
   const hacerReserva = (usuario) => {
@@ -56,6 +65,9 @@ function MesasVip() {
           value={subtipo || ""}
           className={styles.input}
         />
+        <div className={styles.input}>
+          <Calendario onFechaSeleccionada={handleFechaSeleccionada} />
+        </div>
         <button type="submit" disabled={enviar}>
           {enviar ? "Enviando..." : "Enviar"}
         </button>
@@ -83,6 +95,7 @@ function MesasVip() {
               subtipo: subtipo,
               compradorId: usuario._id,
               email: usuario.email,
+              fechaCompra: fecha,
             }),
           }
         );
@@ -102,7 +115,7 @@ function MesasVip() {
         setShow(false);
         setShowEnviado(true);
       } finally {
-        setEnviar(false)
+        setEnviar(false);
       }
     };
 
@@ -279,14 +292,12 @@ function MesasVip() {
           animation={true}
         >
           <Modal.Header>
-            <Modal.Title>
-               Reservar Ahora
-            </Modal.Title>
+            <Modal.Title>Reservar Ahora</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {localStorage.getItem("usuario") ? 
-                hacerReserva(JSON.parse(localStorage.getItem("usuario")))
-             : (
+           {localStorage.getItem("usuario") ? (
+              hacerReserva(JSON.parse(localStorage.getItem("usuario")))
+            ) : (
               <p>Para poder hacer una reserva debes tener una cuenta.</p>
             )}
           </Modal.Body>
@@ -298,13 +309,9 @@ function MesasVip() {
           animation={true}
         >
           <Modal.Header>
-            <Modal.Title>
-               Resultado de la reserva
-            </Modal.Title>
+            <Modal.Title>Resultado de la reserva</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
-            {mensaje}
-          </Modal.Body>
+          <Modal.Body>{mensaje}</Modal.Body>
         </Modal>
       </Container>
     </>
