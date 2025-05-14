@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Button, Modal } from "react-bootstrap";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { isSameDay } from "date-fns";
+import { format } from "date-fns";
 import { Link } from "react-router-dom";
 
 import styles from "./../css/entradas.module.css";
@@ -59,7 +57,7 @@ function Entradas() {
           className={styles.input}
         />
         <div className={styles.input}>
-          <Calendario onFechaSeleccionada={handleFechaSeleccionada} />
+          <Calendario onFechaSeleccionada={handleFechaSeleccionada} tipo={tipo} />
         </div>
         <button type="submit" disabled={enviar}>
           {enviar ? "Enviando..." : "Enviar"}
@@ -87,7 +85,7 @@ function Entradas() {
               tipo: tipo,
               compradorId: usuario._id,
               email: usuario.email,
-              fechaCompra: fecha,
+              fechaCompra: format(fecha, "yyyy-MM-dd"),
             }),
           }
         );

@@ -86,10 +86,11 @@ fechasAgotadas = async function (req, res) {
         // Filtramos los que lleguen al límite de entradas segun el tipo
         const fechasExcedidas = resultados.filter(({ _id, cantidad }) => {
             const limite = limites[_id.tipo];
-            return cantidad === limite;
+            return cantidad >= limite;
         });
 
-        res.status(200).json(fechasExcedidas);
+
+        res.status(200).json({fechas: fechasExcedidas});
     } catch (error) {
         return res.status(500).json({
             error: "Error al contar las fechas excedidas",

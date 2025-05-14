@@ -7,46 +7,46 @@ import { registerLocale } from "react-datepicker";
 
 import styles from "./../css/calendario.module.css";
 
-const Calendario = ({ onFechaSeleccionada }) => {
+const Calendario = ({ onFechaSeleccionada, tipo }) => {
   const [fecha, setFecha] = useState(null);
   const [diasOcupados, setDiasOcupados] = useState([]);
 
   // Registra la localizacion para poder usarla
   registerLocale("es", es);
 
-  //Falta por hacer
-
+//Busca las fechas que ya tengan reservada todas las entradas
   useEffect(() => {
-  const cargarFechasOcupadas = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/reservas/fechasAgotadas", {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-            
-          });
-      const data = await response.json();
-      if(response.ok){
-        const fechas = data.map((item) => new Date(item.fecha));
-        setDiasOcupados(fechas);
-
-      }else{
-
+    const cargarFechasOcupadas = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/reservas/fechasAgotadas", {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
+        const data = await response.json();
+        if (response.ok) {
+          //Filtra por tipo de entrada
+          const fechasTipo = data.fechas.filter(({ _id }) => {return  _id.tipo === tipo});
+          //Devuelve un array de las fechas
+          const fechas = fechasTipo.map(({_id}) => {return _id.fecha})
+          setDiasOcupados(fechas);
+        } else {
+          console.error("Error al cargar fechas ocupadas:", data.error);
+        }
+      } catch (error) {
+        console.error("Error al cargar fechas ocupadas:", error);
       }
-    } catch (error) {
-      console.error("Error al cargar fechas ocupadas:", error);
-    }
-  };
+    };
 
-  cargarFechasOcupadas();
-}, []);
+    cargarFechasOcupadas();
+  }, [tipo]);
 
 
-  // Solo permitir jueves a domingo
+  // Desahibilita todo lo que no sea jueves, viernes, sabado y domingo y los dias ocupados
   const isDiaPermitido = (diaPermitido) => {
-   const dia = date.getDay();
-  const esPermitido = [0, 4, 5, 6].includes(dia); // jueves a domingo
-  const esOcupado = diasOcupados.some((d) => isSameDay(d, date));
-  return esPermitido && !esOcupado;
+    const dia = diaPermitido.getDay();
+    const esPermitido = [0, 4, 5, 6].includes(dia); // jueves a domingo
+    const esOcupado = diasOcupados.some((d) => isSameDay(d, diaPermitido));
+    return esPermitido && !esOcupado;
   };
 
   // Estilos para los días ocupados
