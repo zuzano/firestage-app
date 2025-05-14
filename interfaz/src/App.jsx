@@ -36,15 +36,15 @@ function App() {
             <Route path="/entradas" element={<Entradas />} />
             <Route path="/soporte" element={<Soporte />} />
             <Route path="/premios" element={<Ruleta />} />
-            <Route path="*" element={<Error404 />} /> //Devuele error 404 si no existe alguna url que introduzca el usuario
+            <Route path="*" element={<Error404 />} /> {/*Devuele error 404 si no existe alguna url que introduzca el usuario*/}
             <Route
               path="/administrador"
               element={
                 <RutaPrivada rolRequerido="admin">
-                  <Administrador /> //Componente hijo que se renderiza si se cumple la condicion
+                  <Administrador /> 
                 </RutaPrivada>
               }
-            />
+            />{/* //Componente hijo que se renderiza si se cumple la condicion */}
 
             <Route path="/accesoDenegado" element={<AccesoDenegado />} />
           </Routes>

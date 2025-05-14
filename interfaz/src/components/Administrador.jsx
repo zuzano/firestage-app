@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
-  Container,
+  Container,Button
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -25,6 +25,8 @@ function Administrador() {
         return <TablaUsuarios/>
       case "premios":
         return <Premios />
+      case "administrador":
+        return setEleccion(null);
       default:
         return null;
     }
@@ -58,7 +60,10 @@ function Administrador() {
               <Icon icon="lets-icons:book-check-duotone" width="100px" height="100px" color="brown" />
             </div>
           </div>
-        </> : <>{mostrar()}</>}
+        </> : <>
+        {mostrar()}
+        <Button variant="primary" className="" onClick={() => { handleElegir("administrador") }}>Panel Administrador</Button>
+        </>}
 
       </Container>
     </>

@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from "react";
 import {
     Container,
-    Row,
-    Col,
-    Card,
     Button,
     Modal,
     Table,
     Form,
-    InputGroup,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 
 function TablaUsuarios() {
@@ -20,7 +15,6 @@ function TablaUsuarios() {
     const [titulo, setTitulo] = useState(null);
     const [mensaje, setMensaje] = useState(null);
 
-    const [editar, setEditar] = useState(false);
     const [usuarioId, setUsuarioId] = useState(null);
     const [datosEditados, setDatosEditados] = useState({});
 
@@ -37,7 +31,6 @@ function TablaUsuarios() {
     const handleEditar = (usuario) => {
         setDatosEditados(usuario);
         setUsuarioId(usuario._id);
-        setEditar(true);
     };
 
     const handleClickEliminar = async (id) => {
@@ -68,7 +61,6 @@ function TablaUsuarios() {
     const handleClickActualizar = async (id) => {
         if (id !== usuarioId) {
             setUsuarioId(null);
-            setEditar(false);
             return;
         }
 
@@ -82,7 +74,7 @@ function TablaUsuarios() {
                         nombre: datosEditados.nombre,
                         email: datosEditados.email,
                         rol: datosEditados.rol,
-                        puntos: datosEditados.puntos,
+                        premios: datosEditados.premios,
                     }),
                 }
             );
@@ -93,7 +85,7 @@ function TablaUsuarios() {
                 setMensaje(data.mensaje);
                 setUsuarioId(null);
                 setDatosEditados({});
-                setEditar(false);
+                await mostrarUsuarios();
             } else {
                 setTitulo(data.error);
                 setMensaje(data.mensaje);
@@ -102,58 +94,59 @@ function TablaUsuarios() {
         } catch (err) {
             setShow(true);
             setTitulo("Error al editar el usuario");
-            setMensaje(err);
+            setMensaje("Hubo un error al solicitar la petición al servidor");
+        }
+    };
+
+    const mostrarUsuarios = async () => {
+        try {
+            const response = await fetch(
+                "http://localhost:5000/usuarios/mostrarUsuarios",
+                {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                }
+            );
+            const data = await response.json();
+            if (response.ok) {
+                setUsuarios(data.usuarios); // Guardar los usuarios en el estado
+            } else {
+                setTitulo(data.error)
+               setMensaje(data.mensaje);
+               setShow(true);
+            }
+        } catch (err) {
+             setShow(true);
+            setTitulo("Error al editar el usuario");
+            setMensaje("Hubo un error al solicitar la petición al servidor");
         }
     };
 
     useEffect(() => {
-        const mostrarUsuarios = async () => {
-            try {
-                const response = await fetch(
-                    "http://localhost:5000/usuarios/mostrarUsuarios",
-                    {
-                        method: "GET",
-                        headers: { "Content-Type": "application/json" },
-                    }
-                );
-                const data = await response.json();
-                if (response.ok) {
-                    setUsuarios(data.usuarios); // Guardar los usuarios en el estado
-                } else {
-                    console.log(data.mensaje);
-                }
-            } catch (err) {
-                console.error("Error al obtener usuarios:", err);
-            }
-        };
 
         mostrarUsuarios();
-    }, [usuarios]);
+    }, []);
 
     return (
         <>
-        {/* REVISAR EDICION DE FILAS, CUANDO SE EDITA UNA LOS VALORES CAMBIAN DE TODAS */}
             <Container fluid >
                 <h1 className="text-center text-white">USUARIOS</h1>
-                <Table striped bordered hover>
+                <Table striped bordered hover style={{ overflow: 'auto', maxHeight: '40vh' }}>
                     <thead>
                         <tr>
                             <th>Nombre</th>
                             <th>Email</th>
                             <th>Rol</th>
-                            <th>Puntos</th>
+                            <th>Premios</th>
                             <th>Opciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {usuarios.map((usuario, index) => (
-                            <tr>
-                                <td
-                                    onClick={() => {
-                                        handleEditar(usuario);
-                                    }}
-                                >
-                                    {editar ? (
+                        {usuarios.map((usuario) => (
+                            <tr key={usuario._id}>
+                                <td onClick={() => handleEditar(usuario)}>
+                                    {/* Compara el id del usuario para que al hacer click en un campo , en las demas filas se queden los datos fijos y no se pongan los de la fila que esta editando */}
+                                    {usuarioId === usuario._id ? (
                                         <Form.Control
                                             type="text"
                                             name="nombre"
@@ -168,12 +161,8 @@ function TablaUsuarios() {
                                         usuario.nombre
                                     )}
                                 </td>
-                                <td
-                                    onClick={() => {
-                                        handleEditar(usuario);
-                                    }}
-                                >
-                                    {editar ? (
+                                <td onClick={() => handleEditar(usuario)}>
+                                    {usuarioId === usuario._id ? (
                                         <Form.Control
                                             type="email"
                                             name="email"
@@ -188,12 +177,8 @@ function TablaUsuarios() {
                                         usuario.email
                                     )}
                                 </td>
-                                <td
-                                    onClick={() => {
-                                        handleEditar(usuario);
-                                    }}
-                                >
-                                    {editar ? (
+                                <td onClick={() => handleEditar(usuario)}>
+                                    {usuarioId === usuario._id ? (
                                         <Form.Control
                                             type="text"
                                             name="rol"
@@ -208,16 +193,12 @@ function TablaUsuarios() {
                                         usuario.rol
                                     )}
                                 </td>
-                                <td
-                                    onClick={() => {
-                                        handleEditar(usuario);
-                                    }}
-                                >
-                                    {editar ? (
+                                <td onClick={() => handleEditar(usuario)}>
+                                    {usuarioId === usuario._id ? (
                                         <Form.Control
-                                            type="number"
-                                            name="puntos"
-                                            value={datosEditados.puntos}
+                                            type="text"
+                                            name="premios"
+                                            value={datosEditados.premios}
                                             onChange={handleCambioInput}
                                             style={{
                                                 backgroundColor: "transparent",
@@ -225,7 +206,7 @@ function TablaUsuarios() {
                                             }}
                                         />
                                     ) : (
-                                        usuario.puntos
+                                        usuario.premios
                                     )}
                                 </td>
                                 <td>
@@ -234,24 +215,22 @@ function TablaUsuarios() {
                                         width="24"
                                         height="24"
                                         style={{ color: "#0e89ff", cursor: "pointer" }}
-                                        onClick={() => {
-                                            handleClickActualizar(usuario._id);
-                                        }}
+                                        onClick={() => handleClickActualizar(usuario._id)}
                                     />
                                     <Icon
                                         icon="typcn:delete"
                                         width="24"
                                         height="24"
                                         style={{ color: "#f00", cursor: "pointer" }}
-                                        onClick={() => {
-                                            handleClickEliminar(usuario._id);
-                                        }}
+                                        onClick={() => handleClickEliminar(usuario._id)}
                                     />
                                 </td>
                             </tr>
                         ))}
+
                     </tbody>
                 </Table>
+
                 <Modal
                     className="d-flex align-items-center"
                     show={show}

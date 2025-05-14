@@ -17,16 +17,14 @@ function Premios() {
   const [descripcion, setDescripcion] = useState("");
   const [show, setShow] = useState(false);
   const [titulo, setTitulo] = useState("");
-const [mensaje, setMensaje] = useState(null);
-
-
+  const [mensaje, setMensaje] = useState(null);
 
   const handleChangePremios = (e) => {
     setDescripcion(e.target.value);
   };
 
   const anadirPremio = async (e) => {
-    if(!descripcion) return;
+    if (!descripcion) return;
     e.preventDefault();
     try {
       const response = await fetch(
@@ -34,7 +32,7 @@ const [mensaje, setMensaje] = useState(null);
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({descripcion: descripcion,estado: 'activo'}),
+          body: JSON.stringify({ descripcion: descripcion, estado: 'activo' }),
         }
       );
       const data = await response.json();
@@ -43,6 +41,7 @@ const [mensaje, setMensaje] = useState(null);
         setMensaje(data.mensaje);
         setShow(true);
         setDescripcion("");
+        await mostrarPremios();
       } else {
         setTitulo(data.error);
         setMensaje(data.mensaje);
@@ -50,35 +49,39 @@ const [mensaje, setMensaje] = useState(null);
       }
     } catch (err) {
       setTitulo("Error al añadir un premio.");
-      setMensaje(err.message);
+      setMensaje("Hubo un error al solicitar la petición.");
+      setShow(true);
     }
   };
 
-  useEffect(() => {
-    if(!premios) return;
-
-    const mostrarPremios = async () => {
-        try {
-            const response = await fetch(
-                "http://localhost:5000/sorteos/mostrarPremios",
-                {
-                    method: "GET",
-                    headers: { "Content-Type": "application/json" },
-                }
-            );
-            const data = await response.json();
-            if (response.ok) {
-                setPremios(data.premios); // Guardar los usuarios en el estado
-            } else {
-                console.log(data.mensaje);
-            }
-        } catch (err) {
-            console.error("Error al obtener usuarios:", err);
+  const mostrarPremios = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:5000/sorteos/mostrarPremiosAdmin",
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
         }
-    };
+      );
+      const data = await response.json();
+      if (response.ok) {
+        setPremios(data.premios); // Guardar los usuarios en el estado
+      } else {
+        setTitulo("Error al mostrar los premios.");
+        setMensaje("Hubo un error al solicitar la petición.");
+        setShow(true);
+      }
+    } catch (err) {
+      setTitulo("Error al mostrar los premios.");
+      setMensaje("Hubo un error al solicitar la petición.");
+      setShow(true);
+    }
+  };
 
+  //Solo se carga la primera vez que se renderiza el componente
+  useEffect(() => {
     mostrarPremios();
-  },[premios])
+  }, [])
 
   return (
     <Container fluid>
@@ -94,29 +97,29 @@ const [mensaje, setMensaje] = useState(null);
           />
           <Button type="submit">Añadir</Button>
         </InputGroup>
-        <div className="d-flex flex-column">
+        <div className="d-flex flex-column" style={{ overflow: 'auto', maxHeight: '40vh' }}>
 
-        {premios.length !== 0 ? (
-          premios.map((item, i) =>
-            <div key={i} className="bg-white d-flex justify-content-around my-2" style={{borderRadius: '5px'}}>
+          {premios.length !== 0 ? (
+            premios.map((item, i) =>
+              <div key={i} className="bg-white d-flex justify-content-around my-2" style={{ borderRadius: '5px' }}>
                 <Form.Label className="fs-4 px-2 py-2" >Descripción: {item.descripcion}</Form.Label>
                 <Form.Label className="fs-4 px-2 py-2" >Estado: {item.estado}</Form.Label>
-            </div>
-          )
-        ) : (
-          <>
-            {" "}
-            <Form.Label className="my-3 text-center text-white">
-              No hay premios.
-            </Form.Label>{" "}
-          </>
-        )}
+              </div>
+            )
+          ) : (
+            <>
+              {" "}
+              <Form.Label className="my-3 text-center text-white">
+                No hay premios.
+              </Form.Label>{" "}
+            </>
+          )}
         </div>
       </Form>
       <Modal
         className="d-flex align-items-center"
         show={show}
-        onHide={() => {setShow(false)}}
+        onHide={() => { setShow(false) }}
         animation={true}
       >
         <Modal.Header>

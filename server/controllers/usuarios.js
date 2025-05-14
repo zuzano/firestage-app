@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 require('dotenv').config();
 const Usuario = require("../models/Usuario");
+const Premios = require("../models/Premios");
 
 
 const dbURI = process.env.MONGODB_URI;
-console.log(dbURI)
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -49,8 +49,8 @@ enviarCorreo = async function (req, res) {
       }
     });
 
-     // Correo envia el cliente
-     const mailToAdmin = {
+    // Correo envia el cliente
+    const mailToAdmin = {
       from: email, // quien lo envía
       to: 'santi.casalv@hotmail.com', // mi correo
       subject: asunto,
@@ -103,7 +103,7 @@ mostrarUsuarios = async function (req, res) {
       useUnifiedTopology: true
     });
 
-   
+
 
     const usuarios = await Usuario.find();
 
@@ -111,8 +111,8 @@ mostrarUsuarios = async function (req, res) {
       return res.status(404).json({ mensaje: 'No existe ningún usuario.' });
     }
 
-   
-    res.status(200).json({ mensaje: 'Se encontraron usuarios.', usuarios: usuarios});
+
+    res.status(200).json({ mensaje: 'Se encontraron usuarios.', usuarios: usuarios });
 
 
   } catch (error) {
@@ -124,16 +124,16 @@ mostrarUsuarios = async function (req, res) {
 
 }
 
-editarUsuario = async function(req,res) {
+editarUsuario = async function (req, res) {
   try {
-   
+
     await mongoose.connect(dbURI, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
     const _idusuario = req.params.id;
     const {
-     nombre,email,rol,puntos
+      nombre, email, rol, premios
     } = req.body;
 
 
@@ -142,18 +142,31 @@ editarUsuario = async function(req,res) {
     }
 
     // Campos requeridos para la actualizaci�n
-    const requiredFields = ["nombre","email","rol","puntos"];
-    if (requiredFields.some(field => !req.body[field])) {
-      return res.status(400).json({ error: "Faltan campos por rellenar." });
+    const requiredFields = ["nombre", "email", "rol", "premios"];
+    const campoFaltante = requiredFields.find(field => !req.body[field]);
+    if (campoFaltante) {
+      return res.status(400).json({ error: "Faltan campos por rellenar.", mensaje: `El campo que te falta por rellenar es ${campoFaltante}` });
     }
 
     // Actualizacion del usuario
     const actualizarUsuario = {
-      nombre,email,rol,puntos
+      nombre, email, rol, premios
     };
 
+    // Marcar el premio como inactivo
+    const actualizaPremio = await Premios.findOneAndUpdate(
+      { descripcion: premios },
+      { $set: { estado: 'finalizado' } },
+      { new: true }
+    );
+
+    if (!actualizaPremio) {
+      return res.status(404).json({ error: "No existe ese premio", mensaje: `Introduce un premio valido.` });
+
+    }
+
     const actualizacionUsuario = await Usuario.findOneAndUpdate(
-      {_id:_idusuario},
+      { _id: _idusuario },
       actualizarUsuario,
       { new: true, runValidators: true }
     );
@@ -162,7 +175,7 @@ editarUsuario = async function(req,res) {
       return res.status(404).json({ error: "Usuario no encontrado." });
     }
 
-    res.json({mensaje: "Usuario actualizado correctamente"});
+    res.status(200).json({ mensaje: "Usuario actualizado correctamente" });
 
   } catch (error) {
     console.error(error);
@@ -173,7 +186,7 @@ editarUsuario = async function(req,res) {
   }
 }
 
-eliminarUsuario = async function (req,res){
+eliminarUsuario = async function (req, res) {
   try {
     // Conectar a la base de datos
     await mongoose.connect(dbURI, {
