@@ -1,0 +1,7 @@
+Cosas que me faltan por hacer
+
+Paginacion para las tablas y filtros 
+Y recuperacion de contraseña
+Validacion de campos login
+ Correo para al admin cada vez que reserva algo y cuando le toque un premio
+ Zona de perfil
