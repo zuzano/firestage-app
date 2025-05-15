@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
     Table,
     Form,
 } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react";
 
 function TablaAdmin({cabecera, datos, datosEditados,idActual, onEditar,handleEditar, onEliminar, onActualizar}) {

@@ -6,11 +6,10 @@ import {
   Form,
   InputGroup,
 } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+
 import { Icon } from "@iconify/react";
 
-import confetti from "canvas-confetti";
+import TablaAdmin from "./TablaAdmin";
 
 function Premios() {
   const [premios, setPremios] = useState([]);
@@ -18,6 +17,9 @@ function Premios() {
   const [show, setShow] = useState(false);
   const [titulo, setTitulo] = useState("");
   const [mensaje, setMensaje] = useState(null);
+
+  const [premioId, setPremioId] = useState(null);
+      const [datosEditados, setDatosEditados] = useState({});
 
   const handleChangePremios = (e) => {
     setDescripcion(e.target.value);
@@ -53,6 +55,80 @@ function Premios() {
       setShow(true);
     }
   };
+  
+  const handleCambioInput = (e) => {
+        const { name, value } = e.target;
+        setDatosEditados((prev) => ({ ...prev, [name]: value }));
+    };
+
+  const handleEditar = (premio) => {
+        setDatosEditados(premio);
+        setPremioId(premio._id);
+    };
+
+    const handleClickEliminar = async (id) => {
+        try {
+            const response = await fetch(
+                "http://localhost:5000/sorteos/eliminarPremio/" + id,
+                {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                }
+            );
+            const data = await response.json();
+            if (response.ok) {
+                setTitulo("Premio eliminado correctamente.");
+                setMensaje(data.mensaje);
+                setShow(true);
+                 await mostrarPremios();
+            } else {
+                setTitulo(data.error);
+                setMensaje(data.mensaje);
+                setShow(true);
+            }
+        } catch (err) {
+            setTitulo("Error al eliminar el premio.");
+            setMensaje("Hubo un error en el servidor.");
+        }
+    };
+
+    const handleClickActualizar = async (id) => {
+        if (id !== premioId) {
+            setPremioId(null);
+            return;
+        }
+
+        try {
+            const response = await fetch(
+                "http://localhost:5000/sorteos/editarPremio/" + id,
+                {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                       descripcion: datosEditados.descripcion,
+                       estado: datosEditados.estado
+                    }),
+                }
+            );
+            const data = await response.json();
+            if (response.ok) {
+                setShow(true);
+                setTitulo("Premio editado.");
+                setMensaje(data.mensaje);
+                setPremioId(null);
+                setDatosEditados({});
+                await mostrarPremios();
+            } else {
+                setTitulo(data.error);
+                setMensaje(data.mensaje);
+                setShow(true);
+            }
+        } catch (err) {
+            setShow(true);
+            setTitulo("Error al editar el premio");
+            setMensaje("Hubo un error al solicitar la petición al servidor");
+        }
+    };
 
   const mostrarPremios = async () => {
     try {
@@ -65,7 +141,7 @@ function Premios() {
       );
       const data = await response.json();
       if (response.ok) {
-        setPremios(data.premios); // Guardar los usuarios en el estado
+        setPremios(data.premios); // Guardar los premios en el estado
       } else {
         setTitulo("Error al mostrar los premios.");
         setMensaje("Hubo un error al solicitar la petición.");
@@ -100,12 +176,17 @@ function Premios() {
         <div className="d-flex flex-column" style={{ overflow: 'auto', maxHeight: '40vh' }}>
 
           {premios.length !== 0 ? (
-            premios.map((item, i) =>
-              <div key={i} className="bg-white d-flex justify-content-around my-2" style={{ borderRadius: '5px' }}>
-                <Form.Label className="fs-4 px-2 py-2" >Descripción: {item.descripcion}</Form.Label>
-                <Form.Label className="fs-4 px-2 py-2" >Estado: {item.estado}</Form.Label>
-              </div>
-            )
+            <>
+             <TablaAdmin cabecera={["descripcion", "estado"]}
+                    datos={premios}
+                    datosEditados={datosEditados}
+                    idActual={premioId}
+                    onEditar={handleCambioInput}
+                    handleEditar={handleEditar}
+                    onEliminar={handleClickEliminar}
+                    onActualizar={handleClickActualizar}
+                />
+                </>
           ) : (
             <>
               {" "}

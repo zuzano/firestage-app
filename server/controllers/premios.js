@@ -241,7 +241,7 @@ editarPremio = async function (req, res) {
       descripcion,estado
     };
 
-    const actualizacionPremio = await Premio.findOneAndUpdate(
+    const actualizacionPremio = await Premios.findOneAndUpdate(
       { _id: _idpremio },
       actualizarPremio,
       { new: true, runValidators: true }
@@ -273,7 +273,7 @@ eliminarPremio = async function (req, res) {
     // Obtener el ID del premio a eliminar
     const _id = req.params.id;
     // Intentar eliminar el premio
-    const resultado = await Premio.findByIdAndDelete(_id);
+    const resultado = await Premios.findByIdAndDelete(_id);
 
     // Verificar si se encontró y eliminó el usuario
     if (!resultado) {

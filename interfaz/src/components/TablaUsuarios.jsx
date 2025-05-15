@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import {
     Container,
-    Button,
     Modal,
     Table,
     Form,
 } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react";
+
+import TablaAdmin from "./TablaAdmin";
 
 function TablaUsuarios() {
     const [usuarios, setUsuarios] = useState([]);
@@ -47,6 +47,7 @@ function TablaUsuarios() {
                 setTitulo("Usuario eliminado correctamente.");
                 setMensaje(data.mensaje);
                 setShow(true);
+                 await mostrarUsuarios();
             } else {
                 setTitulo(data.error);
                 setMensaje(data.mensaje);
@@ -54,7 +55,7 @@ function TablaUsuarios() {
             }
         } catch (err) {
             setTitulo("Error al eliminar el usuario");
-            setMensaje(err);
+            setMensaje("Hubo un error en el servidor.");
         }
     };
 
@@ -112,11 +113,11 @@ function TablaUsuarios() {
                 setUsuarios(data.usuarios); // Guardar los usuarios en el estado
             } else {
                 setTitulo(data.error)
-               setMensaje(data.mensaje);
-               setShow(true);
+                setMensaje(data.mensaje);
+                setShow(true);
             }
         } catch (err) {
-             setShow(true);
+            setShow(true);
             setTitulo("Error al editar el usuario");
             setMensaje("Hubo un error al solicitar la petición al servidor");
         }
@@ -131,105 +132,15 @@ function TablaUsuarios() {
         <>
             <Container fluid >
                 <h1 className="text-center text-white">USUARIOS</h1>
-                <Table striped bordered hover style={{ overflow: 'auto', maxHeight: '40vh' }}>
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Email</th>
-                            <th>Rol</th>
-                            <th>Premios</th>
-                            <th>Opciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {usuarios.map((usuario) => (
-                            <tr key={usuario._id}>
-                                <td onClick={() => handleEditar(usuario)}>
-                                    {/* Compara el id del usuario para que al hacer click en un campo , en las demas filas se queden los datos fijos y no se pongan los de la fila que esta editando */}
-                                    {usuarioId === usuario._id ? (
-                                        <Form.Control
-                                            type="text"
-                                            name="nombre"
-                                            value={datosEditados.nombre}
-                                            onChange={handleCambioInput}
-                                            style={{
-                                                backgroundColor: "transparent",
-                                                border: "none",
-                                            }}
-                                        />
-                                    ) : (
-                                        usuario.nombre
-                                    )}
-                                </td>
-                                <td onClick={() => handleEditar(usuario)}>
-                                    {usuarioId === usuario._id ? (
-                                        <Form.Control
-                                            type="email"
-                                            name="email"
-                                            value={datosEditados.email}
-                                            onChange={handleCambioInput}
-                                            style={{
-                                                backgroundColor: "transparent",
-                                                border: "none",
-                                            }}
-                                        />
-                                    ) : (
-                                        usuario.email
-                                    )}
-                                </td>
-                                <td onClick={() => handleEditar(usuario)}>
-                                    {usuarioId === usuario._id ? (
-                                        <Form.Control
-                                            type="text"
-                                            name="rol"
-                                            value={datosEditados.rol}
-                                            onChange={handleCambioInput}
-                                            style={{
-                                                backgroundColor: "transparent",
-                                                border: "none",
-                                            }}
-                                        />
-                                    ) : (
-                                        usuario.rol
-                                    )}
-                                </td>
-                                <td onClick={() => handleEditar(usuario)}>
-                                    {usuarioId === usuario._id ? (
-                                        <Form.Control
-                                            type="text"
-                                            name="premios"
-                                            value={datosEditados.premios}
-                                            onChange={handleCambioInput}
-                                            style={{
-                                                backgroundColor: "transparent",
-                                                border: "none",
-                                            }}
-                                        />
-                                    ) : (
-                                        usuario.premios
-                                    )}
-                                </td>
-                                <td>
-                                    <Icon
-                                        icon="flowbite:edit-solid"
-                                        width="24"
-                                        height="24"
-                                        style={{ color: "#0e89ff", cursor: "pointer" }}
-                                        onClick={() => handleClickActualizar(usuario._id)}
-                                    />
-                                    <Icon
-                                        icon="typcn:delete"
-                                        width="24"
-                                        height="24"
-                                        style={{ color: "#f00", cursor: "pointer" }}
-                                        onClick={() => handleClickEliminar(usuario._id)}
-                                    />
-                                </td>
-                            </tr>
-                        ))}
-
-                    </tbody>
-                </Table>
+                <TablaAdmin cabecera={["nombre","rol", "email", "premios"]}
+                    datos={usuarios}
+                    datosEditados={datosEditados}
+                    idActual={usuarioId}
+                    onEditar={handleCambioInput}
+                    handleEditar={handleEditar}
+                    onEliminar={handleClickEliminar}
+                    onActualizar={handleClickActualizar}
+                />
 
                 <Modal
                     className="d-flex align-items-center"
