@@ -1,12 +1,8 @@
 /* From Uiverse.io by glisovic01 */ 
 .loginBox {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 400px;
+  width: 30%;
   padding: 40px;
   margin: 20px auto;
-  transform: translate(-50%, -55%);
   background: #ffffff;
   box-sizing: border-box;
   box-shadow: 0 15px 25px rgba(97, 96, 96, 0.6);

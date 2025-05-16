@@ -17,6 +17,8 @@ import Administrador from "./components/Administrador";
 import Error404 from "./components/Error404";
 import RutaPrivada from "./components/RutaPrivada";
 import AccesoDenegado from "./components/AccesoDenegado";
+import FormularioRestablecer from "./components/FormularioRestablecer";
+import Perfil from "./components/Perfil";
 
 import "./App.css";
 
@@ -47,6 +49,8 @@ function App() {
             />{/* //Componente hijo que se renderiza si se cumple la condicion */}
 
             <Route path="/accesoDenegado" element={<AccesoDenegado />} />
+            <Route path="/restablecerContraseña/:usuarioID" element={<FormularioRestablecer />} />
+            <Route path="/perfil" element={<Perfil />} />
           </Routes>
         </div>
         <Footer />

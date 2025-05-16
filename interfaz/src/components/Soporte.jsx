@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Card, Button, Modal } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Container, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import styles from "./../css/soporte.module.css";
 import { Icon } from "@iconify/react";

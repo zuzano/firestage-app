@@ -40,6 +40,10 @@ const usuarioSchema = new mongoose.Schema({
   ultimoReinicio: {
     type: Date,
     default: null
+  },
+  expiraContraseña: {
+    type: Date,
+    default: null
   }
 }, {
   timestamps: true

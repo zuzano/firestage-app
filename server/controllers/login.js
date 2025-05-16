@@ -5,10 +5,10 @@ const Usuario = require("../models/Usuario");
 
 const twoFactor = require('node-2fa');
 const QRCode = require('qrcode');
+const nodemailer = require('nodemailer')
 
 const dbURI = process.env.MONGODB_URI;
 
-console.log(dbURI)
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -154,9 +154,103 @@ verificarCodigo = async function (req, res) {
     }
 }
 
+recuperarContraseña = async function (req, res) {
+    try {
+        await mongoose.connect(dbURI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+
+        const { email } = req.body;
+
+        const usuario = await Usuario.findOne({ email });
+
+        if (!usuario) {
+            return res.status(404).json({ error: "Usuario no encontrado" });
+        }
+
+        const expiracion = Date.now() + 3600000; // 1 hora
+
+        usuario.expiraContraseña = expiracion;
+
+        await usuario.save()
+
+        const link = `http://localhost:5173/restablecerContraseña/${usuario._id}`;
+
+
+        // Configura tu transporte de correo
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'odesxd1934@gmail.com',
+                pass: 'kjlh cecz tzhc rxbm'
+            }
+        });
+
+        await transporter.sendMail({
+            from: 'odesxd1934@gmail.com',
+            to: email,
+            subject: 'Recuperar contraseña',
+            html: `<p>Haz clic <a href="${link}">aquí</a> para restablecer tu contraseña. Este enlace expirará en 1 hora.</p>`
+        });
+
+        res.status(200).json({ mensaje: "Correo de recuperación enviado" });
+
+    } catch (error) {
+        res.status(500).json({
+            error: "Error al recuperar contraseña",
+            mensaje: error.message
+        });
+    }
+}
+
+restablecerContraseña = async function (req, res) {
+    try {
+        await mongoose.connect(dbURI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+
+        const { usuarioID, nuevaContraseña } = req.body;
+
+        const usuario = await Usuario.findOne({ _id: usuarioID, expiraContraseña: { $gt: Date.now() } });
+
+        if (!usuario) {
+            return res.status(400).json({ mensaje: "ID inválido o expirado" });
+        }
+
+        const hash = await bcrypt.hash(nuevaContraseña, 10);
+        usuario.contraseña = hash;
+        usuario.expiraContraseña = null;
+
+        await usuario.save();
+
+        res.status(200).json({ mensaje: "Contraseña restablecida correctamente" });
+    } catch (err) {
+        res.status(500).json({ error: "Error al restablecer", mensaje: err.message });
+    }
+}
+
+validarID = async function (req, res) {
+    try {
+        const { usuarioID} = req.body;
+
+        const usuario = await Usuario.findById(usuarioID);
+        if (!usuario) {
+            return res.status(403).json({ error: "ID inválido o expirado" });
+        }
+
+        res.sendStatus(200); 
+    } catch (err) {
+         res.status(500).json({ error: "Error en la solicitud", mensaje: err.message })
+    }
+}
 
 module.exports = {
     registrarUsuario,
     iniciarSesionUsuario,
-    verificarCodigo
+    verificarCodigo,
+    recuperarContraseña,
+    restablecerContraseña,
+    validarID
 }

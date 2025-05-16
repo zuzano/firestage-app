@@ -8,9 +8,12 @@ import styles from "./../css/login.module.css";
 function Login() {
   const [enviar, setEnviar] = useState(false);
   const [correo, setCorreo] = useState("");
+  const [correoRestablecer, setCorreoRestablecer] = useState("");
   const [contraseña, setContraseña] = useState("");
   const [error, setError] = useState(null);
   const [show, setShow] = useState(false);
+  const [showRestablecer, setShowRestablecer] = useState(false);
+  const [enviadoRestablecer, setEnviadoRestablecer] = useState(false)
   const navigate = useNavigate();
 
   const [show2FAModal, setShow2FAModal] = useState(false);
@@ -36,13 +39,13 @@ function Login() {
 
         if (response.status !== 200) {
           setError(data.error || "Error al iniciar sesión");
-        setShow(true);
+          setShow(true);
 
         } else {
-          if(data.requiere2FA){
-            setQrCode(data.qr); 
-            setShow2FAModal(true); 
-          }else{
+          if (data.requiere2FA) {
+            setQrCode(data.qr);
+            setShow2FAModal(true);
+          } else {
             // Guardar datos del usuario en localStorage
             localStorage.setItem("usuario", JSON.stringify(data.usuario));
             localStorage.setItem("rol", data.usuario.rol)
@@ -93,13 +96,6 @@ function Login() {
     }
   };
 
-  // Verificar si ya hay un usuario logueado al cargar el componente
-  useEffect(() => {
-    const usuario = localStorage.getItem("usuario");
-    if (usuario) {
-      navigate("/"); // Redirige si ya está logueado
-    }
-  }, [navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -108,9 +104,9 @@ function Login() {
   };
 
   const handleClose = (e) => {
-    if(error){
+    if (error) {
       setShow(false)
-    }else{
+    } else {
       navigate("/");
     }
   };
@@ -120,10 +116,37 @@ function Login() {
     setCodigo("");
   };
 
+  const handleShowRestablecer = () => {
+    setShowRestablecer(true)
+  }
+
+  const handleSubmitRestablecer = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(
+        "http://localhost:5000/autenticacion/recuperarContrasena",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: correoRestablecer }),
+        }
+      );
+      const data = await response.json();
+
+      if (response.status !== 200) {
+        setError(data.error);
+      } else {
+        setEnviadoRestablecer(true);
+      }
+    } catch (err) {
+      setError("Error al procesar la solicitud.");
+    }
+  }
+
   return (
     // Form by glisovic01
     <>
-      <Container fluid style={{backgroundColor: '#131313' ,height: '80vh', display:'grid', placeItems:'center' }}>
+      <Container fluid style={{ backgroundColor: '#131313', height: '80vh', display: 'grid', placeItems: 'center', }}>
         <div className={styles.loginBox}>
           <p>Iniciar Sesión</p>
           <form onSubmit={handleSubmit}>
@@ -159,6 +182,10 @@ function Login() {
               ¡Regístrate!
             </Link>
           </p>
+          <p >
+            ¿Has olvidado la contraseña?
+            <a style={{ cursor: 'pointer' }} className={styles.a2} onClick={handleShowRestablecer}>Haz click aquí.</a>
+          </p>
         </div>
         <Modal
           className="d-flex align-items-center"
@@ -174,41 +201,69 @@ function Login() {
           </Modal.Body>
         </Modal>
         <Modal
-      className="d-flex align-items-center"
-      show={show2FAModal}
-      onHide={handleClose2FAModal}
-      animation={true}
-    >
-      <Modal.Header>
-        <Modal.Title>Verificación en Dos Pasos</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <p>
-          Escanea este código QR con tu aplicación de autenticación (como Google
-          Authenticator) e introduce el código de verificación.
-        </p>
-        {qrCode && (
-          <img
-            src={qrCode}
-            alt="Código QR para verificación en dos pasos"
-            style={{ maxWidth: "100%" }}
-          />
-        )}
-        <form onSubmit={autenticacion2FA} className="mt-3">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Código de verificación"
-            value={codigo}
-            onChange={(e) => setCodigo(e.target.value)}
-            required
-          />
-          <Button type="submit" className="mt-3" variant="primary">
-            Verificar
-          </Button>
-        </form>
-      </Modal.Body>
-    </Modal>
+          className="d-flex align-items-center"
+          show={show2FAModal}
+          onHide={handleClose2FAModal}
+          animation={true}
+        >
+          <Modal.Header>
+            <Modal.Title>Verificación en Dos Pasos</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>
+              Escanea este código QR con tu aplicación de autenticación (como Google
+              Authenticator) e introduce el código de verificación.
+            </p>
+            {qrCode && (
+              <img
+                src={qrCode}
+                alt="Código QR para verificación en dos pasos"
+                style={{ maxWidth: "100%" }}
+              />
+            )}
+            <form onSubmit={autenticacion2FA} className="mt-3">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Código de verificación"
+                value={codigo}
+                onChange={(e) => setCodigo(e.target.value)}
+                required
+              />
+              <Button type="submit" className="mt-3" variant="primary">
+                Verificar
+              </Button>
+            </form>
+          </Modal.Body>
+        </Modal>
+        <Modal
+          className="d-flex align-items-center"
+          show={showRestablecer}
+          onHide={() => { setShowRestablecer(false) }}
+          animation={true}
+        >
+          <Modal.Header>
+            <Modal.Title>Restablecer Contraseña</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <>
+              {error ?  error  :
+                <form onSubmit={handleSubmitRestablecer}>
+                  <p>Introduce tu correo , te enviaremos un mensaje para que puedas restablecer tu contraseña</p>
+                  <input
+                    className="w-100 rounded mb-2"
+                    required
+                    name="email"
+                    type="email"
+                    onChange={(e) => setCorreoRestablecer(e.target.value)}
+                  />
+                  <Button type="submit" variant="primary">Enviar</Button>
+                  {enviadoRestablecer ? <p style={{color:'green', fontWeight:'bold'}}>Revisa tu correo.</p> : ""}
+                </form>
+              }
+            </>
+          </Modal.Body>
+        </Modal>
       </Container>
     </>
   );
