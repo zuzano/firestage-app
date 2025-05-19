@@ -30,7 +30,7 @@ function Filtros(){
                 <DropdownItem onClick={ordenarMayor}></DropdownItem>
                 <Typeahead
                 id="datos-typeahead"
-                labelKey={propiedad}
+                labelKey={propiedad} // Muestra que propiedad de los datos si son objetos queremos mostrar
                 ></Typeahead>
             </DropdownMenu>
         </Dropdown>
