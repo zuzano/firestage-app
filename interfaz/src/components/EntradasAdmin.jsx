@@ -1,75 +1,35 @@
 import React, { useState, useEffect } from "react";
 import {
   Container,
-  Button,
   Modal,
   Form,
-  InputGroup,
 } from "react-bootstrap";
-
-import { Icon } from "@iconify/react";
 
 import TablaAdmin from "./TablaAdmin";
 
-function Premios() {
-  const [premios, setPremios] = useState([]);
-  const [descripcion, setDescripcion] = useState("");
+function EntradasAdmin() {
+  const [entradas, setEntradas] = useState([]);
   const [show, setShow] = useState(false);
   const [titulo, setTitulo] = useState("");
   const [mensaje, setMensaje] = useState(null);
 
-  const [premioId, setPremioId] = useState(null);
+  const [entradaId, setEntradaId] = useState(null);
       const [datosEditados, setDatosEditados] = useState({});
 
-  const handleChangePremios = (e) => {
-    setDescripcion(e.target.value);
-  };
-
-  const anadirPremio = async (e) => {
-    if (!descripcion) return;
-    e.preventDefault();
-    try {
-      const response = await fetch(
-        "http://localhost:5000/sorteos/anadirPremios",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ descripcion: descripcion, estado: 'activo' }),
-        }
-      );
-      const data = await response.json();
-      if (response.ok) {
-        setTitulo("Añadir Premio.");
-        setMensaje(data.mensaje);
-        setShow(true);
-        setDescripcion("");
-        await mostrarPremios();
-      } else {
-        setTitulo(data.error);
-        setMensaje(data.mensaje);
-        setShow(true);
-      }
-    } catch (err) {
-      setTitulo("Error al añadir un premio.");
-      setMensaje("Hubo un error al solicitar la petición.");
-      setShow(true);
-    }
-  };
-  
   const handleCambioInput = (e) => {
         const { name, value } = e.target;
         setDatosEditados((prev) => ({ ...prev, [name]: value }));
     };
 
-  const handleEditar = (premio) => {
-        setDatosEditados(premio);
-        setPremioId(premio._id);
+  const handleEditar = (entrada) => {
+        setDatosEditados(entrada);
+        setEntradaId(entrada._id);
     };
 
     const handleClickEliminar = async (id) => {
         try {
             const response = await fetch(
-                "http://localhost:5000/sorteos/eliminarPremio/" + id,
+                "http://localhost:5000/reservas/eliminarEntrada/" + id,
                 {
                     method: "DELETE",
                     headers: { "Content-Type": "application/json" },
@@ -77,45 +37,47 @@ function Premios() {
             );
             const data = await response.json();
             if (response.ok) {
-                setTitulo("Premio eliminado correctamente.");
+                setTitulo("entrada eliminada correctamente.");
                 setMensaje(data.mensaje);
                 setShow(true);
-                 await mostrarPremios();
+                 await mostrarEntradas();
             } else {
                 setTitulo(data.error);
                 setMensaje(data.mensaje);
                 setShow(true);
             }
         } catch (err) {
-            setTitulo("Error al eliminar el premio.");
+            setTitulo("Error al eliminar la entrada.");
             setMensaje("Hubo un error en el servidor.");
         }
     };
 
     const handleClickActualizar = async (id) => {
-        if (id !== premioId) {
-            setPremioId(null);
+        if (id !== entradaId) {
+            setEntradaId(null);
             return;
         }
 
         try {
             const response = await fetch(
-                "http://localhost:5000/sorteos/editarPremio/" + id,
+                "http://localhost:5000/reservas/editarEntrada/" + id,
                 {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                       descripcion: datosEditados.descripcion,
-                       estado: datosEditados.estado
+                      tipo: datosEditados.tipo,
+                      subtipo: datosEditados.subtipo,
+                      comprador: datosEditados.comprador,
+                      fechaCompra: datosEditados.fechaCompra
                     }),
                 }
             );
             const data = await response.json();
             if (response.ok) {
                 setShow(true);
-                setTitulo("Premio editado.");
+                setTitulo("Entrada editada.");
                 setMensaje(data.mensaje);
-                setPremioId(null);
+                setEntradaId(null);
                 setDatosEditados({});
                 await mostrarPremios();
             } else {
@@ -125,7 +87,7 @@ function Premios() {
             }
         } catch (err) {
             setShow(true);
-            setTitulo("Error al editar el premio");
+            setTitulo("Error al editar la entrada");
             setMensaje("Hubo un error al solicitar la petición al servidor");
         }
     };
@@ -133,7 +95,7 @@ function Premios() {
   const mostrarPremios = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/sorteos/mostrarPremiosAdmin",
+        "http://localhost:5000/reservas/mostrarEntradas",
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -141,14 +103,14 @@ function Premios() {
       );
       const data = await response.json();
       if (response.ok) {
-        setPremios(data.premios); // Guardar los premios en el estado
+        setEntradas(data.entradas); // Guardar los premios en el estado
       } else {
-        setTitulo("Error al mostrar los premios.");
+        setTitulo("Error al mostrar las entradas.");
         setMensaje("Hubo un error al solicitar la petición.");
         setShow(true);
       }
     } catch (err) {
-      setTitulo("Error al mostrar los premios.");
+      setTitulo("Error al mostrar los entradas.");
       setMensaje("Hubo un error al solicitar la petición.");
       setShow(true);
     }
@@ -156,31 +118,20 @@ function Premios() {
 
   //Solo se carga la primera vez que se renderiza el componente
   useEffect(() => {
-    mostrarPremios();
+    mostrarEntradas();
   }, [])
 
   return (
     <Container fluid>
-      <h1 className="text-center text-white">PREMIOS</h1>
-      <Form onSubmit={anadirPremio}>
-        <InputGroup className="mb-3">
-          <Form.Control
-            type="text"
-            placeholder="Introduce los premios a añadir en la ruleta"
-            name="premios"
-            value={descripcion || ""}
-            onChange={handleChangePremios}
-          />
-          <Button type="submit">Añadir</Button>
-        </InputGroup>
+      <h1 className="text-center text-white">ENTRADAS</h1>
         <div className="d-flex flex-column" style={{ overflow: 'auto', maxHeight: '40vh' }}>
 
-          {premios.length !== 0 ? (
+          {entradas.length !== 0 ? (
             <>
-             <TablaAdmin cabecera={["descripcion", "estado"]}
-                    datos={premios}
+             <TablaAdmin cabecera={["tipo", "subtipo", "comprador", "fechaCompra"]}
+                    datos={entradas}
                     datosEditados={datosEditados}
-                    idActual={premioId}
+                    idActual={entradaId}
                     onEditar={handleCambioInput}
                     handleEditar={handleEditar}
                     onEliminar={handleClickEliminar}
@@ -191,12 +142,11 @@ function Premios() {
             <>
               {" "}
               <Form.Label className="my-3 text-center text-white">
-                No hay premios.
+                No hay entradas.
               </Form.Label>{" "}
             </>
           )}
         </div>
-      </Form>
       <Modal
         className="d-flex align-items-center"
         show={show}
@@ -212,4 +162,4 @@ function Premios() {
   );
 }
 
-export default Premios;
+export default EntradasAdmin;

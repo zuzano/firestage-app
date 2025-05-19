@@ -90,12 +90,12 @@ iniciarSesionUsuario = async function (req, res) {
         const usuario = await Usuario.findOne({ email: email });
 
         if (!usuario) {
-            res.status(404).json({ error: "Usuario no encontrado", mensaje: error.message })
+            res.status(404).json({ error: "Usuario no encontrado", mensaje: "Email incorrecto." })
         }
         // Comparar contraseña ingresada con la almacenada
         const contraseñaValida = await bcrypt.compare(contraseña, usuario.contraseña);
         if (!contraseñaValida) {
-            return res.status(401).json({ error: "Contraseña incorrecta" });
+            return res.status(401).json({ mensaje: "Contraseña incorrecta" });
         }
 
         // No iniciar sesión aún. Verificamos 2FA.

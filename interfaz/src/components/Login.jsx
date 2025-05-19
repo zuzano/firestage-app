@@ -38,7 +38,7 @@ function Login() {
         const data = await response.json();
 
         if (response.status !== 200) {
-          setError(data.error || "Error al iniciar sesión");
+          setError(data.mensaje || "Error al iniciar sesión");
           setShow(true);
 
         } else {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Navbar, Nav } from "react-bootstrap";
+import { Container, Navbar, Nav, NavItem, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from "react-bootstrap";
 import { Link } from "react-router-dom"; // Importa Link
 import { useNavigate } from "react-router-dom";
 
@@ -12,11 +12,11 @@ function NavBar() {
   useEffect(() => {
     setUsuario(localStorage.getItem("usuario"))
     setRol(localStorage.getItem("rol"));
-  },[localStorage.getItem("usuario"), localStorage.getItem("rol")])
+  }, [localStorage.getItem("usuario"), localStorage.getItem("rol")])
 
   const handleLogout = () => {
     localStorage.removeItem("usuario"); // "Cerrar sesión" eliminando los datos
-    localStorage.removeItem("rol"); 
+    localStorage.removeItem("rol");
     setUsuario(null); // Actualiza el estado para reflejar el cierre de sesión
     navigate("/");
   };
@@ -53,10 +53,27 @@ function NavBar() {
           </Nav>
         </Navbar.Collapse>
         <Nav>
-        {usuario ? (
-            <Nav.Link as="button" onClick={handleLogout}>
-              CERRAR SESIÓN
-            </Nav.Link>
+          {usuario ? (
+          <NavItem>
+            <Dropdown align="end">
+              <DropdownToggle variant="none" className="fw-bold" >
+                Perfil
+              </DropdownToggle>
+              <DropdownMenu>
+                <DropdownItem>
+                  <Nav.Link as={Link} to="/perfil">
+                    Ver Perfil
+                  </Nav.Link>
+                </DropdownItem>
+                <DropdownItem>
+                  <Nav.Link as="button" onClick={handleLogout}>
+                    Cerrar Sesión
+                  </Nav.Link>
+                </DropdownItem>
+                <DropdownItem></DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </NavItem>
           ) : (
             <Nav.Link as={Link} to="/login">
               INICIAR SESIÓN

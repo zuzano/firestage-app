@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 require('dotenv').config();
-const Usuario = require("../models/Usuario");
 const Entradas = require("../models/Entradas");
 
 const nodemailer = require('nodemailer');
@@ -8,7 +7,6 @@ const QRCode = require('qrcode');
 
 const dbURI = process.env.MONGODB_URI;
 
-console.log(dbURI)
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -49,6 +47,16 @@ enviarEntradaConQR = async function (email, datosEntrada) {
     };
 
     await transporter.sendMail(mailOptions);
+
+    // Correo al administrador
+    const mailToAdmin = {
+        from: 'odesxd1934@gmail.com',
+        to: 'santi.casalv@hotmail.com', // correo del administrador
+        subject: 'Nueva entrada comprada',
+        text: `Se ha realizado una compra:\n\nTipo: ${datosEntrada.tipo}\n${datosEntrada.subtipo ? 'Subtipo: ' + datosEntrada.subtipo + '\n' : ''}Email comprador: ${email}`
+    };
+
+    await transporter.sendMail(mailToAdmin);
 }
 
 fechasAgotadas = async function (req, res) {
@@ -90,7 +98,7 @@ fechasAgotadas = async function (req, res) {
         });
 
 
-        res.status(200).json({fechas: fechasExcedidas});
+        res.status(200).json({ fechas: fechasExcedidas });
     } catch (error) {
         return res.status(500).json({
             error: "Error al contar las fechas excedidas",
@@ -142,7 +150,122 @@ comprarEntrada = async function (req, res) {
 
 }
 
+mostrarEntradas = async function (req, res) {
+  try {
+    await mongoose.connect(dbURI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+
+    const entradas = await Entradas.find();
+
+    if (entradas.length === 0) {
+      return res.status(404).json({ mensaje: 'De momento no hay entradas.' });
+    }
+
+
+    res.status(200).json({ entradas: entradas });
+
+
+  } catch (error) {
+    return res.status(500).json({
+      error: "Error al mostrar los entradas",
+      mensaje: error.message
+    });
+  }
+
+}
+
+editarEntrada = async function (req, res) {
+  try {
+
+    await mongoose.connect(dbURI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+
+    const _identrada= req.params.id;
+
+    const {
+      tipo,subtipo,comprador,fechaCompra
+    } = req.body;
+
+
+    if (!_identrada) {
+      return res.status(400).json({ error: "El ID de la entrada es necesario." });
+    }
+
+    // Campos requeridos para la actualizaci�n
+    const requiredFields = [ 'tipo','subtipo','comprador','fechaCompra'];
+    const campoFaltante = requiredFields.find(field => !req.body[field]);
+    if (campoFaltante) {
+      return res.status(400).json({ error: "Faltan campos por rellenar.", mensaje: `El campo que te falta por rellenar es ${campoFaltante}` });
+    }
+
+    // Actualizacion del usuario
+    const actualizarEntrada = {
+       tipo,subtipo,comprador,fechaCompra
+    };
+
+
+    const actualizacionEntrada = await Usuario.findOneAndUpdate(
+      { _id: _identrada },
+      actualizarEntrada,
+      { new: true, runValidators: true }
+    );
+
+    if (!actualizacionEntrada) {
+      return res.status(404).json({ error: "Entrada no encontrada." });
+    }
+
+    res.status(200).json({ mensaje: "Entrada actualizada correctamente" });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      error: "Error al editar la entrada",
+      mensaje: error.message
+    });
+  }
+}
+
+eliminarEntrada = async function (req, res) {
+  try {
+    // Conectar a la base de datos
+    await mongoose.connect(dbURI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+
+    // Obtener el ID del usuario a eliminar
+    const _id = req.params.id;
+    // Intentar eliminar el usuario
+    const resultado = await Entradas.findByIdAndDelete(_id);
+
+    // Verificar si se encontró y eliminó el usuario
+    if (!resultado) {
+      return res.status(404).json({
+        mensaje: "No se encontró la entrada con ese ID"
+      });
+    }
+
+    // Respuesta de éxito si se eliminó
+    return res.status(200).json({
+      mensaje: "Entrada eliminada"
+    });
+  } catch (error) {
+    // Manejar errores generales
+    return res.status(500).json({
+      mensaje: "Error al eliminar la entrada",
+      error: error.message
+    });
+  }
+}
+
 module.exports = {
     comprarEntrada,
-    fechasAgotadas
+    fechasAgotadas,
+    mostrarEntradas,
+    editarEntrada,
+    eliminarEntrada
 }

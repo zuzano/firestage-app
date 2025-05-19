@@ -2,12 +2,11 @@ import React, { useState, useEffect } from "react";
 import {
   Container,Button
 } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 
-import TablaUsuarios from "./TablaUsuarios";
-import Premios from "./Premios";
+import UsuariosAdmin from "./UsuariosAdmin";
+import PremiosAdmin from "./PremiosAdmin";
+import EntradasAdmin from "./EntradasAdmin";
 
 import styles from "./../css/administrador.module.css";
 
@@ -22,9 +21,11 @@ function Administrador() {
   const mostrar = () => {
     switch (eleccion) {
       case "usuario":
-        return <TablaUsuarios/>
+        return <UsuariosAdmin/>
       case "premios":
-        return <Premios />
+        return <PremiosAdmin />
+      case "entradas":
+        return <EntradasAdmin />
       case "administrador":
         return setEleccion(null);
       default:

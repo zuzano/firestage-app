@@ -5,10 +5,11 @@ const Usuario = require("../models/Usuario");
 
 
 const dbURI = process.env.MONGODB_URI;
-console.log(dbURI)
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+
+const nodemailer = require('nodemailer')
 
 const app = express();
 app.use(cors());
@@ -140,7 +141,7 @@ anadirPremioUsuario = async function (req, res) {
 
     // Marcar el premio como inactivo
     await Premios.findOneAndUpdate(
-      { descripcion: premio },        
+      { descripcion: premio },
       { $set: { estado: 'finalizado' } },
       { new: true }
     );
@@ -149,7 +150,36 @@ anadirPremioUsuario = async function (req, res) {
       return res.status(404).json({ error: "Usuario no encontrado." });
     }
 
-    res.json({ mensaje: "El premio se ha añadido a tu cuenta. " + premio + ". Solo puedes obtener un premio por mes, si no lo gastas antes del mes y ganas otro, solo te quedará el premio más reciente." });
+    // https://myaccount.google.com/apppasswords para crear una contraseña de aplicacion
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'odesxd1934@gmail.com',
+        pass: 'kjlh cecz tzhc rxbm'
+      }
+    });
+
+    // Obtener los datos del usuario
+      const usuario = await Usuario.findById(_idusuario);
+
+    // Correo envia de notificacion al administrador
+    const mailToAdmin = {
+      from: 'odesxd1934@gmail.com', // quien lo envía
+      to: 'santi.casalv@hotmail.com', // mi correo
+      subject:  "Notificación de nuevo premio asignado",
+      text: `EL usuario ${usuario.email} acaba de recibir ${premio}`
+    };
+
+    transporter.sendMail(mailToAdmin, (error, info) => {
+      if (error) {
+        return res.status(404).json({
+          error: "Error al enviar el correo.",
+          mensaje: error.message
+        });
+      } else {
+        res.status(200).json({ mensaje: "El premio se ha añadido a tu cuenta. " + premio + ". Solo puedes obtener un premio por mes, si no lo gastas antes del mes y ganas otro, solo te quedará el premio más reciente." });
+      }
+    });
 
   } catch (error) {
     console.error(error);
@@ -221,7 +251,7 @@ editarPremio = async function (req, res) {
     });
     const _idpremio = req.params.id;
     const {
-     descripcion, estado
+      descripcion, estado
     } = req.body;
 
 
@@ -238,7 +268,7 @@ editarPremio = async function (req, res) {
 
     // Actualizacion del premio
     const actualizarPremio = {
-      descripcion,estado
+      descripcion, estado
     };
 
     const actualizacionPremio = await Premios.findOneAndUpdate(

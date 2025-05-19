@@ -9,7 +9,7 @@ import { Icon } from "@iconify/react";
 
 import TablaAdmin from "./TablaAdmin";
 
-function TablaUsuarios() {
+function UsuariosAdmin() {
     const [usuarios, setUsuarios] = useState([]);
     const [show, setShow] = useState(false);
     const [titulo, setTitulo] = useState(null);
@@ -158,4 +158,4 @@ function TablaUsuarios() {
     );
 }
 
-export default TablaUsuarios;
+export default UsuariosAdmin;
