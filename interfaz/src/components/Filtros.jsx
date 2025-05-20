@@ -15,7 +15,10 @@ import './../css/filtros.css'
 
 function Filtros({ datos, propiedad }) {
 
-    const [datoSeleccionado, setDatoSeleccionado] = useState([])
+    const [datoSeleccionado, setDatoSeleccionado] = useState([]);
+    const [datosCecked, setDatosChecked] = useState(
+        datos.map(d => ({ ...d, checked: true }))
+    )
     const [allSelected, setAllSelected] = useState(true);
 
     const ordenarMenor = (tipoDato) => {
@@ -28,22 +31,23 @@ function Filtros({ datos, propiedad }) {
     }
 
     const handleCheckboxChange = (option) => {
-        /*  setDatoSeleccionado(prev => {
-             if (prev.includes(option)) {
-                 return prev.filter(item => item !== option);
-             }
-             return [...prev, option];
-         });
-         setAllSelected(false); */
+        setDatosChecked(prev =>
+            prev.map(item =>
+                item[propiedad] === option[propiedad]
+                    ? { ...item, checked: !item.checked }
+                    : item
+            )
+        );
+        setAllSelected(false);
     };
 
     const handleSelectAll = () => {
-        /*   if (allSelected) {
-              setDatoSeleccionado([]);
-          } else {
-              setDatoSeleccionado([...datos]);
-          }
-          setAllSelected(!allSelected); */
+        const nuevosSeleccionados = datoSeleccionado.map(item => ({
+            ...item,
+            checked: !allSelected
+        }));
+        setDatosChecked(nuevosSeleccionados);
+        setAllSelected(!allSelected);
     };
 
     return (
@@ -59,30 +63,27 @@ function Filtros({ datos, propiedad }) {
                         labelKey={propiedad}
                         options={datos}
                         placeholder="Buscar..."
-                        onChange={setDatoSeleccionado}
-                        selected={datoSeleccionado}
+                        onChange={() => { }}      // Ignora la selección
+                        selected={[]}
                         open
                         renderMenu={(results, menuProps) => (
                             <>
-                                <Menu {...menuProps}>
-                                    <MenuItem option={"Seleccionar Todo"} position={0} >
+
+                                <Menu {...menuProps} style={{transform: 'translate(0px, 1px)', width: '100%'}}>
                                         <Form.Check
                                             type="checkbox"
                                             label="Seleccionar Todo"
                                             checked={allSelected}
                                             onChange={handleSelectAll}
                                         />
-                                    </MenuItem>
                                     {results.map((result, index) => (
-                                        <MenuItem option={result} position={index+1} >
                                             <Form.Check
                                                 key={index}
                                                 type="checkbox"
                                                 label={result[propiedad]}
-                                                checked={datoSeleccionado.includes(result)}
+                                                checked={datosCecked.find(item => item[propiedad] === result[propiedad])?.checked || false}
                                                 onChange={() => handleCheckboxChange(result)}
                                             />
-                                        </MenuItem>
                                     ))}
 
                                 </Menu>
