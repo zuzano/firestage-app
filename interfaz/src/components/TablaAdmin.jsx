@@ -5,21 +5,25 @@ import {
 } from "react-bootstrap";
 import { Icon } from "@iconify/react";
 
+import Filtros from "./Filtros";
+
 function TablaAdmin({cabecera, datos, datosEditados,idActual, onEditar,handleEditar, onEliminar, onActualizar}) {
 
     return (
         <>
+              <div className="d-flex flex-column" style={{ overflow: 'auto', maxHeight: '40vh'}}>
       
-                <Table striped bordered hover style={{ overflow: 'auto', maxHeight: '40vh' }}>
-                    <thead>
+                <Table striped bordered hover>
+                    <thead style={{position:'sticky', top:'0'}}>
                         <tr>
                             {cabecera.map((item,index) => (
-                                <th key={index}>{item}</th>
+                                <th className="p-0" key={index}><Filtros datos={datos} propiedad={item} /></th>
+
                             ))}
                             <th>Opciones</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody >
                         {datos.map((dato) => (
                             <tr key={dato._id}>
                                 {cabecera.map((item, index) => ( 
@@ -62,6 +66,7 @@ function TablaAdmin({cabecera, datos, datosEditados,idActual, onEditar,handleEdi
 
                     </tbody>
                 </Table>
+                </div>
         </>
     );
 }

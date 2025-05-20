@@ -41,9 +41,9 @@ function Administrador() {
           backgroundColor: "#131313",
           display: "flex",
           flexDirection: "column",
+          justifyContent: 'center',
           alignItems: "center",
-          padding: "100px",
-          height: '75vh'
+          height: '70vh',
         }}
       >
         {!eleccion ? <>
@@ -57,13 +57,13 @@ function Administrador() {
             <div className={styles.div3} onClick={() => { handleElegir("premios") }}>
               <Icon icon="dashicons:awards" width="100" height="100" color="rgba(255, 175, 2, 0.7)" />
             </div>
-            <div className={styles.div4} onClick={() => { handleElegir("reservas") }}>
+            <div className={styles.div4} onClick={() => { handleElegir("entradas") }}>
               <Icon icon="lets-icons:book-check-duotone" width="100px" height="100px" color="brown" />
             </div>
           </div>
         </> : <>
         {mostrar()}
-        <Button variant="primary" className="" onClick={() => { handleElegir("administrador") }}>Panel Administrador</Button>
+        <Button variant="primary" className="my-2" onClick={() => { handleElegir("administrador") }}>Panel Administrador</Button>
         </>}
 
       </Container>

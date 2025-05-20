@@ -19,7 +19,7 @@ function PremiosAdmin() {
   const [mensaje, setMensaje] = useState(null);
 
   const [premioId, setPremioId] = useState(null);
-      const [datosEditados, setDatosEditados] = useState({});
+  const [datosEditados, setDatosEditados] = useState({});
 
   const handleChangePremios = (e) => {
     setDescripcion(e.target.value);
@@ -55,80 +55,80 @@ function PremiosAdmin() {
       setShow(true);
     }
   };
-  
+
   const handleCambioInput = (e) => {
-        const { name, value } = e.target;
-        setDatosEditados((prev) => ({ ...prev, [name]: value }));
-    };
+    const { name, value } = e.target;
+    setDatosEditados((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleEditar = (premio) => {
-        setDatosEditados(premio);
-        setPremioId(premio._id);
-    };
+    setDatosEditados(premio);
+    setPremioId(premio._id);
+  };
 
-    const handleClickEliminar = async (id) => {
-        try {
-            const response = await fetch(
-                "http://localhost:5000/sorteos/eliminarPremio/" + id,
-                {
-                    method: "DELETE",
-                    headers: { "Content-Type": "application/json" },
-                }
-            );
-            const data = await response.json();
-            if (response.ok) {
-                setTitulo("Premio eliminado correctamente.");
-                setMensaje(data.mensaje);
-                setShow(true);
-                 await mostrarPremios();
-            } else {
-                setTitulo(data.error);
-                setMensaje(data.mensaje);
-                setShow(true);
-            }
-        } catch (err) {
-            setTitulo("Error al eliminar el premio.");
-            setMensaje("Hubo un error en el servidor.");
+  const handleClickEliminar = async (id) => {
+    try {
+      const response = await fetch(
+        "http://localhost:5000/sorteos/eliminarPremio/" + id,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
         }
-    };
+      );
+      const data = await response.json();
+      if (response.ok) {
+        setTitulo("Premio eliminado correctamente.");
+        setMensaje(data.mensaje);
+        setShow(true);
+        await mostrarPremios();
+      } else {
+        setTitulo(data.error);
+        setMensaje(data.mensaje);
+        setShow(true);
+      }
+    } catch (err) {
+      setTitulo("Error al eliminar el premio.");
+      setMensaje("Hubo un error en el servidor.");
+    }
+  };
 
-    const handleClickActualizar = async (id) => {
-        if (id !== premioId) {
-            setPremioId(null);
-            return;
-        }
+  const handleClickActualizar = async (id) => {
+    if (id !== premioId) {
+      setPremioId(null);
+      return;
+    }
 
-        try {
-            const response = await fetch(
-                "http://localhost:5000/sorteos/editarPremio/" + id,
-                {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                       descripcion: datosEditados.descripcion,
-                       estado: datosEditados.estado
-                    }),
-                }
-            );
-            const data = await response.json();
-            if (response.ok) {
-                setShow(true);
-                setTitulo("Premio editado.");
-                setMensaje(data.mensaje);
-                setPremioId(null);
-                setDatosEditados({});
-                await mostrarPremios();
-            } else {
-                setTitulo(data.error);
-                setMensaje(data.mensaje);
-                setShow(true);
-            }
-        } catch (err) {
-            setShow(true);
-            setTitulo("Error al editar el premio");
-            setMensaje("Hubo un error al solicitar la petición al servidor");
+    try {
+      const response = await fetch(
+        "http://localhost:5000/sorteos/editarPremio/" + id,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            descripcion: datosEditados.descripcion,
+            estado: datosEditados.estado
+          }),
         }
-    };
+      );
+      const data = await response.json();
+      if (response.ok) {
+        setShow(true);
+        setTitulo("Premio editado.");
+        setMensaje(data.mensaje);
+        setPremioId(null);
+        setDatosEditados({});
+        await mostrarPremios();
+      } else {
+        setTitulo(data.error);
+        setMensaje(data.mensaje);
+        setShow(true);
+      }
+    } catch (err) {
+      setShow(true);
+      setTitulo("Error al editar el premio");
+      setMensaje("Hubo un error al solicitar la petición al servidor");
+    }
+  };
 
   const mostrarPremios = async () => {
     try {
@@ -160,7 +160,7 @@ function PremiosAdmin() {
   }, [])
 
   return (
-    <Container fluid>
+    <Container fluid className="p-2">
       <h1 className="text-center text-white">PREMIOS</h1>
       <Form onSubmit={anadirPremio}>
         <InputGroup className="mb-3">
@@ -173,29 +173,27 @@ function PremiosAdmin() {
           />
           <Button type="submit">Añadir</Button>
         </InputGroup>
-        <div className="d-flex flex-column" style={{ overflow: 'auto', maxHeight: '40vh' }}>
 
-          {premios.length !== 0 ? (
-            <>
-             <TablaAdmin cabecera={["descripcion", "estado"]}
-                    datos={premios}
-                    datosEditados={datosEditados}
-                    idActual={premioId}
-                    onEditar={handleCambioInput}
-                    handleEditar={handleEditar}
-                    onEliminar={handleClickEliminar}
-                    onActualizar={handleClickActualizar}
-                />
-                </>
-          ) : (
-            <>
-              {" "}
-              <Form.Label className="my-3 text-center text-white">
-                No hay premios.
-              </Form.Label>{" "}
-            </>
-          )}
-        </div>
+        {premios.length !== 0 ? (
+          <>
+            <TablaAdmin cabecera={["descripcion", "estado"]}
+              datos={premios}
+              datosEditados={datosEditados}
+              idActual={premioId}
+              onEditar={handleCambioInput}
+              handleEditar={handleEditar}
+              onEliminar={handleClickEliminar}
+              onActualizar={handleClickActualizar}
+            />
+          </>
+        ) : (
+          <>
+            {" "}
+            <Form.Label className="my-3 text-center text-white">
+              No hay premios.
+            </Form.Label>{" "}
+          </>
+        )}
       </Form>
       <Modal
         className="d-flex align-items-center"

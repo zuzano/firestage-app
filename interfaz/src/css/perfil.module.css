@@ -34,7 +34,8 @@
   background-color: #cacaca;
   border-radius: 10px;
 }
-div > label:first-child{
+
+.wrapper div > label:first-child{
   font-weight: bold;
 }
 

@@ -130,7 +130,7 @@ function UsuariosAdmin() {
 
     return (
         <>
-            <Container fluid >
+            <Container fluid className="p-0">
                 <h1 className="text-center text-white">USUARIOS</h1>
                 <TablaAdmin cabecera={["nombre","rol", "email", "premios"]}
                     datos={usuarios}

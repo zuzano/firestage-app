@@ -24,11 +24,11 @@ import "./App.css";
 
 function App() {
   return (
-    <div className="app-wrapper">
+    <div className="app">
       <Router>
         <NavBar />{" "}
         {/* El NavBar debe estar fuera de Routes si quieres que aparezca en todas las páginas */}
-        <div className="main-content">
+        <div className="main">
           <Routes>
             <Route path="/" element={<Inicio />} />
             <Route path="/login" element={<Login />} />

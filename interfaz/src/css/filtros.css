@@ -1,0 +1,32 @@
+.dropdown-menu.show{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+.dropdownToggle::after {
+    display: none;
+    padding: 0;
+}
+
+.dropdownToggle {
+    border: none;
+}
+
+#datos-typeahead{
+    height: 200px;
+}
+#datos-typeahead.rbt-menu{
+    max-height: 100px !important;
+    overflow: auto;
+}
+
+.rbt{
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+
+

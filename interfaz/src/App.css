@@ -5,18 +5,14 @@ body,
     margin: 0;
 }
 
-.app-wrapper {
+.app {
     display: flex;
     flex-direction: column;
     min-height: 100%;
 }
 
-.main-content {
+.main {
     flex: 1;
 }
 
-@font-face {
- /*    font-family: 'Air Travelers';
-    src: url('./../public/fonts/AirTravelersPersonalUse-BdIt.woff2') format('woff2'); */
-}
 
