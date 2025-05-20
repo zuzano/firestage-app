@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import {
     Dropdown,
     DropdownToggle,
@@ -13,13 +13,10 @@ import { Icon } from "@iconify/react";
 
 import './../css/filtros.css'
 
-function Filtros({ datos, propiedad }) {
+function Filtros({ datos, propiedad, onActualizar }) {
 
-    const [datoSeleccionado, setDatoSeleccionado] = useState([]);
-    const [datosCecked, setDatosChecked] = useState(
-        datos.map(d => ({ ...d, checked: true }))
-    )
-    const [allSelected, setAllSelected] = useState(true);
+    const [datosChecked, setDatosChecked] = useState([])
+    const [todoSeleccionado, setTodoSeleccionado] = useState(true);
 
     const ordenarMenor = (tipoDato) => {
 
@@ -33,22 +30,32 @@ function Filtros({ datos, propiedad }) {
     const handleCheckboxChange = (option) => {
         setDatosChecked(prev =>
             prev.map(item =>
-                item[propiedad] === option[propiedad]
+                item[propiedad] === option
                     ? { ...item, checked: !item.checked }
                     : item
             )
         );
-        setAllSelected(false);
+        setTodoSeleccionado(false);
     };
 
-    const handleSelectAll = () => {
-        const nuevosSeleccionados = datoSeleccionado.map(item => ({
+    const handleSeleccionarTodo = () => {
+        const nuevosSeleccionados = datosChecked.map(item => ({
             ...item,
-            checked: !allSelected
+            checked: !todoSeleccionado
         }));
         setDatosChecked(nuevosSeleccionados);
-        setAllSelected(!allSelected);
+        setTodoSeleccionado(!todoSeleccionado);
     };
+
+    useEffect(() => {
+        setDatosChecked(datos.map(item => ({ ...item, checked: true })))
+    },[datos])
+
+    useEffect(() => {
+        const datosFiltrados = datosChecked.filter((item) => item.checked)
+        onActualizar(datosFiltrados)
+    }, [datosChecked])
+
 
     return (
         <>
@@ -63,32 +70,39 @@ function Filtros({ datos, propiedad }) {
                         labelKey={propiedad}
                         options={datos}
                         placeholder="Buscar..."
-                        onChange={() => { }}      // Ignora la selección
+                        onChange={() => { }}
                         selected={[]}
                         open
-                        renderMenu={(results, menuProps) => (
+                        renderMenu={(results, menuProps) => { 
+                            const sinRepetidos = [...new Set(results.map(item => item[propiedad]))]
+                            console.log(sinRepetidos)
+                            return (
                             <>
 
-                                <Menu {...menuProps} style={{transform: 'translate(0px, 1px)', width: '100%'}}>
+                                <Menu {...menuProps} style={{ transform: 'translate(0px, 1px)', width: '100%' }}>
+                                    <Form.Check
+                                        type="checkbox"
+                                        label="Seleccionar Todo"
+                                        checked={todoSeleccionado}
+                                        onChange={handleSeleccionarTodo}
+                                        className="ms-3"
+                                    />
+
+                                    {sinRepetidos.map((result, index) => {
+                                        return (
                                         <Form.Check
+                                            key={index}
                                             type="checkbox"
-                                            label="Seleccionar Todo"
-                                            checked={allSelected}
-                                            onChange={handleSelectAll}
+                                            label={result}
+                                            checked={datosChecked.find(item => item[propiedad] === result)?.checked || false}
+                                            onChange={() => handleCheckboxChange(result)}
+                                            className="ms-3"
                                         />
-                                    {results.map((result, index) => (
-                                            <Form.Check
-                                                key={index}
-                                                type="checkbox"
-                                                label={result[propiedad]}
-                                                checked={datosCecked.find(item => item[propiedad] === result[propiedad])?.checked || false}
-                                                onChange={() => handleCheckboxChange(result)}
-                                            />
-                                    ))}
+                                    )})}
 
                                 </Menu>
                             </>
-                        )}
+                        )}}
                     />
                 </DropdownMenu>
             </Dropdown>

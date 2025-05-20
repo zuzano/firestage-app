@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     Table,
     Form,
@@ -9,22 +9,28 @@ import Filtros from "./Filtros";
 
 function TablaAdmin({cabecera, datos, datosEditados,idActual, onEditar,handleEditar, onEliminar, onActualizar}) {
 
+    const [actualizarDatos, setActualizarDatos] = useState(datos.map(d => ({...d})));
+    
+    const actualizarTabla = (datosActualizados) => {
+        setActualizarDatos(datosActualizados);
+    }
+
     return (
         <>
-              <div className="d-flex flex-column" style={{ overflow: 'auto', maxHeight: '40vh'}}>
+              <div className="d-flex flex-column" style={{ overflow: 'auto', maxHeight: '40vh',  minHeight: '200px' }}>
       
                 <Table striped bordered hover>
                     <thead style={{position:'sticky', top:'0'}}>
                         <tr>
                             {cabecera.map((item,index) => (
-                                <th className="p-0" key={index}><Filtros datos={datos} propiedad={item} /></th>
+                                <th className="p-0" key={index}><Filtros datos={datos} propiedad={item} onActualizar={actualizarTabla}/></th>
 
                             ))}
                             <th>Opciones</th>
                         </tr>
                     </thead>
                     <tbody >
-                        {datos.map((dato) => (
+                        {actualizarDatos.map((dato) => (
                             <tr key={dato._id}>
                                 {cabecera.map((item, index) => ( 
                                     <td key={index} onClick={() => handleEditar(dato)}>
