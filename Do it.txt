@@ -7,3 +7,5 @@ Correo para al admin cada vez que reserva algo y cuando le toque un premio (prob
 Olvidar contraseña (HECHO)
 zona de perfil (HECHO)
 limitar veces compra entradas por dia (opcional)
+
+Comprobar la tabla entradas sus funciones editar
