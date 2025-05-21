@@ -66,26 +66,28 @@ function EntradasAdmin() {
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                       tipo: datosEditados.tipo,
-                      subtipo: datosEditados.subtipo,
+                      subtipo: datosEditados.subtipo || undefined,
                       comprador: datosEditados.comprador,
                       fechaCompra: datosEditados.fechaCompra
                     }),
                 }
             );
             const data = await response.json();
+
             if (response.ok) {
                 setShow(true);
                 setTitulo("Entrada editada.");
                 setMensaje(data.mensaje);
                 setEntradaId(null);
                 setDatosEditados({});
-                await mostrarPremios();
+                await mostrarEntradas();
             } else {
                 setTitulo(data.error);
                 setMensaje(data.mensaje);
                 setShow(true);
             }
         } catch (err) {
+            console.error("Error fetch:", err);
             setShow(true);
             setTitulo("Error al editar la entrada");
             setMensaje("Hubo un error al solicitar la petición al servidor");

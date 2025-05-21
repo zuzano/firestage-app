@@ -170,6 +170,7 @@ function PremiosAdmin() {
             name="premios"
             value={descripcion || ""}
             onChange={handleChangePremios}
+            required
           />
           <Button type="submit">Añadir</Button>
         </InputGroup>

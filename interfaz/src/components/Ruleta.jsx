@@ -39,7 +39,7 @@ function Ruleta() {
           setMustSpin(true);
         }
       } else {
-        setTitulo("Error");
+        setTitulo("Tiradas Agotadas");
         setMensaje(data.error);
         setShow(true);
       }

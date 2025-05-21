@@ -51,9 +51,6 @@ function Administrador() {
             <div className={styles.div1} onClick={() => { handleElegir("usuario") }}>
               <Icon icon="majesticons:user" width="100px" height="100px" color="gray" />
             </div>
-            <div className={styles.div2} onClick={() => { handleElegir("vip") }}>
-              <Icon icon="ri:vip-line" width="100" height="100" color="rgb(0, 0, 0)" />
-            </div>
             <div className={styles.div3} onClick={() => { handleElegir("premios") }}>
               <Icon icon="dashicons:awards" width="100" height="100" color="rgba(255, 175, 2, 0.7)" />
             </div>

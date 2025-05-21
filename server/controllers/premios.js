@@ -40,7 +40,6 @@ añadirPremios = async function (req, res) {
     if (premioExistente) {
       return res.status(400).json({ mensaje: 'El premio ya existe.' });
     }
-
     const nuevoPremio = new Premios({ descripcion, estado });
 
     await nuevoPremio.save();
