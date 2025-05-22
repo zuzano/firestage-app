@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Container, Button, Modal } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
+import { API_URL } from "../constants";
+
 
 function FormularioRestablecer() {
 
@@ -15,7 +17,7 @@ function FormularioRestablecer() {
     useEffect(() => {
         const validarID = async () => {
             try {
-                const response = await fetch("http://localhost:5000/autenticacion/validarID", {
+                const response = await fetch(`${API_URL}/autenticacion/validarID`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ usuarioID })
@@ -39,7 +41,7 @@ function FormularioRestablecer() {
                 setValidar("La contraseña debe contener al menos 6 caracteres.")
                 return;
             }
-            const response = await fetch("http://localhost:5000/autenticacion/restablecerContrasena", {
+            const response = await fetch(`${API_URL}/autenticacion/restablecerContrasena`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

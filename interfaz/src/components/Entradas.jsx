@@ -7,6 +7,8 @@ import styles from "./../css/entradas.module.css";
 
 import Calendario from "./Calendario";
 
+import { API_URL } from "../constants";
+
 function Entradas() {
   const [show, setShow] = useState(false);
   const [showEnviado, setShowEnviado] = useState(false);
@@ -77,7 +79,7 @@ function Entradas() {
     const comprarEntrada = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/reservas/comprarEntrada",
+          `${API_URL}/reservas/comprarEntrada`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

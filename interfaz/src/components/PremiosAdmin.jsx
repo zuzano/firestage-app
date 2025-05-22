@@ -11,6 +11,8 @@ import { Icon } from "@iconify/react";
 
 import TablaAdmin from "./TablaAdmin";
 
+import { API_URL } from "../constants";
+
 function PremiosAdmin() {
   const [premios, setPremios] = useState([]);
   const [descripcion, setDescripcion] = useState("");
@@ -30,7 +32,7 @@ function PremiosAdmin() {
     e.preventDefault();
     try {
       const response = await fetch(
-        "http://localhost:5000/sorteos/anadirPremios",
+        `${API_URL}/sorteos/anadirPremios`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -69,7 +71,7 @@ function PremiosAdmin() {
   const handleClickEliminar = async (id) => {
     try {
       const response = await fetch(
-        "http://localhost:5000/sorteos/eliminarPremio/" + id,
+        `${API_URL}/sorteos/eliminarPremio/` + id,
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
@@ -100,7 +102,7 @@ function PremiosAdmin() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/sorteos/editarPremio/" + id,
+        `${API_URL}/sorteos/editarPremio/` + id,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -133,7 +135,7 @@ function PremiosAdmin() {
   const mostrarPremios = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/sorteos/mostrarPremiosAdmin",
+       `${API_URL}/sorteos/mostrarPremiosAdmin`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },

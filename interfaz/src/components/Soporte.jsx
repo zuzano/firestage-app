@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import styles from "./../css/soporte.module.css";
 import { Icon } from "@iconify/react";
 
+import { API_URL } from "../constants";
+
 function Soporte() {
   const [nombre, setNombre] = useState("");
   const [correo, setCorreo] = useState("");
@@ -20,7 +22,7 @@ function Soporte() {
     const contactar = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/usuarios/contactar",
+          `${API_URL}/usuarios/contactar`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

@@ -7,6 +7,8 @@ import {
 
 import TablaAdmin from "./TablaAdmin";
 
+import { API_URL } from "../constants";
+
 function EntradasAdmin() {
   const [entradas, setEntradas] = useState([]);
   const [show, setShow] = useState(false);
@@ -29,7 +31,7 @@ function EntradasAdmin() {
     const handleClickEliminar = async (id) => {
         try {
             const response = await fetch(
-                "http://localhost:5000/reservas/eliminarEntrada/" + id,
+                `${API_URL}/reservas/eliminarEntrada/` + id,
                 {
                     method: "DELETE",
                     headers: { "Content-Type": "application/json" },
@@ -60,7 +62,7 @@ function EntradasAdmin() {
 
         try {
             const response = await fetch(
-                "http://localhost:5000/reservas/editarEntrada/" + id,
+                `${API_URL}/reservas/editarEntrada/` + id,
                 {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
@@ -97,7 +99,7 @@ function EntradasAdmin() {
   const mostrarEntradas = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/reservas/mostrarEntradas",
+        `${API_URL}/reservas/mostrarEntradas`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },

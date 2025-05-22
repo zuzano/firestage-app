@@ -7,6 +7,8 @@ import { registerLocale } from "react-datepicker";
 
 import styles from "./../css/calendario.module.css";
 
+import { API_URL } from "../constants";
+
 const Calendario = ({ onFechaSeleccionada, tipo }) => {
   const [fecha, setFecha] = useState(null);
   const [diasOcupados, setDiasOcupados] = useState([]);
@@ -18,7 +20,7 @@ const Calendario = ({ onFechaSeleccionada, tipo }) => {
   useEffect(() => {
     const cargarFechasOcupadas = async () => {
       try {
-        const response = await fetch("http://localhost:5000/reservas/fechasAgotadas", {
+        const response = await fetch(`${API_URL}/reservas/fechasAgotadas`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
         });

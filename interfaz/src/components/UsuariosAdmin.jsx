@@ -9,6 +9,8 @@ import { Icon } from "@iconify/react";
 
 import TablaAdmin from "./TablaAdmin";
 
+import { API_URL } from "../constants";
+
 function UsuariosAdmin() {
     const [usuarios, setUsuarios] = useState([]);
     const [show, setShow] = useState(false);
@@ -36,7 +38,7 @@ function UsuariosAdmin() {
     const handleClickEliminar = async (id) => {
         try {
             const response = await fetch(
-                "http://localhost:5000/usuarios/eliminarUsuario/" + id,
+               `${API_URL}/usuarios/eliminarUsuario/` + id,
                 {
                     method: "DELETE",
                     headers: { "Content-Type": "application/json" },
@@ -67,7 +69,7 @@ function UsuariosAdmin() {
 
         try {
             const response = await fetch(
-                "http://localhost:5000/usuarios/editarUsuario/" + id,
+                `${API_URL}/usuarios/editarUsuario/` + id,
                 {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
@@ -102,7 +104,7 @@ function UsuariosAdmin() {
     const mostrarUsuarios = async () => {
         try {
             const response = await fetch(
-                "http://localhost:5000/usuarios/mostrarUsuarios",
+                `${API_URL}/usuarios/mostrarUsuarios`,
                 {
                     method: "GET",
                     headers: { "Content-Type": "application/json" },

@@ -5,6 +5,8 @@ import { Container, Modal } from "react-bootstrap";
 
 import styles from "./../css/registro.module.css";
 
+import { API_URL } from "../constants";
+
 const Registro = () => {
   const [nombre, setNombre] = useState("");
   const [apellidos, setApellidos] = useState("");
@@ -18,13 +20,15 @@ const Registro = () => {
 
   const navigate = useNavigate();
 
+  
+
   useEffect(() => {
     if (!enviar) return;
 
     const registrarUsuario = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/autenticacion/registrarUsuario",
+          `${API_URL}/autenticacion/registrarUsuario`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
