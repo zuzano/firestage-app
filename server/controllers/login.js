@@ -118,7 +118,7 @@ iniciarSesionUsuario = async function (req, res) {
     } catch (error) {
         return res.status(500).json({
             error: "Error al iniciar sesion",
-            mensaje: error.message
+            mensaje:"Hubo un error al solicitar tu peticion"
         });
     }
 }
