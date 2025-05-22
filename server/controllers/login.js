@@ -66,7 +66,7 @@ registrarUsuario = async function (req, res) {
 
         await nuevoUsuario.save();
 
-        res.status(201).json({ mensaje: 'Usuario registrado con éxito', usuario: nuevoUsuario });
+        return res.status(201).json({ mensaje: 'Usuario registrado con éxito', usuario: nuevoUsuario });
     } catch (error) {
         return res.status(500).json({
             error: "Error al registrar el usuario",
@@ -90,7 +90,7 @@ iniciarSesionUsuario = async function (req, res) {
         const usuario = await Usuario.findOne({ email: email });
 
         if (!usuario) {
-            res.status(404).json({ error: "Usuario no encontrado", mensaje: "Email incorrecto." })
+            return res.status(404).json({ error: "Usuario no encontrado", mensaje: "Email incorrecto." })
         }
         // Comparar contraseña ingresada con la almacenada
         const contraseñaValida = await bcrypt.compare(contraseña, usuario.contraseña);
@@ -106,13 +106,13 @@ iniciarSesionUsuario = async function (req, res) {
                     return res.status(500).json({ error: "Error generando el QR" });
                 }
 
-                res.status(200).json({
+                return res.status(200).json({
                     requiere2FA: true,
                     qr: imageUrl
                 });
             });
         } else {
-            res.status(200).json({ mensaje: "Sesión Iniciada", usuario });
+            return res.status(200).json({ mensaje: "Sesión Iniciada", usuario });
         }
 
     } catch (error) {
@@ -194,10 +194,10 @@ recuperarContraseña = async function (req, res) {
             html: `<p>Haz clic <a href="${link}">aquí</a> para restablecer tu contraseña. Este enlace expirará en 1 hora.</p>`
         });
 
-        res.status(200).json({ mensaje: "Correo de recuperación enviado" });
+        return res.status(200).json({ mensaje: "Correo de recuperación enviado" });
 
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             error: "Error al recuperar contraseña",
             mensaje: error.message
         });
@@ -225,9 +225,9 @@ restablecerContraseña = async function (req, res) {
 
         await usuario.save();
 
-        res.status(200).json({ mensaje: "Contraseña restablecida correctamente" });
+        return res.status(200).json({ mensaje: "Contraseña restablecida correctamente" });
     } catch (err) {
-        res.status(500).json({ error: "Error al restablecer", mensaje: err.message });
+        return res.status(500).json({ error: "Error al restablecer", mensaje: err.message });
     }
 }
 
@@ -242,7 +242,7 @@ validarID = async function (req, res) {
 
         res.sendStatus(200); 
     } catch (err) {
-         res.status(500).json({ error: "Error en la solicitud", mensaje: err.message })
+        return  res.status(500).json({ error: "Error en la solicitud", mensaje: err.message })
     }
 }
 

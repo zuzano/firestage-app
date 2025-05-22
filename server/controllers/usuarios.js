@@ -81,7 +81,7 @@ enviarCorreo = async function (req, res) {
               mensaje: err
             });
           } else {
-            res.status(200).json({ mensaje: 'Correo enviado', info: info.response });
+            return res.status(200).json({ mensaje: 'Correo enviado', info: info.response });
           }
         });
       }
@@ -112,7 +112,7 @@ mostrarUsuarios = async function (req, res) {
     }
 
 
-    res.status(200).json({ mensaje: 'Se encontraron usuarios.', usuarios: usuarios });
+    return res.status(200).json({ mensaje: 'Se encontraron usuarios.', usuarios: usuarios });
 
 
   } catch (error) {
@@ -175,7 +175,7 @@ editarUsuario = async function (req, res) {
       return res.status(404).json({ error: "Usuario no encontrado." });
     }
 
-    res.status(200).json({ mensaje: "Usuario actualizado correctamente" });
+    return res.status(200).json({ mensaje: "Usuario actualizado correctamente" });
 
   } catch (error) {
     console.error(error);

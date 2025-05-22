@@ -73,7 +73,7 @@ mostrarPremios = async function (req, res) {
 
 
 
-    res.status(200).json({ premios: premios });
+    return res.status(200).json({ premios: premios });
 
 
   } catch (error) {
@@ -102,7 +102,7 @@ mostrarPremiosAdmin = async function (req, res) {
 
 
 
-    res.status(200).json({ premios: premios });
+    return res.status(200).json({ premios: premios });
 
 
   } catch (error) {
@@ -176,7 +176,7 @@ anadirPremioUsuario = async function (req, res) {
           mensaje: error.message
         });
       } else {
-        res.status(200).json({ mensaje: "El premio se ha añadido a tu cuenta. " + premio + ". Solo puedes obtener un premio por mes, si no lo gastas antes del mes y ganas otro, solo te quedará el premio más reciente." });
+        return res.status(200).json({ mensaje: "El premio se ha añadido a tu cuenta. " + premio + ". Solo puedes obtener un premio por mes, si no lo gastas antes del mes y ganas otro, solo te quedará el premio más reciente." });
       }
     });
 
@@ -280,7 +280,7 @@ editarPremio = async function (req, res) {
       return res.status(404).json({ error: "Premio no encontrado." });
     }
 
-    res.status(200).json({ mensaje: "Premio actualizado correctamente" });
+    return res.status(200).json({ mensaje: "Premio actualizado correctamente" });
 
   } catch (error) {
     console.error(error);

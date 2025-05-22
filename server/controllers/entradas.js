@@ -99,7 +99,7 @@ fechasAgotadas = async function (req, res) {
     });
 
 
-    res.status(200).json({ fechas: fechasExcedidas });
+    return res.status(200).json({ fechas: fechasExcedidas });
   } catch (error) {
     return res.status(500).json({
       error: "Error al contar las fechas excedidas",
@@ -131,7 +131,7 @@ comprarEntrada = async function (req, res) {
     await entrada.save();
     try {
       await enviarEntradaConQR(email, entrada);
-      res.status(201).json({
+      return res.status(201).json({
         mensaje: "Entrada comprada y correo enviado con éxito"
       });
     } catch (emailError) {
@@ -165,7 +165,7 @@ mostrarEntradas = async function (req, res) {
     }
 
 
-    res.status(200).json({ entradas: entradas });
+    return res.status(200).json({ entradas: entradas });
 
 
   } catch (error) {
@@ -229,7 +229,7 @@ editarEntrada = async function (req, res) {
       return res.status(404).json({ error: "Entrada no encontrada." });
     }
 
-    res.status(200).json({ mensaje: "Entrada actualizada correctamente" });
+    return res.status(200).json({ mensaje: "Entrada actualizada correctamente" });
 
   } catch (error) {
     console.error(error);
