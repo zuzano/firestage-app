@@ -5,6 +5,8 @@ import { Wheel } from "react-custom-roulette";
 import styles from "./../css/ruletas.module.css";
 import confetti from "canvas-confetti";
 
+import { API_URL } from "../constants";
+
 function Ruleta() {
   const [mustSpin, setMustSpin] = useState(false);
   const [prizeNumber, setPrizeNumber] = useState(0);
@@ -24,7 +26,7 @@ function Ruleta() {
     }
     try {
       const response = await fetch(
-        "http://localhost:5000/sorteos/comprobarTiradas/" + usuario._id,
+        `${API_URL}/sorteos/comprobarTiradas/` + usuario._id,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -54,7 +56,7 @@ function Ruleta() {
   const darPremios = async (descripcion) => {
     try {
       const response = await fetch(
-        "http://localhost:5000/sorteos/anadirPremioUsuario",
+        `${API_URL}/sorteos/anadirPremioUsuario`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -80,7 +82,7 @@ function Ruleta() {
     const mostrarPremios = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/sorteos/mostrarPremios",
+          `${API_URL}/sorteos/mostrarPremios`,
           {
             method: "GET",
             headers: { "Content-Type": "application/json" },

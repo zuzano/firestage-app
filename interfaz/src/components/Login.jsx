@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Container, Modal, Button } from "react-bootstrap";
 import styles from "./../css/login.module.css";
+import { API_URL } from "../constants";
 
 
 function Login() {
@@ -21,14 +22,13 @@ function Login() {
   const [codigo, setCodigo] = useState("");
 
 
-
   useEffect(() => {
     if (!enviar) return;
 
     const inciarSesion = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/autenticacion/iniciarSesion",
+          `${API_URL}/autenticacion/iniciarSesion`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -69,7 +69,7 @@ function Login() {
     e.preventDefault();
     try {
       const response = await fetch(
-        "http://localhost:5000/autenticacion/verificarCodigo",
+        `${API_URL}/autenticacion/verificarCodigo`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -124,7 +124,7 @@ function Login() {
     e.preventDefault();
     try {
       const response = await fetch(
-        "http://localhost:5000/autenticacion/recuperarContrasena",
+        `${API_URL}/autenticacion/recuperarContrasena`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
