@@ -7,4 +7,5 @@ server/node_modules/
 interfaz/dist/
 docker-compose.yml
 Dockerfile
-*.env
+server/.env
+interfaz/.env
