@@ -14,10 +14,12 @@ function Administrador() {
 
   const [eleccion, setEleccion] = useState(null)
 
+  //Maneja el estado de eleccion
   const handleElegir = (tipo) => {
     setEleccion(tipo);
   };
 
+  // Segun el estado muestra un componente o otro
   const mostrar = () => {
     switch (eleccion) {
       case "usuario":

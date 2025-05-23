@@ -7,6 +7,7 @@ import { API_URL } from "../constants";
 
 
 function Login() {
+  // Inicializa los estados
   const [enviar, setEnviar] = useState(false);
   const [correo, setCorreo] = useState("");
   const [correoRestablecer, setCorreoRestablecer] = useState("");
@@ -21,7 +22,7 @@ function Login() {
   const [qrCode, setQrCode] = useState(null);
   const [codigo, setCodigo] = useState("");
 
-
+  //Hace una peticion para iniciar sesion solo si enviar es true
   useEffect(() => {
     if (!enviar) return;
 
@@ -42,11 +43,13 @@ function Login() {
           setShow(true);
 
         } else {
+          // Comprueba si tiene activada la doble autenticacion, guarda el qr generado y muestra un modal
           if (data.requiere2FA) {
             setQrCode(data.qr);
             setShow2FAModal(true);
           } else {
-            // Guardar datos del usuario en localStorage
+            //Si la opcion de doble autenticacion no esta activada
+            // Guardar datos del usuario en localStorage para mantener su sesion iniciada
             localStorage.setItem("usuario", JSON.stringify(data.usuario));
             localStorage.setItem("rol", data.usuario.rol)
             setShow(true);
@@ -64,7 +67,7 @@ function Login() {
     inciarSesion();
   }, [enviar, correo, contraseña]);
 
-  // Handle 2FA code submission
+  // Verefica la el codigo de doble autenticacion enviado
   const autenticacion2FA = async (e) => {
     e.preventDefault();
     try {
@@ -83,7 +86,7 @@ function Login() {
         setShow2FAModal(false);
         setShow(true);
       } else {
-        // Save user data and navigate
+        // Guarda los datos del usuario
         localStorage.setItem("usuario", JSON.stringify(data.usuario));
         localStorage.setItem("rol", data.usuario.rol);
         setShow2FAModal(false);
@@ -96,13 +99,14 @@ function Login() {
     }
   };
 
-
+  //Maneja el estado de enviar formulario y reinicia el estado de erro si previamente habia uno
   const handleSubmit = (e) => {
     e.preventDefault();
     setError(null);
     setEnviar(true);
   };
 
+  //Maneja el cierre del modal si no hay error redirige a la pagina de inicio y si lo hay cierra el modal
   const handleClose = (e) => {
     if (error) {
       setShow(false)
@@ -111,15 +115,18 @@ function Login() {
     }
   };
 
+  //Maneja el cierre del modal de doble auth y reinicia el estado del codigo
   const handleClose2FAModal = () => {
     setShow2FAModal(false);
     setCodigo("");
   };
 
+  //Maneja el cierre el modal de recuperar contraseña
   const handleShowRestablecer = () => {
     setShowRestablecer(true)
   }
 
+  //Maneja la peticion de restablecer contraseña
   const handleSubmitRestablecer = async (e) => {
     e.preventDefault();
     try {

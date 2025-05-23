@@ -8,8 +8,10 @@ import styles from './../css/perfil.module.css'
 function Perfil() {
     const navigate = useNavigate();
 
+    //Convierte los datos String a un objeto
     const [usuario, setUsuario] = useState(JSON.parse(localStorage.getItem('usuario')));
 
+    //Comprueba si hay un usuario que ha iniciado sesion
     useEffect(() => {
         if (!localStorage.getItem('usuario')) {
             navigate('/accesoDenegado');

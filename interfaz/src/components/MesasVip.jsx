@@ -11,6 +11,7 @@ import Calendario from "./Calendario";
 import { API_URL } from "../constants";
 
 function MesasVip() {
+  // Inicializa los estados
   const [show, setShow] = useState(false);
   const [showEnviado, setShowEnviado] = useState(false);
   const [enviar, setEnviar] = useState(false);
@@ -19,21 +20,25 @@ function MesasVip() {
 
   const [fecha, setFecha] = useState("");
 
+  //Maneja el cierre de los modales
   const handleClose = (e) => {
     setShow(false);
     setShowEnviado(false);
   };
 
+  //Maneja el estado del subtipo seleccionado al comprar la entrada y muestra un modal
   const handleClick = async (subtipo) => {
         setSubtipo(subtipo);
         setShow(true);
 
   };
 
+  //Guarda las fecha seleccionada en el componente hijo
   const handleFechaSeleccionada = (fecha) => {
     setFecha(fecha);
   };
 
+  //Componente que muestra el formulario para realizar una reserva rellenando los datos del usuario
   const hacerReserva = (usuario) => {
     return (
       <form
@@ -77,6 +82,9 @@ function MesasVip() {
     );
   };
 
+  //Comprueba si el usuario ha enviado el formulario y si hay un usuario registrado, para que no llame a la peticion 
+  // cada vez que detecte un cambio en las dependecias del useEffect (son las que estan entre [])
+  //Sino realiza la peticion de comprarEntrada
   useEffect(() => {
     if (!enviar) return;
 

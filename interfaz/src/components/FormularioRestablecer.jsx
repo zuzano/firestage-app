@@ -7,6 +7,8 @@ import { API_URL } from "../constants";
 function FormularioRestablecer() {
 
     const { usuarioID } = useParams(); // <-- aquí obtienes el id del usuario, useParams() --> obtiene el parametro que se pasa por la URL
+
+    // Inicializa los estados
     const [nuevaContraseña, setNuevaContraseña] = useState("");
     const [error, setError] = useState(null)
     const [validar, setValidar] = useState(null);
@@ -14,6 +16,7 @@ function FormularioRestablecer() {
 
     const navigate = useNavigate();
 
+    //Comprueba que el ID que se pasa en la URL sea el correcto sino te redirige a la pagina de accesoDenegado
     useEffect(() => {
         const validarID = async () => {
             try {
@@ -34,6 +37,7 @@ function FormularioRestablecer() {
         validarID();
     }, []);
 
+    //Maneja el envio del formulario, valida los datos que se pasan y llama a la peticion para restablecer contraseña
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {

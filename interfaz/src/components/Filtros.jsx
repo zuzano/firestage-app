@@ -13,13 +13,15 @@ import { Icon } from "@iconify/react";
 
 import './../css/filtros.css'
 
+//Se le pasan datos del componente padre (TablaAdmin)
 function Filtros({ datos, propiedad, onActualizar }) {
 
+    //Inicializa los estados
     const [datosChecked, setDatosChecked] = useState([])
     const [todoSeleccionado, setTodoSeleccionado] = useState(true);
     const [menuActivo, setMenuActivo] = useState('filtro'); // 'filtro' o 'opciones'
 
-
+    //Funcion para ordenar de forma Ascendente segun el tipo de datos que sea
     const ordenarMenor = (tipoDato) => {
         const copiaOrdenada = [...datosChecked].sort((a, b) => {
             const aValor = a[tipoDato];
@@ -39,9 +41,11 @@ function Filtros({ datos, propiedad, onActualizar }) {
             return aValor.localeCompare(bValor, 'es', { sensitivity: 'base' }); //sensitivy ignora tildes y mayusculas
         });
 
+        //Guardamos los datos para volver a renderizarlos en el orden establecido
         setDatosChecked(copiaOrdenada);
     };
 
+    //Funcion para ordenar de forma Descendente segun el tipo de datos que sea
     const ordenarMayor = (tipoDato) => {
         const copiaOrdenada = [...datosChecked].sort((a, b) => {
             const aValor = a[tipoDato];
@@ -58,9 +62,11 @@ function Filtros({ datos, propiedad, onActualizar }) {
             return bValor.localeCompare(aValor, 'es', { sensitivity: 'base' });
         });
 
+        //Guardamos los datos para volver a renderizarlos en el orden establecido
         setDatosChecked(copiaOrdenada);
     };
 
+    //Maneja el cambio de si esta checked o no buscando la opcion que ha sido modificada
     const handleCheckboxChange = (option) => {
         setDatosChecked(prev =>
             prev.map(item =>
@@ -72,6 +78,7 @@ function Filtros({ datos, propiedad, onActualizar }) {
         setTodoSeleccionado(false);
     };
 
+    //Selecciona todo los checked a true o a false
     const handleSeleccionarTodo = () => {
         const nuevosSeleccionados = datosChecked.map(item => ({
             ...item,
@@ -81,10 +88,12 @@ function Filtros({ datos, propiedad, onActualizar }) {
         setTodoSeleccionado(!todoSeleccionado);
     };
 
+    //Guarda los datos en el estado añadiendoles la propiedad de checked, se ejecuta cada vez que datos cambia.
     useEffect(() => {
         setDatosChecked(datos.map(item => ({ ...item, checked: true })))
     }, [datos])
 
+    //Se ejecuta cuando datosChecked cambia, filtra todos los elementos que checked === true y llama a la funcion de tablaAdmin para mostrarlos
     useEffect(() => {
         const datosFiltrados = datosChecked.filter((item) => item.checked)
         onActualizar(datosFiltrados)

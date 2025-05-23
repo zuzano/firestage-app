@@ -13,10 +13,10 @@ const Calendario = ({ onFechaSeleccionada, tipo }) => {
   const [fecha, setFecha] = useState(null);
   const [diasOcupados, setDiasOcupados] = useState([]);
 
-  // Registra la localizacion para poder usarla
+  // Registra la localizacion para poder usarla, y que el calendario tenfa un 
   registerLocale("es", es);
 
-//Busca las fechas que ya tengan reservada todas las entradas
+//Busca las fechas que hallan llegado al limite de entradas
   useEffect(() => {
     const cargarFechasOcupadas = async () => {
       try {
@@ -58,6 +58,7 @@ const Calendario = ({ onFechaSeleccionada, tipo }) => {
     return undefined;
   };
 
+  //Controla el estado de la fecha cuando cambia. Y se la pasa a una funcion del componente padre
   const handleChange = (date) => {
     setFecha(date);
     onFechaSeleccionada(date); // Avisar al componente padre

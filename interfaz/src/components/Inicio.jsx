@@ -4,6 +4,9 @@ import styles from "./../css/galeriaFotos.module.css";
 import { Link } from "react-router-dom";
 
 function Inicio() {
+
+  //Pagina de aterrizaje
+
   return (
     <Container fluid className="firestage-home p-0">
       <main className="w-100">

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import styles from './../css/eventos.module.css'
 
 function Eventos() {
+  //Muestra una cartelera con los eventos disponibles
   return (
     <>
       <Container

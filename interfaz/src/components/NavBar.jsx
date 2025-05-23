@@ -8,7 +8,7 @@ function NavBar() {
   const [usuario, setUsuario] = useState(localStorage.getItem("usuario")); // Estado para reflejar el usuario
   const [rol, setRol] = useState(localStorage.getItem("rol"));
 
-  // Actualiza el estado sino haria falta recargar ya que localStorage solo se actualiza cuando se recarga
+  // Actualiza el estado sino haria falta recargar ya que localStorage solo se actualiza cuando se recarga la pagina
   useEffect(() => {
     setUsuario(localStorage.getItem("usuario"))
     setRol(localStorage.getItem("rol"));

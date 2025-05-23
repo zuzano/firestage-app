@@ -19,16 +19,19 @@ function Entradas() {
 
   const [tipo, setTipo] = useState(null);
 
+  //Maneja el cierre de los modales
   const handleClose = (e) => {
     setShow(false);
     setShowEnviado(false);
   };
 
+  //Cuando hace click guarda el tipo de entrada y muestra el modal.
   const handleClick = async (tipo) => {
         setTipo(tipo);
         setShow(true);
   };
 
+  //Guarda en el estado la fecha seleccionada desde el componente hijo
   const handleFechaSeleccionada = (fecha) => {
     setFecha(fecha);
   };
