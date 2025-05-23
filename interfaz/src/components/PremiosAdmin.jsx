@@ -14,6 +14,7 @@ import TablaAdmin from "./TablaAdmin";
 import { API_URL } from "../constants";
 
 function PremiosAdmin() {
+  // Inicializar Estados
   const [premios, setPremios] = useState([]);
   const [descripcion, setDescripcion] = useState("");
   const [show, setShow] = useState(false);
@@ -23,10 +24,13 @@ function PremiosAdmin() {
   const [premioId, setPremioId] = useState(null);
   const [datosEditados, setDatosEditados] = useState({});
 
+  //Manejar los premios que se añaden
   const handleChangePremios = (e) => {
     setDescripcion(e.target.value);
   };
 
+
+  //Si no a añadido ninguna descripcion para el premio no se realiza la peticion de añadir premio
   const anadirPremio = async (e) => {
     if (!descripcion) return;
     e.preventDefault();
@@ -58,16 +62,19 @@ function PremiosAdmin() {
     }
   };
 
+  // Maneja los cambios en los inputs del formulario, actualizando datosEditados
   const handleCambioInput = (e) => {
     const { name, value } = e.target;
     setDatosEditados((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Maneja la acción de editar una entrada, estableciendo los datos y el ID
   const handleEditar = (premio) => {
     setDatosEditados(premio);
     setPremioId(premio._id);
   };
 
+    // Maneja la eliminación de una entrada mediante una solicitud DELETE al servidor
   const handleClickEliminar = async (id) => {
     try {
       const response = await fetch(
@@ -94,6 +101,7 @@ function PremiosAdmin() {
     }
   };
 
+  // Maneja la actualización de una entrada mediante una solicitud PUT al servidor
   const handleClickActualizar = async (id) => {
     if (id !== premioId) {
       setPremioId(null);
@@ -132,6 +140,7 @@ function PremiosAdmin() {
     }
   };
 
+  // Obtiene y muestra las entradas mediante una solicitud GET al servidor
   const mostrarPremios = async () => {
     try {
       const response = await fetch(
