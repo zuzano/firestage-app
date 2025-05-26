@@ -196,7 +196,7 @@ editarEntrada = async function (req, res) {
       return res.status(400).json({ error: "El ID de la entrada es necesario." });
     }
 
-    // Campos requeridos para la actualizaci�n
+    // Campos requeridos para la actualizacion
     const requiredFields = ['tipo', 'comprador', 'fechaCompra'];
     const campoFaltante = requiredFields.find(field => !req.body[field]);
     if (campoFaltante) {

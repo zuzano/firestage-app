@@ -8,6 +8,7 @@ import styles from "./../css/registro.module.css";
 import { API_URL } from "../constants";
 
 const Registro = () => {
+  //Inicializa los estados
   const [nombre, setNombre] = useState("");
   const [apellidos, setApellidos] = useState("");
   const [correo, setCorreo] = useState("");
@@ -21,7 +22,7 @@ const Registro = () => {
   const navigate = useNavigate();
 
   
-
+  //Eniva una peticion para registrar al usuario si enviar es true
   useEffect(() => {
     if (!enviar) return;
 
@@ -56,20 +57,24 @@ const Registro = () => {
     registrarUsuario();
   }, [enviar, correo, contraseña]);
 
+  //
   const handleSubmit = (e) => {
     e.preventDefault();
   
     let errores = [];
   
+    //Validar mediante una expresion regular los casos comunes de correos
     const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!correoRegex.test(correo)) {
       errores.push("correo");
     }
   
+      // Validar longitud mínima de la contraseña
     if (contraseña.length < 6) {
       errores.push("contraseña");
     }
   
+    // Validar coincidencia de contraseñas
     if (contraseña !== confirmarContraseña) {
       errores.push("confirmarContraseña");
     }
@@ -83,11 +88,13 @@ const Registro = () => {
     setEnviar(true);
   };
 
+  // Quita un error cuando el usuario modifica el campo
   const quitarError = (campo) => {
     setValidar((prev) => prev.filter((item) => item !== campo));
   };
   
 
+  //Maneja el cierre del modal, si hay un error no redirige a la pagina Login
   const handleClose = (e) => {
     if (error) {
       setShow(false);

@@ -16,6 +16,7 @@ function Soporte() {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
 
+  //Realiza la peticion de contactar si enviar es true
   useEffect(() => {
     if (!enviar) return;
 
@@ -49,12 +50,14 @@ function Soporte() {
     contactar();
   }, [enviar, nombre, correo, asunto, mensaje, error]);
 
+  //Maneja el envio del formulario
   const handleSubmit = (e) => {
     e.preventDefault();
     setError(null);
     setEnviar(true);
   };
 
+  //Maneja el cierre del modal
   const handleClose = (e) => {
     setShow(false);
   };

@@ -12,6 +12,7 @@ import TablaAdmin from "./TablaAdmin";
 import { API_URL } from "../constants";
 
 function UsuariosAdmin() {
+    //Inicializa los estados
     const [usuarios, setUsuarios] = useState([]);
     const [show, setShow] = useState(false);
     const [titulo, setTitulo] = useState(null);
@@ -20,21 +21,25 @@ function UsuariosAdmin() {
     const [usuarioId, setUsuarioId] = useState(null);
     const [datosEditados, setDatosEditados] = useState({});
 
-
+    //Maneja el cierre del modal
     const handleClose = () => {
         setShow(false);
     };
 
+     // Maneja los cambios en los inputs del formulario, actualizando datosEditados
     const handleCambioInput = (e) => {
         const { name, value } = e.target;
         setDatosEditados((prev) => ({ ...prev, [name]: value }));
     };
 
+     // Maneja la acción de editar una entrada, estableciendo los datos y el ID
     const handleEditar = (usuario) => {
         setDatosEditados(usuario);
         setUsuarioId(usuario._id);
     };
 
+
+     // Maneja la eliminación de una entrada mediante una solicitud DELETE al servidor
     const handleClickEliminar = async (id) => {
         try {
             const response = await fetch(
@@ -61,6 +66,7 @@ function UsuariosAdmin() {
         }
     };
 
+     // Maneja la actualización de una entrada mediante una solicitud PUT al servidor
     const handleClickActualizar = async (id) => {
         if (id !== usuarioId) {
             setUsuarioId(null);
@@ -101,6 +107,7 @@ function UsuariosAdmin() {
         }
     };
 
+     // Obtiene y muestra las entradas mediante una solicitud GET al servidor
     const mostrarUsuarios = async () => {
         try {
             const response = await fetch(
@@ -125,6 +132,7 @@ function UsuariosAdmin() {
         }
     };
 
+     //Solo se carga la primera vez que se renderiza el componente
     useEffect(() => {
 
         mostrarUsuarios();

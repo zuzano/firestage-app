@@ -9,8 +9,10 @@ import Filtros from "./Filtros";
 
 function TablaAdmin({cabecera, datos, datosEditados,idActual, onEditar,handleEditar, onEliminar, onActualizar}) {
 
+    //Guarda los datos a mostrar en el cuerpo de la tabla
     const [actualizarDatos, setActualizarDatos] = useState(datos.map(d => ({...d})));
     
+    //Funcion para actualizar el estado
     const actualizarTabla = (datosActualizados) => {
         setActualizarDatos(datosActualizados);
     }

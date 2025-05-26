@@ -15,8 +15,10 @@ function Ruleta() {
   const [titulo, setTitulo] = useState("");
   const [mensaje, setMensaje] = useState("");
 
+  //Convierte la cadena de texto a un objeto de JAVASCRIPT
   const usuario = JSON.parse(localStorage.getItem("usuario"));
 
+  //Maneja la accion de girar la ruleta si no existe el usuario o si tiene las tiradas agotadas no gira la ruleta
   const handleSpinClick = async () => {
     if (!usuario) {
       setShow(true);
@@ -53,6 +55,7 @@ function Ruleta() {
     }
   };
 
+  //Maneja la peticion de añadir un premio al usuario
   const darPremios = async (descripcion) => {
     try {
       const response = await fetch(
@@ -77,7 +80,7 @@ function Ruleta() {
     }
   };
 
-
+  //AL renderizar el componente se guardan los premios en un estado mediante una peticion en el backend
   useEffect(() => {
     const mostrarPremios = async () => {
       try {
