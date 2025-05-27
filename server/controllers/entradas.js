@@ -207,10 +207,10 @@ editarEntrada = async function (req, res) {
       return res.status(400).json({ error: 'Debes especificar un subtipo válido para entradas VIP.' });
     }
 
-    const compradorExiste = await Usuario.findById({ _id: comprador }); 
-
+    const compradorExiste = await Usuario.findById( comprador ); 
+    console.log(compradorExiste)
     if (!compradorExiste) {
-      return res.status(400).json({ error: "El usuario  no existe." , mensaje: 'Asegurate de introducir un usuario que exista.'});
+      return res.status(400).json({ error: "El campo  no existe." , mensaje: 'Asegurate de introducir un campo que exista.'});
     }
 
     // Actualizacion del usuario
