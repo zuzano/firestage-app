@@ -21,9 +21,9 @@ function Perfil() {
     return (
         <Container fluid style={{
             backgroundColor: "#131313",
-            height: "72vh",
             display: "grid",
             placeItems: "center",
+              height: "85vh",
         }}>
             <div className={styles.loader}>
                 <div className={styles.wrapper}>

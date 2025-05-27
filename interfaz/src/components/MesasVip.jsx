@@ -142,6 +142,7 @@ function MesasVip() {
           flexDirection: "column",
           alignItems: "center",
           padding: "100px",
+            height: "85vh",
         }}
       >
         <section className="text-white">

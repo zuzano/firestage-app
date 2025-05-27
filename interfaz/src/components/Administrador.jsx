@@ -45,7 +45,7 @@ function Administrador() {
           flexDirection: "column",
           justifyContent: 'center',
           alignItems: "center",
-          height: '70vh',
+          height: '85vh',
         }}
       >
         {!eleccion ? <>

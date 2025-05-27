@@ -70,7 +70,9 @@ function Soporte() {
           backgroundColor: "#131313",
           display: "flex",
           flexDirection: 'column',
+          justifyContent: 'center',
           alignItems: 'center',
+            height: "85vh",
         }}
       >
         <div className="d-flex flex-column w-70 mt-5">

@@ -126,7 +126,9 @@ function Entradas() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          justifyContent: 'center',
           padding: "100px",
+            height: "85vh",
         }}
       >
         <main className="d-flex w-100 justify-content-around text-white">

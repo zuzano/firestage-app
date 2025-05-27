@@ -115,6 +115,7 @@ function Ruleta() {
           display: "grid",
           placeItems: "center",
           padding: "2%",
+          height: "85vh",
         }}
       >
         {premios.length > 0 ? (
