@@ -54,7 +54,25 @@ enviarCorreo = async function (req, res) {
       from: email, // quien lo envía
       to: 'santi.casalv@hotmail.com', // mi correo
       subject: asunto,
-      text: `${mensaje}`
+      html: `
+                <div style="font-family: Arial, sans-serif;">
+                <img src="cid:logo" alt="Logo" style="width: 150px; margin-bottom: 20px;">
+                <p>${mensaje}</p>
+
+                <hr style="margin: 40px 0;">
+
+                <footer style="font-size: 12px; color: #777;">
+                    <p>© 2025 FireStage</p>
+                </footer>
+                </div>
+            `,
+      attachments: [
+        {
+          filename: 'logo.png',
+          path: './assets/images/logo.png',
+          cid: 'logo'
+        }
+      ]
     };
 
     // Correo de CONFIRMACIÓN para el cliente
@@ -62,7 +80,25 @@ enviarCorreo = async function (req, res) {
       from: 'odesxd1934@gmail.com', // mi correo oficial
       to: email, // correo del cliente
       subject: 'Confirmación de contacto',
-      text: `Hola, hemos recibido tu mensaje:\n\n"${mensaje}"\n\nTe responderemos pronto.`
+      html: `
+                <div style="font-family: Arial, sans-serif;">
+                <img src="cid:logo" alt="Logo" style="width: 150px; margin-bottom: 20px;">
+                <p>Hola, hemos recibido tu mensaje:\n\n"${mensaje}"\n\nTe responderemos pronto.</p>
+
+                <hr style="margin: 40px 0;">
+
+                <footer style="font-size: 12px; color: #777;">
+                    <p>© 2025 FireStage</p>
+                </footer>
+                </div>
+            `,
+      attachments: [
+        {
+          filename: 'logo.png',
+          path: './assets/images/logo.png',
+          cid: 'logo'
+        }
+      ]
     };
 
     // Primero enviar a ti
@@ -153,16 +189,17 @@ editarUsuario = async function (req, res) {
       nombre, email, rol, premios
     };
 
-    // Marcar el premio como inactivo
-    const actualizaPremio = await Premios.findOneAndUpdate(
-      { descripcion: premios },
-      { $set: { estado: 'finalizado' } },
-      { new: true }
-    );
+    if (premios !== "Nada") {
+      // Marcar el premio como inactivo
+      const actualizaPremio = await Premios.findOneAndUpdate(
+        { descripcion: premios },
+        { $set: { estado: 'finalizado' } },
+        { new: true }
+      );
 
-    if (!actualizaPremio) {
-      return res.status(404).json({ error: "No existe ese premio", mensaje: `Introduce un premio valido.` });
-
+      if (!actualizaPremio) {
+        return res.status(404).json({ error: "No existe ese premio", mensaje: `Introduce un premio valido.` });
+      }
     }
 
     const actualizacionUsuario = await Usuario.findOneAndUpdate(

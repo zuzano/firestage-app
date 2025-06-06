@@ -166,7 +166,25 @@ anadirPremioUsuario = async function (req, res) {
       from: 'odesxd1934@gmail.com', // quien lo envía
       to: 'santi.casalv@hotmail.com', // mi correo
       subject:  "Notificación de nuevo premio asignado",
-      text: `EL usuario ${usuario.email} acaba de recibir ${premio}`
+        html: `
+                <div style="font-family: Arial, sans-serif;">
+                <img src="cid:logo" alt="Logo" style="width: 150px; margin-bottom: 20px;">
+                <p>EL usuario ${usuario.email} acaba de recibir ${premio}</p>
+
+                <hr style="margin: 40px 0;">
+
+                <footer style="font-size: 12px; color: #777;">
+                    <p>© 2025 FireStage</p>
+                </footer>
+                </div>
+            `,
+      attachments: [
+        {
+          filename: 'logo.png',
+          path: './assets/images/logo.png',
+          cid: 'logo'
+        }
+      ]
     };
 
     transporter.sendMail(mailToAdmin, (error, info) => {

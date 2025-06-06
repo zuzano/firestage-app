@@ -24,6 +24,19 @@ Convierte el JSON recibido en un objeto JavaScript accesible en req.body. */
 app.use(bodyParser.json({ limit: '10mb' }));
 
 
+validarDNI = function (dni) {
+    // Asegurarse de que sigue el formato correcto: 8 números seguidos de 1 letra mayúscula
+    const dniRegex = /^[0-9]{8}[A-Z]$/;
+    if (!dniRegex.test(dni)) return false;
+
+    const letras = "TRWAGMYFPDXBNJZSQVHLCKE";
+    const numero = parseInt(dni.slice(0, 8), 10); // Extrae los 8 primeros dígitos
+    const letraEsperada = letras[numero % 23];   // Calcula la letra correcta
+    const letraIngresada = dni.charAt(8);        // Toma la letra que el usuario puso
+
+    return letraIngresada === letraEsperada;     // Compara si coinciden
+}
+
 
 registrarUsuario = async function (req, res) {
     try {
@@ -36,13 +49,21 @@ registrarUsuario = async function (req, res) {
             nombre,
             apellidos,
             email,
-            contraseña
+            contraseña,
+            dni
         } = req.body;
 
-        const usuarioExistente = await Usuario.findOne({ email });
+        // Verificar si email o dni ya existen
+        const usuarioExistente = await Usuario.findOne({
+            $or: [{ email }, { dni }]
+        });
 
         if (usuarioExistente) {
-            return res.status(400).json({ mensaje: 'El email ya está registrado' });
+            return res.status(400).json({ mensaje: 'El email o dni ya está registrado' });
+        }
+
+        if (!validarDNI(dni)) {
+            return res.status(400).json({ mensaje: 'El DNI no es válido' });
         }
 
         const nuevoSecreto = twoFactor.generateSecret({
@@ -60,7 +81,8 @@ registrarUsuario = async function (req, res) {
             email,
             contraseña: contraseñaEncriptada,
             twoFASecret: nuevoSecreto.secret,
-            twoFAHabilitado: true
+            twoFAHabilitado: true,
+            dni
         });
 
 
@@ -118,7 +140,7 @@ iniciarSesionUsuario = async function (req, res) {
     } catch (error) {
         return res.status(500).json({
             error: "Error al iniciar sesion",
-            mensaje:"Hubo un error al solicitar tu peticion"
+            mensaje: "Hubo un error al solicitar tu peticion"
         });
     }
 }
@@ -175,7 +197,7 @@ recuperarContraseña = async function (req, res) {
 
         await usuario.save()
 
-        const link = `http://localhost:5173/restablecerContraseña/${usuario._id}`;
+        const link = `${process.env.URL}/restablecerContraseña/${usuario._id}`;
 
 
         // Configura tu transporte de correo
@@ -191,7 +213,25 @@ recuperarContraseña = async function (req, res) {
             from: 'odesxd1934@gmail.com',
             to: email,
             subject: 'Recuperar contraseña',
-            html: `<p>Haz clic <a href="${link}">aquí</a> para restablecer tu contraseña. Este enlace expirará en 1 hora.</p>`
+            html: `
+                <div style="font-family: Arial, sans-serif;">
+                <img src="cid:logo" alt="Logo" style="width: 150px; margin-bottom: 20px;">
+                <p>Haz clic <a href="${link}">aquí</a> para restablecer tu contraseña. Este enlace expirará en 1 hora.</p>
+
+                <hr style="margin: 40px 0;">
+
+                <footer style="font-size: 12px; color: #777;">
+                    <p>© 2025 FireStage</p>
+                </footer>
+                </div>
+            `,
+            attachments: [
+                {
+                    filename: 'logo.png',
+                    path: './assets/images/logo.png',
+                    cid: 'logo'
+                }
+            ]
         });
 
         return res.status(200).json({ mensaje: "Correo de recuperación enviado" });
@@ -233,16 +273,16 @@ restablecerContraseña = async function (req, res) {
 
 validarID = async function (req, res) {
     try {
-        const { usuarioID} = req.body;
+        const { usuarioID } = req.body;
 
         const usuario = await Usuario.findById(usuarioID);
         if (!usuario) {
             return res.status(403).json({ error: "ID inválido o expirado" });
         }
 
-        res.sendStatus(200); 
+        res.sendStatus(200);
     } catch (err) {
-        return  res.status(500).json({ error: "Error en la solicitud", mensaje: err.message })
+        return res.status(500).json({ error: "Error en la solicitud", mensaje: err.message })
     }
 }
 

@@ -18,6 +18,12 @@ const usuarioSchema = new mongoose.Schema({
     lowercase: true,
     trim: true
   },
+    dni: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true
+  },
   contraseña: {
     type: String,
     required: true

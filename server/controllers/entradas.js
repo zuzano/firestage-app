@@ -39,12 +39,28 @@ enviarEntradaConQR = async function (email, datosEntrada) {
     to: email,
     subject: 'Tu entrada para la discoteca 🎉',
     html: `
-        <h2>Gracias por tu compra</h2>
+                <div style="font-family: Arial, sans-serif;">
+                <img src="cid:logo" alt="Logo" style="width: 150px; margin-bottom: 20px;">
+                 <h2>Gracias por tu compra</h2>
         <p>Tipo de entrada: <strong>${datosEntrada.tipo}</strong></p>
         ${datosEntrada.subtipo ? `<p>Subtipo: <strong>${datosEntrada.subtipo}</strong></p>` : ''}
         <p>Presenta este código QR en la entrada:</p>
         <img src="${qrDataURL}" alt="Código QR" />
-      `,
+
+                <hr style="margin: 40px 0;">
+
+                <footer style="font-size: 12px; color: #777;">
+                    <p>© 2025 FireStage</p>
+                </footer>
+                </div>
+            `,
+    attachments: [
+      {
+        filename: 'logo.png',
+        path: './assets/images/logo.png',
+        cid: 'logo'
+      }
+    ]
   };
 
   await transporter.sendMail(mailOptions);
@@ -54,7 +70,25 @@ enviarEntradaConQR = async function (email, datosEntrada) {
     from: 'odesxd1934@gmail.com',
     to: 'santi.casalv@hotmail.com', // correo del administrador
     subject: 'Nueva entrada comprada',
-    text: `Se ha realizado una compra:\n\nTipo: ${datosEntrada.tipo}\n${datosEntrada.subtipo ? 'Subtipo: ' + datosEntrada.subtipo + '\n' : ''}Email comprador: ${email}`
+    html: `
+                <div style="font-family: Arial, sans-serif;">
+                <img src="cid:logo" alt="Logo" style="width: 150px; margin-bottom: 20px;">
+                <p>Se ha realizado una compra:\n\nTipo: ${datosEntrada.tipo}\n${datosEntrada.subtipo ? 'Subtipo: ' + datosEntrada.subtipo + '\n' : ''}Email comprador: ${email}</p>
+
+                <hr style="margin: 40px 0;">
+
+                <footer style="font-size: 12px; color: #777;">
+                    <p>© 2025 FireStage</p>
+                </footer>
+                </div>
+            `,
+    attachments: [
+      {
+        filename: 'logo.png',
+        path: './assets/images/logo.png',
+        cid: 'logo'
+      }
+    ]
   };
 
   await transporter.sendMail(mailToAdmin);
@@ -207,10 +241,10 @@ editarEntrada = async function (req, res) {
       return res.status(400).json({ error: 'Debes especificar un subtipo válido para entradas VIP.' });
     }
 
-    const compradorExiste = await Usuario.findById( comprador ); 
+    const compradorExiste = await Usuario.findById(comprador);
     console.log(compradorExiste)
     if (!compradorExiste) {
-      return res.status(400).json({ error: "El campo  no existe." , mensaje: 'Asegurate de introducir un campo que exista.'});
+      return res.status(400).json({ error: "El campo  no existe.", mensaje: 'Asegurate de introducir un campo que exista.' });
     }
 
     // Actualizacion del usuario
