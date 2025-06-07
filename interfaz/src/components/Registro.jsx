@@ -12,6 +12,7 @@ const Registro = () => {
   const [nombre, setNombre] = useState("");
   const [apellidos, setApellidos] = useState("");
   const [correo, setCorreo] = useState("");
+  const [dni, setDni] = useState("");
   const [contraseña, setContraseña] = useState("");
   const [enviar, setEnviar] = useState(false);
   const [error, setError] = useState(null);
@@ -21,7 +22,19 @@ const Registro = () => {
 
   const navigate = useNavigate();
 
+  const validarDNI = (dni) => {
+      // Asegurarse de que sigue el formato correcto: 8 números seguidos de 1 letra mayúscula
+      const dniRegex = /^[0-9]{8}[A-Z]$/;
+      if (!dniRegex.test(dni)) return false;
   
+      const letras = "TRWAGMYFPDXBNJZSQVHLCKE";
+      const numero = parseInt(dni.slice(0, 8), 10); // Extrae los 8 primeros dígitos
+      const letraEsperada = letras[numero % 23];   // Calcula la letra correcta
+      const letraIngresada = dni.charAt(8);        // Toma la letra que el usuario puso
+  
+      return letraIngresada === letraEsperada;     // Compara si coinciden
+  }
+
   //Eniva una peticion para registrar al usuario si enviar es true
   useEffect(() => {
     if (!enviar) return;
@@ -38,6 +51,7 @@ const Registro = () => {
               apellidos: apellidos,
               email: correo,
               contraseña: contraseña,
+              dni: dni
             }),
           }
         );
@@ -63,6 +77,10 @@ const Registro = () => {
   
     let errores = [];
   
+    if(!validarDNI(dni.toUpperCase())){
+      errores.push("dni")
+    }
+
     //Validar mediante una expresion regular los casos comunes de correos
     const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!correoRegex.test(correo)) {
@@ -157,14 +175,29 @@ const Registro = () => {
             />
             <span>Email</span>
           </label>
+          <label>
+            <input
+              style={{
+                border:  validar.includes("dni") ? "2px solid red" : "none",
+              }}
+              className={styles.input}
+              type="text"
+              placeholder
+              required
+              onChange={(e) => {setDni(e.target.value)
+                quitarError("dni")
+              }}
+            />
+            <span>DNI</span>
+          </label>
           <span
             style={{
-              display:  validar.includes("correo") ? "block" : "none",
+              display:  validar.includes("dni") ? "block" : "none",
               color: "red",
               fontSize: "0.7em",
             }}
           >
-            Debes introducir un correo válido
+            Debes introducir un DNI válido
           </span>
 
           <label>

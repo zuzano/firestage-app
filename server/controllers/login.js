@@ -24,18 +24,7 @@ Convierte el JSON recibido en un objeto JavaScript accesible en req.body. */
 app.use(bodyParser.json({ limit: '10mb' }));
 
 
-validarDNI = function (dni) {
-    // Asegurarse de que sigue el formato correcto: 8 números seguidos de 1 letra mayúscula
-    const dniRegex = /^[0-9]{8}[A-Z]$/;
-    if (!dniRegex.test(dni)) return false;
 
-    const letras = "TRWAGMYFPDXBNJZSQVHLCKE";
-    const numero = parseInt(dni.slice(0, 8), 10); // Extrae los 8 primeros dígitos
-    const letraEsperada = letras[numero % 23];   // Calcula la letra correcta
-    const letraIngresada = dni.charAt(8);        // Toma la letra que el usuario puso
-
-    return letraIngresada === letraEsperada;     // Compara si coinciden
-}
 
 
 registrarUsuario = async function (req, res) {
@@ -62,9 +51,6 @@ registrarUsuario = async function (req, res) {
             return res.status(400).json({ mensaje: 'El email o dni ya está registrado' });
         }
 
-        if (!validarDNI(dni)) {
-            return res.status(400).json({ mensaje: 'El DNI no es válido' });
-        }
 
         const nuevoSecreto = twoFactor.generateSecret({
             name: "MiApp",

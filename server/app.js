@@ -5,18 +5,18 @@ const bodyParser = require('body-parser');
 const createError = require('http-errors');
 require('dotenv').config();
 
-
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => {
+.then(() => {
         console.log('Conectado a MongoDB')
     })
     .catch(err => console.error('Error al conectar a MongoDB:', err));
 
-// Importar routes
+    // Importar routes
 const loginRouter = require('./routes/loginRoutes');
 const usuariosRouter = require('./routes/usuarioRoutes');
 const premiosRouter = require('./routes/premiosRoutes');
 const entradasRouter = require('./routes/entradasRoutes');
+const aforoRouter = require('./routes/aforoRoutes')
 
 const app = express();
 
@@ -35,6 +35,7 @@ app.use('/autenticacion', loginRouter);
 app.use('/usuarios', usuariosRouter);
 app.use('/sorteos', premiosRouter);
 app.use('/reservas', entradasRouter);
+app.use('/aforo', aforoRouter);
 
 
 // 404 ERROR
