@@ -6,17 +6,19 @@ const createError = require('http-errors');
 require('dotenv').config();
 
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-.then(() => {
+    .then(() => {
         console.log('Conectado a MongoDB')
+        const { insertarCapacidadesIniciales } = require('./controllers/capacidad');
+        insertarCapacidadesIniciales(); // Se ejecutará al arrancar el servidor
     })
     .catch(err => console.error('Error al conectar a MongoDB:', err));
 
-    // Importar routes
+// Importar routes
 const loginRouter = require('./routes/loginRoutes');
 const usuariosRouter = require('./routes/usuarioRoutes');
 const premiosRouter = require('./routes/premiosRoutes');
 const entradasRouter = require('./routes/entradasRoutes');
-const aforoRouter = require('./routes/aforoRoutes')
+const aforoRouter = require('./routes/aforoRoutes');
 
 const app = express();
 

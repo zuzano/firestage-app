@@ -192,6 +192,9 @@ recuperarContraseña = async function (req, res) {
             auth: {
                 user: 'odesxd1934@gmail.com',
                 pass: 'kjlh cecz tzhc rxbm'
+            },
+            tls: {
+                rejectUnauthorized: false
             }
         });
 

@@ -73,7 +73,7 @@ function MesasVip() {
           className={styles.input}
         />
         <div className={styles.input}>
-          <Calendario onFechaSeleccionada={handleFechaSeleccionada} tipo={"vip"}/>
+          <Calendario onFechaSeleccionada={handleFechaSeleccionada} tipo={"vip"} subtipo={subtipo}/>
         </div>
         <button type="submit" disabled={enviar}>
           {enviar ? "Enviando..." : "Enviar"}

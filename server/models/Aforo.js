@@ -13,22 +13,9 @@ const aforoSchema = new mongoose.Schema({
   subtipo: {
     type: String,
     enum: ['plata', 'oro', 'diamante'],
+    default: null,
     required: function () {
       return this.tipo === 'vip';
-    },
-  },
-  capacidadTotal: {
-    type: Number,
-    required: true,
-    default: function () {
-      if (this.tipo === 'general') return 200;
-      if (this.tipo === 'premium') return 1;
-      if (this.tipo === 'vip') {
-        if (this.subtipo === 'plata') return 5;
-        if (this.subtipo === 'oro') return 3;
-        if (this.subtipo === 'diamante') return 2;
-      }
-      return 0;
     },
   },
   entradasVendidas: {

@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 require('dotenv').config();
 const Entradas = require("../models/Entradas");
 const Usuario = require("../models/Usuario");
+const Aforo = require("../models/Aforo");
 
 const nodemailer = require('nodemailer');
 const QRCode = require('qrcode');
@@ -31,6 +32,9 @@ enviarEntradaConQR = async function (email, datosEntrada) {
     auth: {
       user: 'odesxd1934@gmail.com',
       pass: 'kjlh cecz tzhc rxbm'
+    },
+    tls: {
+      rejectUnauthorized: false // desactiva la validación estricta del certificado
     }
   });
 
@@ -94,53 +98,22 @@ enviarEntradaConQR = async function (email, datosEntrada) {
   await transporter.sendMail(mailToAdmin);
 }
 
-fechasAgotadas = async function (req, res) {
+crearOActualizarAforo = async (fecha, tipo, subtipo, incremento = 1) => {
   try {
-    await mongoose.connect(dbURI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
+    // Convertir fecha string a Date
+    const fechaDate = new Date(fecha);
 
+    await Aforo.findOneAndUpdate(
+      { fecha: fechaDate, tipo, subtipo },
+      { $inc: { entradasVendidas: incremento } },
+      { new: true, upsert: true }// upsert crea el documento si no existe
+    )
 
-    // Contadores por tipo
-    const limites = {
-      general: 2,
-      vip: 3,
-      premium: 2,
-    };
-
-    /*Solo se agruparán juntos los datos que tengan:
-    El mismo tipo de entrada, y La misma fecha (ignorando la hora). */
-    // Agrupamos por fecha y tipo, contando cuántas hay en total
-    const resultados = await Entradas.aggregate([
-      {
-        $group: {
-          _id: {
-            tipo: "$tipo",
-            fecha: {
-              $dateToString: { format: "%Y-%m-%d", date: "$fechaCompra" },
-            },
-          },
-          cantidad: { $sum: 1 },
-        },
-      },
-    ]);
-
-    // Filtramos los que lleguen al límite de entradas segun el tipo
-    const fechasExcedidas = resultados.filter(({ _id, cantidad }) => {
-      const limite = limites[_id.tipo];
-      return cantidad >= limite;
-    });
-
-
-    return res.status(200).json({ fechas: fechasExcedidas });
   } catch (error) {
-    return res.status(500).json({
-      error: "Error al contar las fechas excedidas",
-      mensaje: error.message
-    });
+    console.error(error.message);
+    throw error; // Para propagar el error a quien llame
   }
-}
+};
 
 comprarEntrada = async function (req, res) {
   try {
@@ -163,6 +136,9 @@ comprarEntrada = async function (req, res) {
     });
 
     await entrada.save();
+
+    await crearOActualizarAforo(fechaCompra, tipo, subtipo, 1);
+
     try {
       await enviarEntradaConQR(email, entrada);
       return res.status(201).json({
@@ -309,7 +285,6 @@ eliminarEntrada = async function (req, res) {
 
 module.exports = {
   comprarEntrada,
-  fechasAgotadas,
   mostrarEntradas,
   editarEntrada,
   eliminarEntrada

@@ -155,18 +155,21 @@ anadirPremioUsuario = async function (req, res) {
       auth: {
         user: 'odesxd1934@gmail.com',
         pass: 'kjlh cecz tzhc rxbm'
+      },
+      tls: {
+        rejectUnauthorized: false
       }
     });
 
     // Obtener los datos del usuario
-      const usuario = await Usuario.findById(_idusuario);
+    const usuario = await Usuario.findById(_idusuario);
 
     // Correo envia de notificacion al administrador
     const mailToAdmin = {
       from: 'odesxd1934@gmail.com', // quien lo envía
       to: 'santi.casalv@hotmail.com', // mi correo
-      subject:  "Notificación de nuevo premio asignado",
-        html: `
+      subject: "Notificación de nuevo premio asignado",
+      html: `
                 <div style="font-family: Arial, sans-serif;">
                 <img src="cid:logo" alt="Logo" style="width: 150px; margin-bottom: 20px;">
                 <p>EL usuario ${usuario.email} acaba de recibir ${premio}</p>

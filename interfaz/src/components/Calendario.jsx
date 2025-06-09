@@ -9,28 +9,31 @@ import styles from "./../css/calendario.module.css";
 
 import { API_URL } from "../constants";
 
-const Calendario = ({ onFechaSeleccionada, tipo }) => {
+const Calendario = ({ onFechaSeleccionada, tipo, subtipo }) => {
   const [fecha, setFecha] = useState(null);
   const [diasOcupados, setDiasOcupados] = useState([]);
+  const [hoverFecha, setHoverFecha] = useState(null);
+  const [aforoInfo, setAforoInfo] = useState(null);
 
-  // Registra la localizacion para poder usarla, y que el calendario tenfa un 
+
+  // Registra la localizacion para poder usarla, y que el calendario use los datos de esa localizacions
   registerLocale("es", es);
 
-//Busca las fechas que hallan llegado al limite de entradas
+  //Busca las fechas que hallan llegado al limite de entradas
   useEffect(() => {
     const cargarFechasOcupadas = async () => {
       try {
-        const response = await fetch(`${API_URL}/reservas/fechasAgotadas`, {
-          method: "GET",
+        const response = await fetch(`${API_URL}/aforo/fechasAgotadas`, {
+          method: "POST",
           headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            tipo: tipo,
+            subtipo: subtipo
+          }),
         });
         const data = await response.json();
         if (response.ok) {
-          //Filtra por tipo de entrada
-          const fechasTipo = data.fechas.filter(({ _id }) => {return  _id.tipo === tipo});
-          //Devuelve un array de las fechas
-          const fechas = fechasTipo.map(({_id}) => {return _id.fecha})
-          setDiasOcupados(fechas);
+          setDiasOcupados(data.fechasAgotadas);
         } else {
           console.error("Error al cargar fechas ocupadas:", data.error);
         }
@@ -40,7 +43,38 @@ const Calendario = ({ onFechaSeleccionada, tipo }) => {
     };
 
     cargarFechasOcupadas();
-  }, [tipo]);
+  }, [tipo])
+
+  const handleMouseEnter = async (fecha) => {
+    setHoverFecha(fecha);
+
+    try {
+      const response = await fetch(`${API_URL}/aforo/info`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fecha: fecha,
+          tipo: tipo,
+          subtipo: subtipo
+        }),
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+        setAforoInfo({ entradasVendidas: data.entradasVendidas, capacidadTotal: data.capacidadTotal })
+      } else {
+        setAforoInfo(null);
+      }
+    } catch (error) {
+      console.error("Error al consultar aforo:", error);
+      setAforoInfo(null);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setHoverFecha(null);
+    setAforoInfo(null);
+  };
 
 
   // Desahibilita todo lo que no sea jueves, viernes, sabado y domingo y los dias ocupados
@@ -64,6 +98,18 @@ const Calendario = ({ onFechaSeleccionada, tipo }) => {
     onFechaSeleccionada(date); // Avisar al componente padre
   };
 
+  // Personaliza cómo se renderiza cada día
+  const renderDayContents = (day, date) => {
+    return (
+      <div
+        onMouseEnter={() => handleMouseEnter(date)}
+        onMouseLeave={handleMouseLeave}
+      >
+        {day}
+      </div>
+    );
+  };
+
   return (
     <DatePicker
       locale="es"
@@ -71,11 +117,23 @@ const Calendario = ({ onFechaSeleccionada, tipo }) => {
       onChange={handleChange}
       calendarStartDay={1} // Establece que la semana comience el lunes (1 es lunes)
       minDate={new Date()}
+      renderDayContents={renderDayContents}
       filterDate={isDiaPermitido}
       dayClassName={dayClassName}
       placeholderText="Selecciona una fecha"
       dateFormat="yyyy-MM-dd"
-    />
+    >
+      {hoverFecha && (
+        <div style={{ marginTop: '10px' }}>
+          <strong>{hoverFecha.toLocaleDateString()}</strong>:<br />
+          <span>
+            {aforoInfo
+              ? `${aforoInfo.entradasVendidas} / ${aforoInfo.capacidadTotal} entradas`
+              : 'Cargando información...'}
+          </span>
+        </div>
+      )}
+    </DatePicker>
   );
 };
 
