@@ -9,6 +9,7 @@ router.get('/mostrarPremiosAdmin',ctrlPremios.mostrarPremiosAdmin);
 router.get('/comprobarTiradas/:id',ctrlPremios.validarTiradas);
 router.put('/editarPremio/:id',ctrlPremios.editarPremio);
 router.delete('/eliminarPremio/:id',ctrlPremios.eliminarPremio);
+router.post('/obtenerCodigo',ctrlPremios.obtenerCodigoPremio);
 
 
 module.exports = router;

@@ -71,7 +71,7 @@ function Ruleta() {
       );
       const data = await response.json();
       if (response.ok) {
-        setMensaje(data.mensaje); 
+        setMensaje(data.mensaje);
       } else {
         setMensaje(data.error);
       }
@@ -79,6 +79,28 @@ function Ruleta() {
       setMensaje(data.error);
     }
   };
+
+  const actualizarPerfil = async () => {
+    try {
+      const response = await fetch(
+        `${API_URL}/usuarios/actualizar/`+usuario._id,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      const data = await response.json();
+      if (response.ok) {
+         localStorage.setItem("usuario", JSON.stringify(data.usuario));
+      } else {
+        console.log(data.error)
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  };
+
+  actualizarPerfil();
 
   //AL renderizar el componente se guardan los premios en un estado mediante una peticion en el backend
   useEffect(() => {
@@ -152,10 +174,11 @@ function Ruleta() {
               ]}
               onStopSpinning={() => {
                 setMustSpin(false);
-                darPremios(premios[prizeNumber]?.descripcion);
-                setTitulo("¡Premio!");
-                setShow(true);
                 confetti();
+                setShow(true);
+                setTitulo("¡Premio!");
+                darPremios(premios[prizeNumber]?.descripcion);
+                actualizarPerfil();
               }}
             />
             <button className={styles.btnClassName} onClick={handleSpinClick}>

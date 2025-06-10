@@ -20,6 +20,24 @@ app.use(bodyParser.urlencoded({ extended: false }));
 /* establece un tamaño máximo de 10 megabytes para el cuerpo de la petición, evitando que se cuelgue el servidor con datos muy grandes.
 Convierte el JSON recibido en un objeto JavaScript */
 
+// Función para generar un código alfanumérico único de 8 caracteres
+generarCodigoPremio = async function () {
+  const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let codigo;
+  let existe;
+
+  do {
+    codigo = '';
+    for (let i = 0; i < 8; i++) {
+      codigo += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+    }
+    // Verificar si el código ya existe en la base de datos
+    existe = await Usuario.findOne({ codigoPremio: codigo });
+  } while (existe); // Repetir hasta encontrar un código único
+
+  return codigo;
+};
+
 añadirPremios = async function (req, res) {
   try {
     // Conectar a la base de datos
@@ -33,14 +51,14 @@ añadirPremios = async function (req, res) {
       estado
     } = req.body;
 
-
+    const codigoPremio = await generarCodigoPremio();
 
     const premioExistente = await Premios.findOne({ descripcion });
 
     if (premioExistente) {
       return res.status(400).json({ mensaje: 'El premio ya existe.' });
     }
-    const nuevoPremio = new Premios({ descripcion, estado });
+    const nuevoPremio = new Premios({ descripcion, estado, codigoPremio });
 
     await nuevoPremio.save();
 
@@ -345,6 +363,33 @@ eliminarPremio = async function (req, res) {
   }
 }
 
+obtenerCodigoPremio = async function (req, res) {
+  try {
+    // Conectar a la base de datos
+    await mongoose.connect(dbURI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+
+    const {
+      descripcion
+    } = req.body;
+
+
+    const premioExistente = await Premios.findOne({ descripcion });
+    
+    if (!premioExistente) {
+      console.error('El premio no existe.');
+    }
+
+    return res.status(200).json({
+      codPremio: premioExistente.codigoPremio
+    });
+  } catch (error) {
+    // Manejar errores generales
+    console.error(error.message);
+  }
+}
 
 module.exports = {
   añadirPremios,
@@ -353,5 +398,6 @@ module.exports = {
   mostrarPremiosAdmin,
   validarTiradas,
   editarPremio,
-  eliminarPremio
+  eliminarPremio,
+  obtenerCodigoPremio
 }

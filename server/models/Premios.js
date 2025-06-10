@@ -11,6 +11,12 @@ const premioSchema = new mongoose.Schema({
     enum: ['activo', 'finalizado'],
     default: 'activo'
   },
+  codigoPremio: { 
+    type: String,
+    trim: true,
+    unique: true,
+    default: null 
+  },
 });
 
 module.exports = mongoose.model('Premio', premioSchema);

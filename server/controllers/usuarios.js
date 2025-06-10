@@ -259,10 +259,38 @@ eliminarUsuario = async function (req, res) {
   }
 }
 
+actualizarUsuario = async function (req, res) {
+   try {
+    await mongoose.connect(dbURI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+
+    const id = req.params.id;
+
+    const usuario = await Usuario.findById(id);
+
+    if (!usuario) {
+      return res.status(404).json({ mensaje: 'No existe ningún usuario.' });
+    }
+
+
+    return res.status(200).json({ usuario: usuario });
+
+
+  } catch (error) {
+    return res.status(500).json({
+      error: "Error al actualizar usuario",
+      mensaje: error.message
+    });
+  }
+}
+
 module.exports = {
   enviarCorreo,
   mostrarUsuarios,
   editarUsuario,
-  eliminarUsuario
+  eliminarUsuario,
+  actualizarUsuario
 }
 

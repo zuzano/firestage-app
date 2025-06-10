@@ -5,17 +5,44 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 
 import styles from './../css/perfil.module.css'
 
+import { API_URL } from "../constants";
+
 function Perfil() {
     const navigate = useNavigate();
 
     //Convierte los datos String a un objeto
     const [usuario, setUsuario] = useState(JSON.parse(localStorage.getItem('usuario')));
+    const [cod, setCod] = useState(null)
 
     //Comprueba si hay un usuario que ha iniciado sesion
     useEffect(() => {
         if (!localStorage.getItem('usuario')) {
             navigate('/accesoDenegado');
         }
+        const obtenerCodigo = async () => {
+            try {
+                const response = await fetch(
+                    `${API_URL}/sorteos/obtenerCodigo`,
+                    {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            descripcion: usuario.premios,
+                        }),
+                    }
+                );
+                const data = await response.json();
+                if (response.ok) {
+                    setCod(data.codPremio)
+                } else {
+                    console.log(data.error)
+                }
+            } catch (err) {
+                console.log(err)
+            }
+        };
+
+        obtenerCodigo();
     }, [])
 
     return (
@@ -23,7 +50,7 @@ function Perfil() {
             backgroundColor: "#131313",
             display: "grid",
             placeItems: "center",
-              height: "85vh",
+            height: "85vh",
         }}>
             <div className={styles.loader}>
                 <div className={styles.wrapper}>
@@ -33,7 +60,6 @@ function Perfil() {
                     <div className={styles.line1}>
                         <label>Nombre</label>
                         <label>
-                            {console.log(usuario)}
                             {usuario.nombre}
                         </label>
                     </div>
@@ -49,13 +75,23 @@ function Perfil() {
                             {usuario.email}
                         </label>
                     </div>
-                    <div className={styles.line4}>
-                        <label>Premio</label>
-                        <label>
-                            {usuario.premios}
-                        </label>
+                    {localStorage.getItem('rol') === 'admin' ? <></> : <>
+                        <div className={styles.line4}>
+                            <label>Premio</label>
+                            <label>
+                                {usuario.premios}
+                            </label>
+                            {usuario.premios != 'Nada' ?
+                                <>
+                                    <label style={{ fontWeight: 'bold' }}>Codigo</label>
+                                    <label>
+                                        {cod}
+                                    </label>
+                                </> : <></>}
 
-                    </div>
+                        </div>
+                    </>}
+
                 </div>
             </div>
         </Container>
