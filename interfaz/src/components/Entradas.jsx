@@ -14,6 +14,7 @@ function Entradas() {
   const [showEnviado, setShowEnviado] = useState(false);
   const [enviar, setEnviar] = useState(false);
   const [mensaje, setMensaje] = useState(null);
+   const [contenido, setContenido] = useState(null);
 
   const [fecha, setFecha] = useState("");
 
@@ -27,8 +28,8 @@ function Entradas() {
 
   //Cuando hace click guarda el tipo de entrada y muestra el modal.
   const handleClick = async (tipo) => {
-        setTipo(tipo);
-        setShow(true);
+    setTipo(tipo);
+    setShow(true);
   };
 
   //Guarda en el estado la fecha seleccionada desde el componente hijo
@@ -117,6 +118,17 @@ function Entradas() {
     comprarEntrada();
   }, [enviar, tipo]);
 
+
+  useEffect(() => {
+    if (showEnviado) {
+      setContenido(<p>Aquí se ejecutaría la pasarela de pago</p>);
+      const timer = setTimeout(() => {
+        setContenido(<p>{mensaje}</p>);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [showEnviado, mensaje]);
+
   return (
     <>
       <Container
@@ -128,7 +140,7 @@ function Entradas() {
           alignItems: "center",
           justifyContent: 'center',
           padding: "100px",
-            height: "85vh",
+          height: "85vh",
         }}
       >
         <main className="d-flex w-100 justify-content-around text-white">
@@ -234,7 +246,7 @@ function Entradas() {
           <Modal.Header>
             <Modal.Title>Resultado de la reserva</Modal.Title>
           </Modal.Header>
-          <Modal.Body>{mensaje}</Modal.Body>
+          <Modal.Body>{contenido}</Modal.Body>
         </Modal>
       </Container>
     </>

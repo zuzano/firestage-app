@@ -17,6 +17,7 @@ function MesasVip() {
   const [enviar, setEnviar] = useState(false);
   const [subtipo, setSubtipo] = useState(null);
   const [mensaje, setMensaje] = useState(null);
+   const [contenido, setContenido] = useState(null);
 
   const [fecha, setFecha] = useState("");
 
@@ -131,6 +132,16 @@ function MesasVip() {
 
     comprarEntrada();
   }, [enviar, subtipo]);
+
+   useEffect(() => {
+      if (showEnviado) {
+        setContenido(<p>Aquí se ejecutaría la pasarela de pago</p>);
+        const timer = setTimeout(() => {
+          setContenido(<p>{mensaje}</p>);
+        }, 2000);
+        return () => clearTimeout(timer);
+      }
+    }, [showEnviado, mensaje]);
 
   return (
     <>
@@ -322,7 +333,7 @@ function MesasVip() {
           <Modal.Header>
             <Modal.Title>Resultado de la reserva</Modal.Title>
           </Modal.Header>
-          <Modal.Body>{mensaje}</Modal.Body>
+          <Modal.Body>{contenido}</Modal.Body>
         </Modal>
       </Container>
     </>
