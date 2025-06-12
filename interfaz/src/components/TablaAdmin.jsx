@@ -50,9 +50,8 @@ function TablaAdmin({cabecera, datos, datosEditados,idActual, onEditar,handleEdi
                                     ) : (
                                         dato[item]
                                     )}
-                                </td>
+                                    </td>
                                 ))}
-                                
                                 <td>
                                     <Icon
                                         icon="flowbite:edit-solid"

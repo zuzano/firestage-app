@@ -26,24 +26,28 @@ function UsuariosAdmin() {
         setShow(false);
     };
 
-     // Maneja los cambios en los inputs del formulario, actualizando datosEditados
+    // Maneja los cambios en los inputs del formulario, actualizando datosEditados
     const handleCambioInput = (e) => {
         const { name, value } = e.target;
         setDatosEditados((prev) => ({ ...prev, [name]: value }));
     };
 
-     // Maneja la acción de editar una entrada, estableciendo los datos y el ID
+    // Maneja la acción de editar una entrada, estableciendo los datos y el ID
     const handleEditar = (usuario) => {
-        setDatosEditados(usuario);
-        setUsuarioId(usuario._id);
+        if (usuario._id !== usuarioId) {
+            // Solo si cambias a otra fila, carga el usuario original para editar
+            setDatosEditados(usuario);
+            setUsuarioId(usuario._id);
+        }
+        // Si haces clic en otra celda de la misma fila, no cambia datosEditados para no perder los cambios 
     };
 
 
-     // Maneja la eliminación de una entrada mediante una solicitud DELETE al servidor
+    // Maneja la eliminación de una entrada mediante una solicitud DELETE al servidor
     const handleClickEliminar = async (id) => {
         try {
             const response = await fetch(
-               `${API_URL}/usuarios/eliminarUsuario/` + id,
+                `${API_URL}/usuarios/eliminarUsuario/` + id,
                 {
                     method: "DELETE",
                     headers: { "Content-Type": "application/json" },
@@ -54,7 +58,7 @@ function UsuariosAdmin() {
                 setTitulo("Usuario eliminado correctamente.");
                 setMensaje(data.mensaje);
                 setShow(true);
-                 await mostrarUsuarios();
+                await mostrarUsuarios();
             } else {
                 setTitulo(data.error);
                 setMensaje(data.mensaje);
@@ -66,7 +70,7 @@ function UsuariosAdmin() {
         }
     };
 
-     // Maneja la actualización de una entrada mediante una solicitud PUT al servidor
+    // Maneja la actualización de una entrada mediante una solicitud PUT al servidor
     const handleClickActualizar = async (id) => {
         if (id !== usuarioId) {
             setUsuarioId(null);
@@ -107,7 +111,7 @@ function UsuariosAdmin() {
         }
     };
 
-     // Obtiene y muestra las entradas mediante una solicitud GET al servidor
+    // Obtiene y muestra las entradas mediante una solicitud GET al servidor
     const mostrarUsuarios = async () => {
         try {
             const response = await fetch(
@@ -132,7 +136,7 @@ function UsuariosAdmin() {
         }
     };
 
-     //Solo se carga la primera vez que se renderiza el componente
+    //Solo se carga la primera vez que se renderiza el componente
     useEffect(() => {
 
         mostrarUsuarios();
@@ -142,7 +146,7 @@ function UsuariosAdmin() {
         <>
             <Container fluid className="p-0">
                 <h1 className="text-center text-white">USUARIOS</h1>
-                <TablaAdmin cabecera={["nombre","rol", "email", "premios"]}
+                <TablaAdmin cabecera={["nombre", "rol", "email", "premios"]}
                     datos={usuarios}
                     datosEditados={datosEditados}
                     idActual={usuarioId}

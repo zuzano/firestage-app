@@ -1,4 +1,4 @@
-              import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Button,
@@ -70,11 +70,13 @@ function PremiosAdmin() {
 
   // Maneja la acción de editar una entrada, estableciendo los datos y el ID
   const handleEditar = (premio) => {
-    setDatosEditados(premio);
-    setPremioId(premio._id);
+    if (premio._id !== premioId) {
+      setDatosEditados(premio);
+      setPremioId(premio._id);
+    }
   };
 
-    // Maneja la eliminación de una entrada mediante una solicitud DELETE al servidor
+  // Maneja la eliminación de una entrada mediante una solicitud DELETE al servidor
   const handleClickEliminar = async (id) => {
     try {
       const response = await fetch(
@@ -144,7 +146,7 @@ function PremiosAdmin() {
   const mostrarPremios = async () => {
     try {
       const response = await fetch(
-       `${API_URL}/sorteos/mostrarPremiosAdmin`,
+        `${API_URL}/sorteos/mostrarPremiosAdmin`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },

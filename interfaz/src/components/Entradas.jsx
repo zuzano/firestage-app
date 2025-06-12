@@ -91,7 +91,7 @@ function Entradas() {
               tipo: tipo,
               compradorId: usuario._id,
               email: usuario.email,
-              fechaCompra: format(fecha, "yyyy-MM-dd"),
+              fechaCompra: fecha,
             }),
           }
         );

@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 require('dotenv').config();
 const Usuario = require("../models/Usuario");
 const Premios = require("../models/Premios");
+const Entrada = require("../models/Entradas");
 
 
 const dbURI = process.env.MONGODB_URI;
@@ -245,6 +246,14 @@ eliminarUsuario = async function (req, res) {
         mensaje: "No se encontró el usuario con ese ID"
       });
     }
+
+     // Eliminar las entradas relacionadas
+    await Entrada.deleteMany({ comprador: _id });
+    await Premios.updateMany(
+          { descripcion: resultado.premios },  // o el campo que usas para mostrar
+          { $set: { estado: 'activo' } }
+        );
+    
 
     // Respuesta de éxito si se eliminó
     return res.status(200).json({

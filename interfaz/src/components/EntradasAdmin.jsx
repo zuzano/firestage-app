@@ -27,8 +27,10 @@ function EntradasAdmin() {
 
   // Maneja la acción de editar una entrada, estableciendo los datos y el ID
   const handleEditar = (entrada) => {
-    setDatosEditados(entrada);
-    setEntradaId(entrada._id);
+    if (entrada._id !== entradaId) {
+      setDatosEditados(entrada);
+      setEntradaId(entrada._id);
+    }
   };
 
   // Maneja la eliminación de una entrada mediante una solicitud DELETE al servidor

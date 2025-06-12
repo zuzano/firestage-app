@@ -31,7 +31,7 @@ obtenerAforo = async (req, res) => {
         if (!fecha || !tipo) {
             return res.status(400).json({ error: "Los parámetros 'fecha' y 'tipo' son obligatorios" });
         }
-
+        
         // Convertir fecha string a Date
         const fechaDate = new Date(fecha);
 
@@ -49,7 +49,6 @@ obtenerAforo = async (req, res) => {
             aforo = await Aforo.findOne({ tipo: tipo, fecha: fechaDate });
             capacidad = await Capacidad.findOne({ tipo: tipo });
         }
-
 
         res.status(200).json({ entradasVendidas: aforo ? aforo.entradasVendidas : 0, capacidadTotal: capacidad.capacidadTotal });
     } catch (error) {

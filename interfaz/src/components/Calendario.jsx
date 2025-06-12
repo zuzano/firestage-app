@@ -47,7 +47,6 @@ const Calendario = ({ onFechaSeleccionada, tipo, subtipo }) => {
 
   const handleMouseEnter = async (fecha) => {
     setHoverFecha(fecha);
-
     try {
       const response = await fetch(`${API_URL}/aforo/info`, {
         method: "POST",
@@ -95,7 +94,7 @@ const Calendario = ({ onFechaSeleccionada, tipo, subtipo }) => {
   //Controla el estado de la fecha cuando cambia. Y se la pasa a una funcion del componente padre
   const handleChange = (date) => {
     setFecha(date);
-    onFechaSeleccionada(date); // Avisar al componente padre
+    onFechaSeleccionada(date) // Avisar al componente padre
   };
 
   // Personaliza cómo se renderiza cada día

@@ -3,9 +3,11 @@ require('dotenv').config();
 const Entradas = require("../models/Entradas");
 const Usuario = require("../models/Usuario");
 const Aforo = require("../models/Aforo");
+const Capacidad = require("../models/Capacidad");
 
 const nodemailer = require('nodemailer');
 const QRCode = require('qrcode');
+const { parse, isEqual } = require('date-fns');
 
 const dbURI = process.env.MONGODB_URI;
 
@@ -102,7 +104,17 @@ crearOActualizarAforo = async (fecha, tipo, subtipo, incremento = 1) => {
   try {
     // Convertir fecha string a Date
     const fechaDate = new Date(fecha);
+    const capacidad = await Capacidad.findOne({ tipo: tipo, subtipo: subtipo });
+    const aforo = await Aforo.findOne({ tipo: tipo, subtipo: subtipo, fecha: fechaDate })
 
+
+    if (aforo && aforo.entradasVendidas >= capacidad.capacidadTotal) {
+      return {
+        status: 400,
+        error: "Capacidad Maxima",
+        mensaje: "Introduce otra fecha, esta fecha ya ha llegado a su capacidad máxima."
+      };
+    }
     await Aforo.findOneAndUpdate(
       { fecha: fechaDate, tipo, subtipo },
       { $inc: { entradasVendidas: incremento } },
@@ -137,7 +149,11 @@ comprarEntrada = async function (req, res) {
 
     await entrada.save();
 
-    await crearOActualizarAforo(fechaCompra, tipo, subtipo, 1);
+    const result = await crearOActualizarAforo(fechaCompra, tipo, subtipo, 1);
+    if (result && result.status !== 200) {
+      return res.status(result.status).json(result);
+    }
+
 
     try {
       await enviarEntradaConQR(email, entrada);
@@ -153,9 +169,10 @@ comprarEntrada = async function (req, res) {
       });
     }
   } catch (error) {
+    console.error(error)
     return res.status(500).json({
       error: "Error al comprar una entrada",
-      mensaje: error.message
+      mensaje: "Hubo un error al realizar la solicitud."
     });
   }
 
@@ -168,17 +185,26 @@ mostrarEntradas = async function (req, res) {
       useUnifiedTopology: true
     });
 
-    const entradas = await Entradas.find();
+    const entradasOriginales = await Entradas.find().populate('comprador', 'email'); //reemplaza automáticamente el ObjectId con los datos reales del usuario referenciado
 
-    if (entradas.length === 0) {
+    if (entradasOriginales.length === 0) {
       return res.status(404).json({ mensaje: 'De momento no hay entradas.' });
     }
+
+    // Transformar el campo comprador a solo el email
+    const entradas = entradasOriginales.map(entrada => {
+      const entradaObj = entrada.toObject(); // convertir a objeto plano
+      entradaObj.comprador = entrada.comprador?.email || null;
+      entradaObj.fechaCompra = entrada.fechaCompra.toLocaleDateString() //Formatear la fecha para obtenerla en el horario de Europe/Madrid
+      return entradaObj;
+    });
 
 
     return res.status(200).json({ entradas: entradas });
 
 
   } catch (error) {
+    console.error(error)
     return res.status(500).json({
       error: "Error al mostrar los entradas",
       mensaje: error.message
@@ -186,6 +212,24 @@ mostrarEntradas = async function (req, res) {
   }
 
 }
+
+reducirEntradasVendidas = async function (tipo, subtipo, fechaAntigua, fecha) {
+  try {
+
+    if (isEqual(fechaAntigua, fecha)) return;
+
+    const aforo = await Aforo.findOne({ tipo: tipo, subtipo: subtipo, fecha: fechaAntigua });
+
+    if (aforo && aforo.entradasVendidas > 0) {
+      aforo.entradasVendidas -= 1;
+      await aforo.save();
+    }
+  } catch (error) {
+    console.error('Error al reducir entradas vendidas:', error);
+    throw error;
+  }
+};
+
 
 editarEntrada = async function (req, res) {
   try {
@@ -201,7 +245,6 @@ editarEntrada = async function (req, res) {
       tipo, subtipo, comprador, fechaCompra
     } = req.body;
 
-
     if (!_identrada) {
       return res.status(400).json({ error: "El ID de la entrada es necesario." });
     }
@@ -213,19 +256,37 @@ editarEntrada = async function (req, res) {
       return res.status(400).json({ error: "Faltan campos por rellenar.", mensaje: `El campo que te falta por rellenar es ${campoFaltante}` });
     }
 
-    if (tipo === 'vip' && !['plata', 'oro', 'diamante'].includes(subtipo)) {
-      return res.status(400).json({ error: 'Debes especificar un subtipo válido para entradas VIP.' });
+    if (tipo === 'vip') {
+      if (!subtipo) {
+        return res.status(400).json({ error: 'El campo subtipo es obligatorio', mensaje: 'Para entradas de tipo VIP' });
+      }
+      if (!['plata', 'oro', 'diamante'].includes(subtipo)) {
+        return res.status(400).json({ error: 'Debes especificar un subtipo válido para entradas VIP.' });
+      }
+    } else {
+      if (subtipo) {
+        return res.status(400).json({ error: 'Tipo de entrada invalido', mensaje: 'Subtipo solo se puede editar para entradas VIP' });
+      }
     }
 
-    const compradorExiste = await Usuario.findById(comprador);
-    console.log(compradorExiste)
+    const compradorExiste = await Usuario.findOne({ email: comprador });
     if (!compradorExiste) {
-      return res.status(400).json({ error: "El campo  no existe.", mensaje: 'Asegurate de introducir un campo que exista.' });
+      return res.status(400).json({ error: 'Comprador no válido.', mensaje: 'No se encontró ningún usuario con ese correo electrónico.' });
     }
 
+    const fechaAntigua = await Entradas.findById(_identrada);
+
+
+    await reducirEntradasVendidas(tipo, subtipo, fechaAntigua.fechaCompra, parse(fechaCompra, 'd/M/yyyy', new Date()));
+
+    const result = await crearOActualizarAforo(parse(fechaCompra, 'd/M/yyyy', new Date()), tipo, subtipo, 1);
+
+    if (result && result.status !== 200) {
+      return res.status(result.status).json(result);
+    }
     // Actualizacion del usuario
     const actualizarEntrada = {
-      tipo, subtipo, comprador, fechaCompra
+      tipo, subtipo: subtipo === undefined ? null : subtipo, comprador: compradorExiste.id, fechaCompra: parse(fechaCompra, 'd/M/yyyy', new Date())
     };
 
 
@@ -266,9 +327,13 @@ eliminarEntrada = async function (req, res) {
     // Verificar si se encontró y eliminó el usuario
     if (!resultado) {
       return res.status(404).json({
+        error: 'ID incorrecto',
         mensaje: "No se encontró la entrada con ese ID"
       });
     }
+
+
+    await reducirEntradasVendidas(resultado.tipo, resultado.subtipo, resultado.fechaCompra);
 
     // Respuesta de éxito si se eliminó
     return res.status(200).json({

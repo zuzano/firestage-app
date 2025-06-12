@@ -81,15 +81,11 @@ mostrarPremios = async function (req, res) {
       useUnifiedTopology: true
     });
 
-
-
     const premios = await Premios.find({ estado: 'activo' });
 
     if (premios.length === 0) {
       return res.status(404).json({ mensaje: 'No hay premios activos en este momento.' });
     }
-
-
 
     return res.status(200).json({ premios: premios });
 
@@ -109,8 +105,6 @@ mostrarPremiosAdmin = async function (req, res) {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
-
-
 
     const premios = await Premios.find();
 
@@ -349,6 +343,12 @@ eliminarPremio = async function (req, res) {
         mensaje: "No se encontró el premio con ese ID"
       });
     }
+
+     // Si el campo "premios" en Usuario guarda el nombre del premio:
+    await Usuario.updateMany(
+      { premios: resultado.descripcion },  // o el campo que usas para mostrar
+      { $set: { premios: 'Nada' } }
+    );
 
     // Respuesta de éxito si se eliminó
     return res.status(200).json({
