@@ -3,6 +3,7 @@ require('dotenv').config();
 const Usuario = require("../models/Usuario");
 const Premios = require("../models/Premios");
 const Entrada = require("../models/Entradas");
+const Aforo = require("../models/Aforo");
 
 
 const dbURI = process.env.MONGODB_URI;
@@ -227,6 +228,21 @@ editarUsuario = async function (req, res) {
   }
 }
 
+reducirEntradasVendidas = async function (tipo, subtipo, fecha) {
+  try {
+
+    const aforo = await Aforo.findOne({ tipo: tipo, subtipo: subtipo, fecha: fecha });
+
+    if (aforo && aforo.entradasVendidas > 0) {
+      aforo.entradasVendidas -= 1;
+      await aforo.save();
+    }
+  } catch (error) {
+    console.error('Error al reducir entradas vendidas:', error);
+    throw error;
+  }
+};
+
 eliminarUsuario = async function (req, res) {
   try {
     // Conectar a la base de datos
@@ -247,13 +263,24 @@ eliminarUsuario = async function (req, res) {
       });
     }
 
-     // Eliminar las entradas relacionadas
+    const entradas = await Entrada.find({ comprador: _id });
+
+    for (const entrada of entradas) {
+      try {
+        await reducirEntradasVendidas(entrada.tipo, entrada.subtipo, entrada.fechaCompra);
+      } catch (error) {
+        console.error(`Error al procesar entrada con ID ${entrada._id}:`, error);
+      }
+    }
+
+    // Eliminar las entradas relacionadas
     await Entrada.deleteMany({ comprador: _id });
+
     await Premios.updateMany(
-          { descripcion: resultado.premios },  // o el campo que usas para mostrar
-          { $set: { estado: 'activo' } }
-        );
-    
+      { descripcion: resultado.premios },
+      { $set: { estado: 'activo' } }
+    );
+
 
     // Respuesta de éxito si se eliminó
     return res.status(200).json({
@@ -269,7 +296,7 @@ eliminarUsuario = async function (req, res) {
 }
 
 actualizarUsuario = async function (req, res) {
-   try {
+  try {
     await mongoose.connect(dbURI, {
       useNewUrlParser: true,
       useUnifiedTopology: true

@@ -20,6 +20,8 @@ function Filtros({ datos, propiedad, onActualizar }) {
     const [datosChecked, setDatosChecked] = useState([])
     const [todoSeleccionado, setTodoSeleccionado] = useState(true);
     const [menuActivo, setMenuActivo] = useState('filtro'); // 'filtro' o 'opciones'
+    const [seleccionado, setSeleccionado] = useState([]);
+
 
     //Funcion para ordenar de forma Ascendente segun el tipo de datos que sea
     const ordenarMenor = (tipoDato) => {
@@ -88,6 +90,24 @@ function Filtros({ datos, propiedad, onActualizar }) {
         setTodoSeleccionado(!todoSeleccionado);
     };
 
+    const handleAplicarFiltro = (results) => {
+        // Extraemos los valores de la propiedad de los resultados seleccionados
+        const valoresSeleccionados = results.map(r => r[propiedad]);
+
+        // Activamos checked solo en los que están en valoresSeleccionados
+        const nuevosDatos = datosChecked.map(item => ({
+            ...item,
+            checked: valoresSeleccionados.includes(item[propiedad])
+        }));
+
+        setDatosChecked(nuevosDatos);
+
+        // Si todos están seleccionados, marca todoSeleccionado, si no, false
+        const todoSel = nuevosDatos.every(item => item.checked);
+        setTodoSeleccionado(todoSel);
+    };
+
+
     //Guarda los datos en el estado añadiendoles la propiedad de checked, se ejecuta cada vez que datos cambia.
     useEffect(() => {
         setDatosChecked(datos.map(item => ({ ...item, checked: true })))
@@ -119,6 +139,7 @@ function Filtros({ datos, propiedad, onActualizar }) {
                                 selected={[]}
                                 open
                                 renderMenu={(results, menuProps) => {
+                                    //Para evitar copias de datos iguales
                                     const sinRepetidos = [...new Set(results.map(item => item[propiedad]))]
                                     return (
                                         <>
@@ -144,7 +165,7 @@ function Filtros({ datos, propiedad, onActualizar }) {
                                                         />
                                                     )
                                                 })}
-
+                                                <Button onClick={() => { handleAplicarFiltro(results) }}>Aplicar</Button>
                                             </Menu>
                                         </>
                                     )
