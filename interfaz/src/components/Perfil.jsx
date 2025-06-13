@@ -74,6 +74,10 @@ function Perfil() {
                         <label>
                             {usuario.email}
                         </label>
+                        <label style={{ fontWeight: 'bold' }}>DNI</label>
+                        <label>
+                            {usuario.dni}
+                        </label>
                     </div>
                     {localStorage.getItem('rol') === 'admin' ? <></> : <>
                         <div className={styles.line4}>
